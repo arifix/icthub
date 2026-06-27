@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { BookOpen, Search, ChevronRight, User } from "lucide-react";
+import { BookOpen, Search, ChevronRight } from "lucide-react";
 import { supabase } from "../lib/supabase";
 import { Database } from "../types/supabase";
 
 type Subject = Database["public"]["Tables"]["subjects"]["Row"] & {
   semester?: { name: string } | null;
-  teachers?: Array<{ name: string; designation?: string }>;
 };
 
 const SubjectsPage: React.FC = () => {
@@ -20,24 +19,16 @@ const SubjectsPage: React.FC = () => {
         setLoading(true);
         const { data, error } = await supabase
           .from("subjects")
-          .select(
-            `*, semester:semesters(id, name, is_current), subject_teachers(teachers:teacher_id(name, designation))`
-          )
+          .select(`*, semester:semesters(id, name, is_current)`)
           .eq("is_active", true)
           .order("title", { ascending: true });
 
         if (error) throw error;
 
-        const subjectsWithTeachers =
-          data
-            ?.filter((subject: any) => subject.semester?.is_current === true)
-            .map((subject: any) => ({
-              ...subject,
-              teachers:
-                subject.subject_teachers?.map((st: any) => st.teachers).filter(Boolean) || [],
-            })) || [];
+        const currentSubjects =
+          data?.filter((subject: any) => subject.semester?.is_current === true) || [];
 
-        setSubjects(subjectsWithTeachers);
+        setSubjects(currentSubjects);
         document.title = "Subjects — ICTHub";
       } catch (error) {
         console.error("Error fetching subjects:", error);
@@ -52,10 +43,7 @@ const SubjectsPage: React.FC = () => {
     (subject) =>
       subject.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       subject.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      subject.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      subject.teachers?.some((t) =>
-        t.name.toLowerCase().includes(searchTerm.toLowerCase())
-      )
+      subject.description.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -80,7 +68,7 @@ const SubjectsPage: React.FC = () => {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
             <input
               type="text"
-              placeholder="Search by name, code or teacher..."
+              placeholder="Search by name or code..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-primary-700 focus:border-transparent"
@@ -140,15 +128,9 @@ const SubjectsPage: React.FC = () => {
                   )}
 
                   <div className="border-t border-gray-100 pt-3 flex items-center justify-between">
-                    <div className="space-y-1">
+                    <div>
                       {subject.semester && (
                         <p className=" text-gray-500">{subject.semester.name}</p>
-                      )}
-                      {subject.teachers && subject.teachers.length > 0 && (
-                        <p className=" text-gray-600 flex items-center gap-1">
-                          <User className="h-3 w-3 text-gray-400" />
-                          {subject.teachers[0].name}
-                        </p>
                       )}
                     </div>
                     <ChevronRight className="h-4 w-4 text-primary-700 group-hover:translate-x-0.5 transition-transform" />

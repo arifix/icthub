@@ -7,7 +7,6 @@ import { toast } from "react-hot-toast";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { createNotification } from "../../utils/notifications";
-import CommentSection from "../../components/CommentSection";
 
 type Note = Database["public"]["Tables"]["notes"]["Row"];
 type Subject = Database["public"]["Tables"]["subjects"]["Row"];
@@ -391,21 +390,6 @@ const AdminNoteForm: React.FC = () => {
           </div>
         </form>
       </div>
-
-      {/* Comments Section - Only show when editing existing notes */}
-      {isEditing && note.title && (
-        <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-sm border border-gray-100 overflow-hidden max-w-4xl mx-auto">
-          <div className="px-6 py-4 border-b border-gray-100">
-            <h2 className="text-xl font-bold text-gray-900">Comments & Discussion</h2>
-            <p className="text-sm text-gray-600 mt-1">
-              View and manage comments on this note.
-            </p>
-          </div>
-          <div className="p-6">
-            <CommentSection noteId={parseInt(id!)} />
-          </div>
-        </div>
-      )}
     </div>
   );
 };

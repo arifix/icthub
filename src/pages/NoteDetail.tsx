@@ -3,7 +3,6 @@ import { Link, useParams } from "react-router-dom";
 import { BookOpen, FileText, Sparkles, ChevronRight } from "lucide-react";
 import { supabase } from "../lib/supabase";
 import { Database } from "../types/supabase";
-import CommentSection from "../components/CommentSection";
 
 type Note = Database["public"]["Tables"]["notes"]["Row"];
 type Subject = Database["public"]["Tables"]["subjects"]["Row"];
@@ -120,8 +119,7 @@ const NoteDetailPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Comments */}
-        <CommentSection noteId={note.id} />
+
       </div>
     </div>
   );

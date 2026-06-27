@@ -16,7 +16,6 @@ import { stripHtmlAndTruncate } from "../utils/helper";
 
 type Subject = Database["public"]["Tables"]["subjects"]["Row"] & {
   semester?: { name: string } | null;
-  teachers?: Array<{ name: string; designation?: string }>;
 };
 type Note = Database["public"]["Tables"]["notes"]["Row"] & {
   subjects?: { title: string; code: string } | null;
@@ -43,11 +42,6 @@ const SubjectCard: React.FC<{ subject: Subject }> = ({ subject }) => (
         <h3 className="text-sm font-semibold text-gray-900 group-hover:text-primary-700 transition-colors line-clamp-2 mb-1">
           {subject.title}
         </h3>
-        {subject.teachers && subject.teachers.length > 0 && (
-          <p className=" text-gray-500 truncate">
-            {subject.teachers[0].name}
-          </p>
-        )}
       </div>
       <ChevronRight className="h-4 w-4 text-gray-300 group-hover:text-primary-700 transition-colors shrink-0 mt-1" />
     </div>
@@ -134,29 +128,17 @@ const Home: React.FC = () => {
 
         const { data: allSubjects, error: subjectsError } = await supabase
           .from("subjects")
-          .select(
-            `*, semester:semesters(id, name, is_current), subject_teachers(teachers:teacher_id(name, designation))`,
-          )
+          .select(`*, semester:semesters(id, name, is_current)`)
           .eq("is_active", true)
           .order("title", { ascending: true });
 
         if (subjectsError) throw subjectsError;
 
-        const subjectsWithTeachers =
-          allSubjects
-            ?.filter((subject: any) => subject.semester?.is_current === true)
-            .map((subject: any) => ({
-              ...subject,
-              teachers:
-                subject.subject_teachers
-                  ?.map(
-                    (st: {
-                      teachers: { name: string; designation?: string };
-                    }) => st.teachers,
-                  )
-                  .filter(Boolean) || [],
-            })) || [];
-        setRecentSubjects(subjectsWithTeachers);
+        const currentSubjects =
+          allSubjects?.filter(
+            (subject: any) => subject.semester?.is_current === true,
+          ) || [];
+        setRecentSubjects(currentSubjects);
 
         const { data: allNotes, error: notesError } = await supabase
           .from("notes")

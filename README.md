@@ -10,24 +10,13 @@ A comprehensive educational management platform built with React, TypeScript, Ta
 - **Notes**: Access study materials and notes for each subject
 - **Calendar**: View academic events, class schedules, and important dates
 - **Files**: Download study materials, presentations, and resources
-- **Quizzes**: Take interactive quizzes and view results
-- **Results**: View academic results and grades
-- **Student Directory**: View information about classmates
-- **Profile Management**: Update personal and professional information
 
-### For Teachers
-- **Results Management**: Add and edit student results for assigned subjects
-- **Profile Management**: Update personal and professional information
 
 ### For Administrators
 - **Complete Management System**: Manage all aspects of the platform
 - **Semester Management**: Create and manage academic semesters
-- **Subject Management**: Add subjects and assign teachers
-- **Teacher Management**: Add teachers and assign subjects
-- **Student Management**: Manage student information and accounts
+- **Subject Management**: Add subjects
 - **Content Management**: Add notes, files, and events
-- **Quiz Management**: Create interactive quizzes with multiple question types
-- **Results Management**: Comprehensive grade and result tracking
 - **Calendar Management**: Schedule and manage academic events
 
 ## In-App Notifications
@@ -36,7 +25,6 @@ The platform includes a comprehensive in-app notification system that alerts use
 - New files are uploaded
 - New notes are added
 - New events are scheduled
-- New quizzes are created
 
 ### Notification Features
 
@@ -52,7 +40,6 @@ The platform includes a comprehensive in-app notification system that alerts use
 - **📁 File Uploads**: Shows file name, type, and subject
 - **📝 New Notes**: Shows note title and subject
 - **📅 New Events**: Shows event title, date, and subject
-- **🎓 New Quizzes**: Shows quiz title and subject
 
 ## Technology Stack
 
@@ -103,9 +90,6 @@ The platform includes a comprehensive in-app notification system that alerts use
 - Students log in using their student ID (format: 10025100040830XX) and password
 - Student IDs follow the university's numbering system
 
-### Teacher Login
-- Teachers log in using their email and password
-- Can only manage results for their assigned subjects
 
 ### Admin Login
 - Administrators log in using email and password via Supabase Auth
@@ -116,19 +100,9 @@ The platform includes a comprehensive in-app notification system that alerts use
 The application uses the following main tables:
 - `semesters` - Academic semesters
 - `subjects` - Course subjects
-- `teachers` - Teacher information
-- `students` - Student information
-- `subject_teachers` - Teacher-subject assignments
 - `notes` - Study notes and materials
 - `events` - Academic calendar events
 - `files` - File uploads and resources
-- `quizzes` - Quiz definitions
-- `questions` - Quiz questions
-- `options` - Question options
-- `quiz_attempts` - Student quiz attempts
-- `attempt_answers` - Individual question answers
-- `result_categories` - Assessment categories (Midterm, Final, etc.)
-- `student_results` - Student grades and results
 - `notifications` - In-app notifications for users
 
 ## Security Features

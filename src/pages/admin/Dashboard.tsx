@@ -36,9 +36,6 @@ const AdminDashboard: React.FC = () => {
     notes: 0,
     events: 0,
     files: 0,
-    students: 0,
-    quizzes: 0,
-    teachers: 0,
     semesters: 0,
   });
   const [semesters, setSemesters] = useState<Semester[]>([]);
@@ -68,9 +65,6 @@ const AdminDashboard: React.FC = () => {
         { count: notesCount },
         { count: eventsCount },
         { count: filesCount },
-        { count: studentsCount },
-        { count: quizzesCount },
-        { count: teachersCount },
         { count: semestersCount },
         { data: semestersData, error: semestersError },
       ] = await Promise.all([
@@ -78,9 +72,6 @@ const AdminDashboard: React.FC = () => {
         supabase.from("notes").select("*", { count: "exact", head: true }),
         supabase.from("events").select("*", { count: "exact", head: true }),
         supabase.from("files").select("*", { count: "exact", head: true }),
-        supabase.from("students").select("*", { count: "exact", head: true }),
-        supabase.from("quizzes").select("*", { count: "exact", head: true }),
-        supabase.from("teachers").select("*", { count: "exact", head: true }),
         supabase.from("semesters").select("*", { count: "exact", head: true }),
         supabase
           .from("semesters")
@@ -95,9 +86,6 @@ const AdminDashboard: React.FC = () => {
         notes: notesCount || 0,
         events: eventsCount || 0,
         files: filesCount || 0,
-        students: studentsCount || 0,
-        quizzes: quizzesCount || 0,
-        teachers: teachersCount || 0,
         semesters: semestersCount || 0,
       });
 
@@ -229,31 +217,7 @@ const AdminDashboard: React.FC = () => {
       color: "purple",
       link: "/admin/files",
       addLink: "/admin/files/new",
-    },
-    {
-      title: "Quizzes",
-      count: stats.quizzes,
-      icon: GraduationCap,
-      color: "indigo",
-      link: "/admin/quizzes",
-      addLink: "/admin/quizzes/new",
-    },
-    {
-      title: "Students",
-      count: stats.students,
-      icon: Users,
-      color: "rose",
-      link: "/admin/students",
-      addLink: "/admin/students/new",
-    },
-    {
-      title: "Teachers",
-      count: stats.teachers,
-      icon: UserCheck,
-      color: "green",
-      link: "/admin/teachers",
-      addLink: "/admin/teachers/new",
-    },
+    }
   ];
 
   const getColorClasses = (color: string) => {
@@ -293,7 +257,7 @@ const AdminDashboard: React.FC = () => {
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
         {statCards.map((card) => {
           const colorClasses = getColorClasses(card.color);
           const [gradientClasses, iconBgClasses] = colorClasses.split(" bg-");

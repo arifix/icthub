@@ -1,17 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { BookOpen, Calendar, FileText, File, ArrowLeft, ChevronRight, User, Download } from "lucide-react";
+import { BookOpen, Calendar, FileText, File, ArrowLeft, ChevronRight, Download } from "lucide-react";
 import { supabase } from "../lib/supabase";
 import { Database } from "../types/supabase";
 
 type Subject = Database["public"]["Tables"]["subjects"]["Row"] & {
   semester?: { name: string } | null;
-  teachers?: Array<{
-    id: number;
-    name: string;
-    designation?: string;
-    email?: string;
-  }>;
 };
 type Note = Database["public"]["Tables"]["notes"]["Row"];
 type Event = Database["public"]["Tables"]["events"]["Row"];
@@ -33,7 +27,7 @@ const SubjectDetailPage: React.FC = () => {
 
         const { data: subjectData, error: subjectError } = await supabase
           .from("subjects")
-          .select(`*, semester:semesters(id, name, is_current), subject_teachers(teachers:teacher_id(id, name, designation, email))`)
+          .select(`*, semester:semesters(id, name, is_current)`)
           .eq("id", id)
           .eq("is_active", true)
           .single();
@@ -42,18 +36,14 @@ const SubjectDetailPage: React.FC = () => {
           const { data: basicSubject, error: basicError } = await supabase
             .from("subjects").select("*").eq("id", id).eq("is_active", true).single();
           if (basicError || !basicSubject) { setSubject(null); return; }
-          setSubject({ ...(basicSubject as any), teachers: [] } as Subject);
+          setSubject(basicSubject as Subject);
           document.title = (basicSubject as any)?.title || "Subject";
           return;
         }
 
         if (!subjectData) { setSubject(null); return; }
 
-        const subjectWithTeachers = {
-          ...(subjectData as any),
-          teachers: (subjectData as any)?.subject_teachers?.map((st: any) => st.teachers).filter(Boolean) || [],
-        };
-        setSubject(subjectWithTeachers);
+        setSubject(subjectData as Subject);
         document.title = `${(subjectData as any)?.title} — ICTHub`;
 
         const [notesRes, eventsRes, filesRes] = await Promise.all([
@@ -130,12 +120,6 @@ const SubjectDetailPage: React.FC = () => {
                   <span className="flex items-center gap-1.5">
                     <Calendar className="h-3.5 w-3.5 text-accent-500" />
                     {subject.semester.name}
-                  </span>
-                )}
-                {subject.teachers && subject.teachers.length > 0 && (
-                  <span className="flex items-center gap-1.5">
-                    <User className="h-3.5 w-3.5 text-accent-500" />
-                    {subject.teachers.map((t) => t.name).join(", ")}
                   </span>
                 )}
               </div>

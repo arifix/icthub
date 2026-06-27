@@ -32,8 +32,6 @@ const NotificationDropdown: React.FC = () => {
         return <File className="h-4 w-4 text-purple-600" />;
       case "event":
         return <Calendar className="h-4 w-4 text-amber-600" />;
-      case "quiz":
-        return <GraduationCap className="h-4 w-4 text-indigo-600" />;
       default:
         return <Bell className="h-4 w-4 text-gray-600" />;
     }
@@ -47,8 +45,6 @@ const NotificationDropdown: React.FC = () => {
         return "/files";
       case "event":
         return "/calendar";
-      case "quiz":
-        return `/quizzes/${notification.related_id}`;
       default:
         return "/";
     }
@@ -178,8 +174,6 @@ const NotificationDropdown: React.FC = () => {
                                 ? "bg-gradient-to-br from-purple-100 to-fuchsia-100"
                                 : notification.type === "event"
                                 ? "bg-gradient-to-br from-amber-100 to-orange-100"
-                                : notification.type === "quiz"
-                                ? "bg-green-100"
                                 : "bg-gradient-to-br from-gray-100 to-slate-100"
                             }`}
                           >

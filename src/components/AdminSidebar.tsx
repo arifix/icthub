@@ -58,15 +58,15 @@ const AdminSidebar: React.FC = () => {
       } flex flex-col`}
     >
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-4 bg-kuet-dark border-b border-white/10">
+      <div className="flex items-center justify-between px-4 py-4 border-b border-white/10">
         {!collapsed && (
           <div className="flex items-center gap-2.5">
             <div className="bg-primary-700 p-1.5 rounded-md border border-primary-600">
               <BookOpen className="h-4 w-4 text-white" />
             </div>
             <div>
-              <h1 className="text-sm font-bold text-white">ICTHub</h1>
-              <p className=" text-gray-400">Admin Panel</p>
+              <h1 className="text-sm font-bold">ICTHub</h1>
+              <p className=" text-gray-600">Admin Panel</p>
             </div>
           </div>
         )}
