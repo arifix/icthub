@@ -12,14 +12,22 @@ export const useNotifications = () => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [loading, setLoading] = useState(true);
-  const { currentSemester } = useSemesterData();
+  const { currentSemester, loading: semesterLoading } = useSemesterData();
 
   useEffect(() => {
-    if (currentSemester) {
-      fetchNotifications();
-      subscribeToNotifications();
+    // Wait until semester data has finished loading
+    if (semesterLoading) return;
+
+    // No current semester — nothing to load
+    if (!currentSemester) {
+      setLoading(false);
+      return;
     }
-  }, [currentSemester]);
+
+    fetchNotifications();
+    const cleanup = subscribeToNotifications();
+    return cleanup;
+  }, [currentSemester, semesterLoading]);
 
   const fetchNotifications = async () => {
     if (!currentSemester) return;
