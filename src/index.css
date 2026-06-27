@@ -1,0 +1,46 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --kuet-green: #005b3a;
+    --kuet-amber: #ffb606;
+    --kuet-dark: #1e2a3b;
+  }
+
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    color: #333333;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+}
+
+@layer components {
+  .section-heading {
+    @apply text-2xl font-bold text-kuet-dark relative pb-3 mb-6;
+  }
+  .section-heading::after {
+    content: '';
+    @apply absolute bottom-0 left-0 w-12 h-0.5 bg-accent-500;
+  }
+  .btn-primary {
+    @apply bg-primary-700 text-white px-5 py-2.5 rounded font-semibold hover:bg-primary-800 transition-colors text-sm;
+  }
+  .btn-accent {
+    @apply bg-accent-500 text-kuet-dark px-5 py-2.5 rounded font-semibold hover:bg-accent-600 transition-colors text-sm;
+  }
+  .card {
+    @apply bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden;
+  }
+  .notice-ticker {
+    animation: ticker 30s linear infinite;
+  }
+  @keyframes ticker {
+    0%   { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
+  }
+}
