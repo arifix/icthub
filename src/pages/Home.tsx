@@ -86,7 +86,7 @@ const EventCard: React.FC<{ event: Event }> = ({ event }) => {
   const date = new Date(event.date);
   return (
     <div className="flex items-start gap-4 bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
-      <div className="text-center bg-accent-500 text-kuet-dark rounded-lg px-3 py-2 min-w-[52px] shrink-0">
+      <div className="text-center bg-accent-500 text-white rounded-lg px-3 py-2 min-w-[52px] shrink-0">
         <div className=" font-bold uppercase">
           {date.toLocaleDateString(undefined, { month: "short" })}
         </div>
@@ -197,7 +197,7 @@ const Home: React.FC = () => {
         <div className="absolute inset-0 opacity-10" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-14 relative">
           <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 bg-accent-500 text-kuet-dark text-xs font-bold px-3 py-1 rounded-full mb-4 uppercase tracking-wide">
+            <div className="inline-flex items-center gap-2 bg-accent-500 text-white text-xs font-bold px-3 py-1 rounded-full mb-4 uppercase tracking-wide">
               M.Sc. Eng. in ICT Programme
             </div>
             <h1 className="text-4xl sm:text-5xl font-bold text-white mb-4 leading-tight">

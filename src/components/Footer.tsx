@@ -104,7 +104,7 @@ const Footer: React.FC = () => {
               href="https://www.arif-khan.net"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-accent-500 hover:text-accent-400 transition-colors"
+              className="text-gray-300 hover:text-gray-200 transition-colors"
             >
               Arif Khan
             </a>

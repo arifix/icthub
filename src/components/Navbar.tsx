@@ -41,8 +41,8 @@ const Navbar: React.FC = () => {
   const linkClass = ({ isActive }: { isActive: boolean }) =>
     `flex items-center gap-1.5 px-3 py-2 text-sm font-medium transition-colors ${
       isActive
-        ? "text-accent-500 border-b-2 border-accent-500"
-        : "text-gray-200 hover:text-white"
+        ? "text-white border-b-2 border-white"
+        : "text-gray-300 hover:text-white"
     }`;
 
   return (
@@ -97,7 +97,7 @@ const Navbar: React.FC = () => {
             {isAdmin && (
               <Link
                 to="/admin/dashboard"
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded  font-semibold bg-accent-500 text-kuet-dark hover:bg-accent-400 transition-colors ml-2"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded  font-semibold bg-accent-500 text-white hover:bg-accent-400 transition-colors ml-2"
               >
                 <Settings className="h-3.5 w-3.5" />
                 Admin

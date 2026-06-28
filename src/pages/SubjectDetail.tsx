@@ -111,7 +111,7 @@ const SubjectDetailPage: React.FC = () => {
               <BookOpen className="h-6 w-6 text-white" />
             </div>
             <div>
-              <div className="inline-block bg-accent-500 text-kuet-dark  font-bold px-2.5 py-1 rounded mb-2">
+              <div className="inline-block bg-accent-500 text-white  font-bold px-2.5 py-1 rounded mb-2">
                 {subject.code}
               </div>
               <h1 className="text-2xl sm:text-3xl font-bold text-white">{subject.title}</h1>
@@ -189,7 +189,7 @@ const SubjectDetailPage: React.FC = () => {
                 const d = new Date(event.date);
                 return (
                   <div key={event.id} className="flex items-start gap-4 px-6 py-4">
-                    <div className="text-center bg-accent-500 text-kuet-dark rounded-lg px-3 py-2 min-w-[48px] shrink-0">
+                    <div className="text-center bg-accent-500 text-white rounded-lg px-3 py-2 min-w-[48px] shrink-0">
                       <div className="text-[9px] font-bold uppercase">{d.toLocaleDateString(undefined, { month: "short" })}</div>
                       <div className="text-lg font-bold leading-none">{d.getDate()}</div>
                     </div>

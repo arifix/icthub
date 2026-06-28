@@ -106,7 +106,7 @@ const NoteDetailPage: React.FC = () => {
           <div className="bg-primary-50 border border-primary-200 rounded-lg p-5 mb-6 flex items-start gap-3">
             <Sparkles className="h-5 w-5 text-primary-700 shrink-0 mt-0.5" />
             <div>
-              <p className=" font-bold text-primary-700 uppercase tracking-wide mb-1">AI Summary</p>
+              <p className=" font-bold text-primary-700 uppercase tracking-wide mb-1">Summary</p>
               <p className="text-sm text-gray-700 leading-relaxed">{note.summary}</p>
             </div>
           </div>

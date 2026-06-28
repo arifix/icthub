@@ -139,7 +139,7 @@ const CalendarPage: React.FC = () => {
                             </div>
                             {day.events && day.events.slice(0, 2).map((event: Event) => (
                               <div key={event.id}
-                                className="text-[9px] bg-accent-500 text-kuet-dark rounded px-1 py-0.5 truncate mb-0.5 font-semibold"
+                                className="text-[9px] bg-accent-500 text-white rounded px-1 py-0.5 truncate mb-0.5 font-semibold"
                                 title={event.title}>
                                 {event.title}
                               </div>
@@ -180,7 +180,7 @@ const CalendarPage: React.FC = () => {
                     const d = new Date(event.date);
                     return (
                       <div key={event.id} className="flex items-start gap-3 px-5 py-4">
-                        <div className="text-center bg-accent-500 text-kuet-dark rounded px-2 py-1.5 min-w-[42px] shrink-0">
+                        <div className="text-center bg-accent-500 text-white rounded px-2 py-1.5 min-w-[42px] shrink-0">
                           <div className="text-[9px] font-bold uppercase">{d.toLocaleDateString(undefined, { month: "short" })}</div>
                           <div className="text-base font-bold leading-none">{d.getDate()}</div>
                         </div>

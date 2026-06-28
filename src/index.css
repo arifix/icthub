@@ -25,13 +25,13 @@
   }
   .section-heading::after {
     content: '';
-    @apply absolute bottom-0 left-0 w-12 h-0.5 bg-accent-500;
+    @apply absolute bottom-0 left-0 w-12 h-0.5 bg-[#002147];
   }
   .btn-primary {
     @apply bg-primary-700 text-white px-5 py-2.5 rounded font-semibold hover:bg-primary-800 transition-colors text-sm;
   }
   .btn-accent {
-    @apply bg-accent-500 text-kuet-dark px-5 py-2.5 rounded font-semibold hover:bg-accent-600 transition-colors text-sm;
+    @apply bg-[#002147] text-white px-5 py-2.5 rounded font-semibold hover:bg-[#002147] transition-colors text-sm;
   }
   .card {
     @apply bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden;
