@@ -48,7 +48,7 @@ const AdminSubjectForm: React.FC = () => {
           description: "",
           is_active: true,
           semester_id: null,
-        }
+        },
       );
     } catch (error) {
       console.error("Error fetching subject:", error);
@@ -78,7 +78,7 @@ const AdminSubjectForm: React.FC = () => {
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
     setSubject((prev) => ({ ...prev, [name]: value }));
@@ -174,9 +174,7 @@ const AdminSubjectForm: React.FC = () => {
       {/* Form */}
       <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-sm border border-gray-100 overflow-hidden max-w-4xl mx-auto">
         <div className="px-6 py-4 border-b border-gray-100">
-          <h2 className="text-xl font-bold text-gray-900">
-            Subject Details
-          </h2>
+          <h2 className="text-xl font-bold text-gray-900">Subject Details</h2>
           <p className="text-sm text-gray-600 mt-1">
             Fill in the information below to {isEditing ? "update" : "create"}{" "}
             the subject.

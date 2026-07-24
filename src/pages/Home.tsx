@@ -27,23 +27,29 @@ type Event = Database["public"]["Tables"]["events"]["Row"] & {
 const SubjectCard: React.FC<{ subject: Subject }> = ({ subject }) => (
   <Link
     to={`/subjects/${subject.id}`}
-    className="group bg-white border border-gray-200 hover:border-primary-300 rounded-lg p-5 shadow-sm hover:shadow-md transition-all duration-200"
+    className="group bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-blue-200"
   >
-    <div className="flex items-start gap-4">
-      <div className="w-10 h-10 bg-primary-700 rounded-lg flex items-center justify-center shrink-0 group-hover:bg-primary-800 transition-colors">
-        <BookOpen className="h-5 w-5 text-white" />
-      </div>
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2 mb-1">
-          <span className=" font-bold text-primary-700 bg-primary-50 px-2 py-0.5 rounded">
-            {subject.code}
-          </span>
+    <div className="p-6">
+      <div className="flex items-center justify-between mb-4">
+        <div className="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl shadow-sm group-hover:scale-110 transition-transform duration-300">
+          <BookOpen className="h-6 w-6 text-white" />
         </div>
-        <h3 className="text-sm font-semibold text-gray-900 group-hover:text-primary-700 transition-colors line-clamp-2 mb-1">
-          {subject.title}
-        </h3>
+        <span className="px-3 py-1 bg-blue-50 text-blue-700 text-xs font-semibold rounded-full font-mono">
+          {subject.code}
+        </span>
       </div>
-      <ChevronRight className="h-4 w-4 text-gray-300 group-hover:text-primary-700 transition-colors shrink-0 mt-1" />
+      <h2 className="text-base font-bold mb-2 text-gray-900 group-hover:text-blue-600 transition-colors duration-200 line-clamp-2">
+        {subject.title}
+      </h2>
+      {subject.semester && (
+        <div className="flex items-center text-sm text-gray-500 mb-4">
+          <div className="w-1.5 h-1.5 bg-blue-400 rounded-full mr-2" />
+          <span>{subject.semester.name}</span>
+        </div>
+      )}
+      <div className="flex items-center text-blue-600 font-medium text-sm group-hover:translate-x-1 transition-transform duration-200">
+        View Details <ArrowRight className="ml-2 h-4 w-4" />
+      </div>
     </div>
   </Link>
 );
@@ -51,33 +57,38 @@ const SubjectCard: React.FC<{ subject: Subject }> = ({ subject }) => (
 const NoteCard: React.FC<{ note: Note }> = ({ note }) => (
   <Link
     to={`/notes/${note.id}`}
-    className="group flex items-start gap-4 bg-white border border-gray-200 hover:border-primary-300 rounded-lg p-4 shadow-sm hover:shadow-md transition-all duration-200"
+    className="group bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-teal-200"
   >
-    <div className="w-9 h-9 bg-gray-100 group-hover:bg-primary-50 rounded-lg flex items-center justify-center shrink-0 transition-colors">
-      <FileText className="h-4 w-4 text-gray-500 group-hover:text-primary-700 transition-colors" />
-    </div>
-    <div className="flex-1 min-w-0">
-      <div className="flex items-center justify-between gap-2 mb-1">
-        {note.subjects?.code && (
-          <span className=" font-bold text-primary-700 bg-primary-50 px-1.5 py-0.5 rounded uppercase">
-            {note.subjects.code}
-          </span>
-        )}
-        <span className=" text-gray-400 flex items-center gap-0.5 ml-auto">
-          <Clock className="h-3 w-3" />
+    <div className="p-5">
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center space-x-2">
+          <div className="inline-flex items-center justify-center w-9 h-9 bg-teal-100 rounded-lg">
+            <FileText className="h-4 w-4 text-teal-600" />
+          </div>
+          {note.subjects?.code && (
+            <span className="px-2.5 py-1 bg-teal-50 text-teal-700 text-xs font-semibold rounded-full font-mono">
+              {note.subjects.code}
+            </span>
+          )}
+        </div>
+        <span className="text-xs text-gray-400 flex items-center gap-1">
+          <Clock className="h-3.5 w-3.5" />
           {new Date(note.created_at).toLocaleDateString()}
         </span>
       </div>
-      <h3 className="text-sm font-semibold text-gray-900 group-hover:text-primary-700 transition-colors line-clamp-1 mb-1">
+      <h3 className="text-sm font-bold mb-2 text-gray-900 group-hover:text-teal-600 transition-colors line-clamp-2">
         {note.title}
       </h3>
-      <p className=" text-gray-500 line-clamp-1">
+      <p className="text-xs text-gray-500 line-clamp-2 mb-3">
         <span
           dangerouslySetInnerHTML={{
             __html: stripHtmlAndTruncate(note.content, 80),
           }}
         />
       </p>
+      <div className="flex items-center text-teal-600 font-medium text-sm group-hover:translate-x-1 transition-transform duration-200">
+        Read More <ArrowRight className="ml-2 h-4 w-4" />
+      </div>
     </div>
   </Link>
 );
@@ -85,31 +96,36 @@ const NoteCard: React.FC<{ note: Note }> = ({ note }) => (
 const EventCard: React.FC<{ event: Event }> = ({ event }) => {
   const date = new Date(event.date);
   return (
-    <div className="flex items-start gap-4 bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
-      <div className="text-center bg-accent-500 text-white rounded-lg px-3 py-2 min-w-[52px] shrink-0">
-        <div className=" font-bold uppercase">
-          {date.toLocaleDateString(undefined, { month: "short" })}
+    <div className="group bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-amber-200">
+      <div className="p-5">
+        <div className="flex gap-4">
+          <div className="flex-shrink-0">
+            <div className="bg-gradient-to-br from-amber-500 to-amber-600 text-white rounded-xl p-3 text-center min-w-[60px] shadow-md">
+              <div className="text-xs font-medium opacity-90">
+                {date.toLocaleDateString(undefined, { month: "short" })}
+              </div>
+              <div className="text-2xl font-bold leading-tight">
+                {date.getDate()}
+              </div>
+            </div>
+          </div>
+          <div className="flex-1 min-w-0">
+            <h3 className="text-sm font-bold text-gray-900 group-hover:text-amber-600 transition-colors line-clamp-2 mb-2">
+              {event.title}
+            </h3>
+            {event.subjects ? (
+              <div className="flex items-center text-xs text-amber-600 bg-amber-50 px-2.5 py-1 rounded-full w-fit">
+                <BookOpen className="h-3 w-3 mr-1.5" />
+                <span className="font-medium">{event.subjects.code}</span>
+              </div>
+            ) : (
+              <div className="flex items-center text-xs text-gray-500 bg-gray-100 px-2.5 py-1 rounded-full w-fit">
+                <Globe className="h-3 w-3 mr-1.5" />
+                <span>General</span>
+              </div>
+            )}
+          </div>
         </div>
-        <div className="text-xl font-bold leading-none">{date.getDate()}</div>
-      </div>
-      <div className="flex-1 min-w-0">
-        <h3 className="text-sm font-semibold text-gray-900 line-clamp-1 mb-1">
-          {event.title}
-        </h3>
-        {event.subjects ? (
-          <span className=" text-primary-700 bg-primary-50 px-2 py-0.5 rounded">
-            {event.subjects.code}
-          </span>
-        ) : (
-          <span className=" text-gray-500 flex items-center gap-1">
-            <Globe className="h-3 w-3" />
-            General
-          </span>
-        )}
-        <p
-          className=" text-gray-500 mt-1 line-clamp-1"
-          dangerouslySetInnerHTML={{ __html: event.description }}
-        />
       </div>
     </div>
   );
@@ -191,79 +207,56 @@ const Home: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Hero Banner */}
-      <div className="bg-primary-700 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10" />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-14 relative">
-          <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 bg-accent-500 text-white text-xs font-bold px-3 py-1 rounded-full mb-4 uppercase tracking-wide">
-              M.Sc. Eng. in ICT Programme
-            </div>
-            <h1 className="text-4xl sm:text-5xl font-bold text-white mb-4 leading-tight">
-              Welcome to ICTHub
-            </h1>
-            <p className="text-lg text-white/80 mb-8 leading-relaxed max-w-2xl">
-              Your academic resource portal for the Institute of Information and
-              Communication Technology (IICT), Khulna University of Engineering
-              &amp; Technology.
-            </p>
-            <div className="flex flex-wrap gap-3">
-              <Link
-                to="/subjects"
-                className="btn-accent inline-flex items-center gap-2 rounded"
-              >
-                <BookOpen className="h-4 w-4" />
-                Browse Subjects
-              </Link>
-              <Link
-                to="/notes"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded bg-white/15 text-white border border-white/30 hover:bg-white/25 transition-colors text-sm font-semibold"
-              >
-                <FileText className="h-4 w-4" />
-                Study Notes
-              </Link>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+      {/* Hero */}
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-10">
+        <div className="max-w-4xl mx-auto text-center">
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+            Welcome to ICTHub
+          </h1>
+          <p className="text-lg text-gray-600 mb-10 max-w-2xl mx-auto">
+            Your academic resource portal for the M.Sc. Eng. in ICT programme at
+            the Institute of Information and Communication Technology (IICT),
+            KUET.
+          </p>
 
-      {/* Stats bar */}
-      <div className="bg-kuet-dark border-b border-white/10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-white/10">
+          {/* Stats */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto">
             {[
               {
                 icon: BookOpen,
                 value: recentSubjects.length,
-                label: "Current Subjects",
-                color: "text-accent-500",
+                label: "Subjects",
+                color: "text-blue-600",
               },
               {
                 icon: FileText,
                 value: recentNotes.length + "+",
-                label: "Study Notes",
-                color: "text-accent-500",
+                label: "Notes",
+                color: "text-teal-600",
               },
               {
                 icon: Calendar,
                 value: upcomingEvents.length,
-                label: "Upcoming Events",
-                color: "text-accent-500",
+                label: "Events",
+                color: "text-amber-600",
               },
               {
                 icon: File,
                 value: "IICT",
                 label: "KUET",
-                color: "text-accent-500",
+                color: "text-indigo-600",
               },
             ].map(({ icon: Icon, value, label, color }) => (
-              <div key={label} className="flex items-center gap-3 px-6 py-4">
-                <Icon className={`h-5 w-5 ${color} shrink-0`} />
-                <div>
-                  <div className={`text-xl font-bold ${color}`}>{value}</div>
-                  <div className=" text-gray-400">{label}</div>
+              <div
+                key={label}
+                className="bg-white/80 backdrop-blur-sm rounded-xl p-4 shadow-sm border border-gray-100"
+              >
+                <div className="flex items-center justify-center mb-2">
+                  <Icon className={`h-5 w-5 ${color}`} />
                 </div>
+                <div className="text-2xl font-bold text-gray-900">{value}</div>
+                <div className="text-sm text-gray-500">{label}</div>
               </div>
             ))}
           </div>
@@ -271,91 +264,104 @@ const Home: React.FC = () => {
       </div>
 
       {/* Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 space-y-12">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 pb-16 space-y-10">
         {/* Quick Access */}
         <div>
-          <h2 className="section-heading">Quick Access</h2>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            {[
-              {
-                to: "/subjects",
-                label: "Subjects",
-                desc: "Courses & materials",
-                icon: BookOpen,
-                color: "bg-primary-700",
-              },
-              {
-                to: "/notes",
-                label: "Notes",
-                desc: "Study materials",
-                icon: FileText,
-                color: "bg-kuet-dark",
-              },
-              {
-                to: "/calendar",
-                label: "Calendar",
-                desc: "Events & schedule",
-                icon: Calendar,
-                color: "bg-amber-600",
-              },
-              {
-                to: "/files",
-                label: "Files",
-                desc: "Resources & docs",
-                icon: File,
-                color: "bg-teal-700",
-              },
-            ].map(({ to, label, desc, icon: Icon, color }) => (
-              <Link
-                key={to}
-                to={to}
-                className="group bg-white border border-gray-200 hover:border-primary-200 rounded-lg p-5 shadow-sm hover:shadow-md transition-all duration-200 flex items-start gap-4"
-              >
-                <div
-                  className={`w-10 h-10 ${color} rounded-lg flex items-center justify-center shrink-0`}
-                >
-                  <Icon className="h-5 w-5 text-white" />
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <Link
+              to="/subjects"
+              className="group relative bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-blue-200"
+            >
+              <div className="absolute top-0 right-0 w-24 h-24 bg-blue-50 rounded-bl-full transform translate-x-4 -translate-y-4 opacity-60" />
+              <div className="relative p-5">
+                <div className="inline-flex items-center justify-center w-11 h-11 bg-blue-600 rounded-xl mb-3 shadow-sm group-hover:scale-110 transition-transform duration-300">
+                  <BookOpen className="h-5 w-5 text-white" />
                 </div>
-                <div>
-                  <div className="font-semibold text-gray-900 text-sm group-hover:text-primary-700 transition-colors">
-                    {label}
-                  </div>
-                  <div className=" text-gray-500 mt-0.5">{desc}</div>
+                <h3 className="text-sm font-semibold text-gray-900 mb-0.5 group-hover:text-blue-600 transition-colors">
+                  Subjects
+                </h3>
+                <p className="text-xs text-gray-400">Courses & materials</p>
+              </div>
+            </Link>
+            <Link
+              to="/notes"
+              className="group relative bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-teal-200"
+            >
+              <div className="absolute top-0 right-0 w-24 h-24 bg-teal-50 rounded-bl-full transform translate-x-4 -translate-y-4 opacity-60" />
+              <div className="relative p-5">
+                <div className="inline-flex items-center justify-center w-11 h-11 bg-teal-600 rounded-xl mb-3 shadow-sm group-hover:scale-110 transition-transform duration-300">
+                  <FileText className="h-5 w-5 text-white" />
                 </div>
-              </Link>
-            ))}
+                <h3 className="text-sm font-semibold text-gray-900 mb-0.5 group-hover:text-teal-600 transition-colors">
+                  Notes
+                </h3>
+                <p className="text-xs text-gray-400">Study materials</p>
+              </div>
+            </Link>
+            <Link
+              to="/calendar"
+              className="group relative bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-amber-200"
+            >
+              <div className="absolute top-0 right-0 w-24 h-24 bg-amber-50 rounded-bl-full transform translate-x-4 -translate-y-4 opacity-60" />
+              <div className="relative p-5">
+                <div className="inline-flex items-center justify-center w-11 h-11 bg-amber-500 rounded-xl mb-3 shadow-sm group-hover:scale-110 transition-transform duration-300">
+                  <Calendar className="h-5 w-5 text-white" />
+                </div>
+                <h3 className="text-sm font-semibold text-gray-900 mb-0.5 group-hover:text-amber-600 transition-colors">
+                  Calendar
+                </h3>
+                <p className="text-xs text-gray-400">Events & schedule</p>
+              </div>
+            </Link>
+            <Link
+              to="/files"
+              className="group relative bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-indigo-200"
+            >
+              <div className="absolute top-0 right-0 w-24 h-24 bg-indigo-50 rounded-bl-full transform translate-x-4 -translate-y-4 opacity-60" />
+              <div className="relative p-5">
+                <div className="inline-flex items-center justify-center w-11 h-11 bg-indigo-600 rounded-xl mb-3 shadow-sm group-hover:scale-110 transition-transform duration-300">
+                  <File className="h-5 w-5 text-white" />
+                </div>
+                <h3 className="text-sm font-semibold text-gray-900 mb-0.5 group-hover:text-indigo-600 transition-colors">
+                  Files
+                </h3>
+                <p className="text-xs text-gray-400">Resources & docs</p>
+              </div>
+            </Link>
           </div>
         </div>
 
         {/* Current Subjects */}
         <div>
-          <div className="flex items-center justify-between mb-3">
-            <h2 className="text-xl font-bold text-kuet-dark">
-              Current Semester Subjects
-            </h2>
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <span className="section-label">This Semester</span>
+              <h2 className="text-xl font-bold text-gray-900">
+                Current Subjects
+              </h2>
+            </div>
             <Link
               to="/subjects"
-              className="inline-flex items-center gap-1 text-sm font-medium text-primary-700 hover:text-primary-800 transition-colors"
+              className="flex items-center text-blue-600 font-medium text-sm hover:text-blue-700 transition-colors"
             >
-              View all <ArrowRight className="h-4 w-4" />
+              View all <ArrowRight className="ml-1 h-4 w-4" />
             </Link>
           </div>
-          <div className="h-0.5 w-12 bg-accent-500 mb-6" />
 
           {loading ? (
-            <div className="flex justify-center py-10">
-              <div className="animate-spin rounded-full h-8 w-8 border-2 border-primary-700 border-t-transparent" />
+            <div className="flex justify-center py-16">
+              <div className="animate-spin rounded-full h-10 w-10 border-3 border-blue-600 border-t-transparent" />
             </div>
           ) : recentSubjects.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {recentSubjects.map((subject) => (
                 <SubjectCard key={subject.id} subject={subject} />
               ))}
             </div>
           ) : (
-            <div className="bg-white border border-gray-200 rounded-lg p-10 text-center">
-              <BookOpen className="h-10 w-10 text-gray-300 mx-auto mb-3" />
-              <p className="text-gray-500 text-sm">
+            <div className="bg-white rounded-2xl border border-gray-100 p-12 text-center shadow-sm">
+              <BookOpen className="h-12 w-12 text-gray-300 mx-auto mb-3" />
+              <p className="text-gray-500">
                 No subjects available for the current semester
               </p>
             </div>
@@ -363,33 +369,78 @@ const Home: React.FC = () => {
         </div>
 
         {/* Notes & Events */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Recent Notes */}
           <div>
-            <div className="flex items-center justify-between mb-3">
-              <h2 className="text-xl font-bold text-kuet-dark">Recent Notes</h2>
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <span className="section-label">Latest</span>
+                <h2 className="text-xl font-bold text-gray-900">
+                  Recent Notes
+                </h2>
+              </div>
               <Link
                 to="/notes"
-                className="text-sm font-medium text-primary-700 hover:text-primary-800 flex items-center gap-1"
+                className="flex items-center text-teal-600 font-medium text-sm hover:text-teal-700 transition-colors"
               >
-                View all <ArrowRight className="h-3.5 w-3.5" />
+                View all <ArrowRight className="ml-1 h-4 w-4" />
               </Link>
             </div>
-            <div className="h-0.5 w-10 bg-accent-500 mb-5" />
-
             {loading ? (
-              <div className="flex justify-center py-8">
-                <div className="animate-spin rounded-full h-8 w-8 border-2 border-primary-700 border-t-transparent" />
+              <div className="flex justify-center py-12">
+                <div className="animate-spin rounded-full h-8 w-8 border-2 border-teal-600 border-t-transparent" />
               </div>
             ) : recentNotes.length > 0 ? (
-              <div className="space-y-3">
-                {recentNotes.map((note) => (
-                  <NoteCard key={note.id} note={note} />
-                ))}
+              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                <div className="divide-y divide-gray-50">
+                  {recentNotes.map((note) => (
+                    <Link
+                      key={note.id}
+                      to={`/notes/${note.id}`}
+                      className="flex items-start gap-3 p-4 hover:bg-gray-50 transition-colors group"
+                    >
+                      <div className="w-9 h-9 bg-teal-50 rounded-xl flex items-center justify-center shrink-0 mt-0.5 group-hover:bg-teal-100 transition-colors">
+                        <FileText className="h-4 w-4 text-teal-600" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-1">
+                          {note.subjects?.code && (
+                            <span className="text-xs font-semibold text-teal-700 bg-teal-50 px-2 py-0.5 rounded-full font-mono">
+                              {note.subjects.code}
+                            </span>
+                          )}
+                          <span className="text-xs text-gray-400 flex items-center gap-1">
+                            <Clock className="h-3 w-3" />
+                            {new Date(note.created_at).toLocaleDateString()}
+                          </span>
+                        </div>
+                        <p className="text-sm font-semibold text-gray-900 group-hover:text-teal-600 transition-colors line-clamp-1">
+                          {note.title}
+                        </p>
+                        <p className="text-xs text-gray-400 line-clamp-1 mt-0.5">
+                          <span
+                            dangerouslySetInnerHTML={{
+                              __html: stripHtmlAndTruncate(note.content, 80),
+                            }}
+                          />
+                        </p>
+                      </div>
+                      <ArrowRight className="h-4 w-4 text-gray-300 group-hover:text-teal-500 shrink-0 mt-2 group-hover:translate-x-0.5 transition-transform" />
+                    </Link>
+                  ))}
+                </div>
+                <div className="px-4 py-3 bg-gray-50 border-t border-gray-100">
+                  <Link
+                    to="/notes"
+                    className="text-sm text-teal-600 font-medium hover:text-teal-700 flex items-center gap-1"
+                  >
+                    Browse all notes <ArrowRight className="h-3.5 w-3.5" />
+                  </Link>
+                </div>
               </div>
             ) : (
-              <div className="bg-white border border-gray-200 rounded-lg p-8 text-center">
-                <FileText className="h-8 w-8 text-gray-300 mx-auto mb-2" />
+              <div className="bg-white rounded-2xl border border-gray-100 p-10 text-center shadow-sm">
+                <FileText className="h-10 w-10 text-gray-300 mx-auto mb-2" />
                 <p className="text-gray-500 text-sm">No notes available yet</p>
               </div>
             )}
@@ -397,32 +448,76 @@ const Home: React.FC = () => {
 
           {/* Upcoming Events */}
           <div>
-            <div className="flex items-center justify-between mb-3">
-              <h2 className="text-xl font-bold text-kuet-dark">
-                Upcoming Events
-              </h2>
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <span className="section-label">Upcoming</span>
+                <h2 className="text-xl font-bold text-gray-900">Events</h2>
+              </div>
               <Link
                 to="/calendar"
-                className="text-sm font-medium text-primary-700 hover:text-primary-800 flex items-center gap-1"
+                className="flex items-center text-amber-600 font-medium text-sm hover:text-amber-700 transition-colors"
               >
-                View all <ArrowRight className="h-3.5 w-3.5" />
+                View all <ArrowRight className="ml-1 h-4 w-4" />
               </Link>
             </div>
-            <div className="h-0.5 w-10 bg-accent-500 mb-5" />
-
             {loading ? (
-              <div className="flex justify-center py-8">
-                <div className="animate-spin rounded-full h-8 w-8 border-2 border-primary-700 border-t-transparent" />
+              <div className="flex justify-center py-12">
+                <div className="animate-spin rounded-full h-8 w-8 border-2 border-amber-600 border-t-transparent" />
               </div>
             ) : upcomingEvents.length > 0 ? (
-              <div className="space-y-3">
-                {upcomingEvents.map((event) => (
-                  <EventCard key={event.id} event={event} />
-                ))}
+              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                <div className="divide-y divide-gray-50">
+                  {upcomingEvents.map((event) => {
+                    const date = new Date(event.date);
+                    return (
+                      <div
+                        key={event.id}
+                        className="flex items-start gap-3 p-4"
+                      >
+                        <div className="flex-shrink-0 bg-gradient-to-br from-amber-500 to-amber-600 text-white rounded-xl px-3 py-2 text-center min-w-[52px] shadow-sm">
+                          <div className="text-[10px] font-semibold uppercase opacity-90">
+                            {date.toLocaleDateString(undefined, {
+                              month: "short",
+                            })}
+                          </div>
+                          <div className="text-lg font-bold leading-tight">
+                            {date.getDate()}
+                          </div>
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-semibold text-gray-900 line-clamp-1 mb-1">
+                            {event.title}
+                          </p>
+                          {event.subjects ? (
+                            <div className="flex items-center text-xs text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full w-fit">
+                              <BookOpen className="h-3 w-3 mr-1" />
+                              <span className="font-medium">
+                                {event.subjects.code}
+                              </span>
+                            </div>
+                          ) : (
+                            <div className="flex items-center text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full w-fit">
+                              <Globe className="h-3 w-3 mr-1" />
+                              <span>General</span>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+                <div className="px-4 py-3 bg-gray-50 border-t border-gray-100">
+                  <Link
+                    to="/calendar"
+                    className="text-sm text-amber-600 font-medium hover:text-amber-700 flex items-center gap-1"
+                  >
+                    View full calendar <ArrowRight className="h-3.5 w-3.5" />
+                  </Link>
+                </div>
               </div>
             ) : (
-              <div className="bg-white border border-gray-200 rounded-lg p-8 text-center">
-                <Calendar className="h-8 w-8 text-gray-300 mx-auto mb-2" />
+              <div className="bg-white rounded-2xl border border-gray-100 p-10 text-center shadow-sm">
+                <Calendar className="h-10 w-10 text-gray-300 mx-auto mb-2" />
                 <p className="text-gray-500 text-sm">No upcoming events</p>
               </div>
             )}

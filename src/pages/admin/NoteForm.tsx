@@ -45,7 +45,7 @@ const AdminNoteForm: React.FC = () => {
 
       if (error) throw error;
       setNote(
-        data || { title: "", content: "", subject_id: undefined, summary: "" }
+        data || { title: "", content: "", subject_id: undefined, summary: "" },
       );
     } catch (error) {
       console.error("Error fetching note:", error);
@@ -62,21 +62,24 @@ const AdminNoteForm: React.FC = () => {
       // Only fetch subjects from current semester
       const { data, error } = await supabase
         .from("subjects")
-        .select(`
+        .select(
+          `
           *,
           semester:semesters(id, name, is_current)
-        `)
+        `,
+        )
         .eq("is_active", true)
         .order("title", { ascending: true });
 
       if (error) throw error;
-      
+
       // Filter for current semester subjects only
-      const currentSemesterSubjects = data?.filter(
-        (subject: Subject & { semester?: { is_current: boolean } }) => 
-          subject.semester?.is_current === true
-      ) || [];
-      
+      const currentSemesterSubjects =
+        data?.filter(
+          (subject: Subject & { semester?: { is_current: boolean } }) =>
+            subject.semester?.is_current === true,
+        ) || [];
+
       setSubjects(currentSemesterSubjects);
     } catch (error) {
       console.error("Error fetching subjects:", error);
@@ -89,7 +92,7 @@ const AdminNoteForm: React.FC = () => {
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
+    >,
   ) => {
     const { name, value } = e.target;
 
@@ -157,7 +160,7 @@ const AdminNoteForm: React.FC = () => {
           *,
           subjects:subject_id (title, code),
           semesters:semester_id (name)
-        `
+        `,
           )
           .single();
 

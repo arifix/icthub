@@ -46,7 +46,10 @@ const AdminSettings: React.FC = () => {
     try {
       const { error } = await supabase
         .from("portal_settings")
-        .upsert({ key: "portal_password", value: newPassword.trim() }, { onConflict: "key" });
+        .upsert(
+          { key: "portal_password", value: newPassword.trim() },
+          { onConflict: "key" },
+        );
       if (error) throw error;
       setPortalPassword(newPassword.trim());
       setNewPassword("");
@@ -71,7 +74,9 @@ const AdminSettings: React.FC = () => {
     <div className="max-w-xl space-y-8">
       <div>
         <h1 className="text-2xl font-bold text-gray-900">Settings</h1>
-        <p className="text-sm text-gray-500 mt-1">Manage portal access and configuration.</p>
+        <p className="text-sm text-gray-500 mt-1">
+          Manage portal access and configuration.
+        </p>
       </div>
 
       {/* Portal Password Card */}
@@ -81,16 +86,21 @@ const AdminSettings: React.FC = () => {
             <KeyRound className="h-4 w-4 text-green-700" />
           </div>
           <div>
-            <h2 className="text-sm font-semibold text-gray-900">Portal Access Password</h2>
+            <h2 className="text-sm font-semibold text-gray-900">
+              Portal Access Password
+            </h2>
             <p className=" text-gray-500">
-              Anyone with this password can view the study portal. Changing it invalidates existing sessions.
+              Anyone with this password can view the study portal. Changing it
+              invalidates existing sessions.
             </p>
           </div>
         </div>
 
         {/* Current password (read-only display) */}
         <div>
-          <label className="block  font-medium text-gray-600 mb-1.5">Current Password</label>
+          <label className="block  font-medium text-gray-600 mb-1.5">
+            Current Password
+          </label>
           <div className="relative">
             <input
               type={showCurrent ? "text" : "password"}
@@ -103,14 +113,21 @@ const AdminSettings: React.FC = () => {
               onClick={() => setShowCurrent(!showCurrent)}
               className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
             >
-              {showCurrent ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              {showCurrent ? (
+                <EyeOff className="h-4 w-4" />
+              ) : (
+                <Eye className="h-4 w-4" />
+              )}
             </button>
           </div>
         </div>
 
         <form onSubmit={handleSave} className="space-y-4">
           <div>
-            <label htmlFor="newPw" className="block  font-medium text-gray-600 mb-1.5">
+            <label
+              htmlFor="newPw"
+              className="block  font-medium text-gray-600 mb-1.5"
+            >
               New Password
             </label>
             <div className="relative">
@@ -128,13 +145,20 @@ const AdminSettings: React.FC = () => {
                 onClick={() => setShowNew(!showNew)}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
               >
-                {showNew ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                {showNew ? (
+                  <EyeOff className="h-4 w-4" />
+                ) : (
+                  <Eye className="h-4 w-4" />
+                )}
               </button>
             </div>
           </div>
 
           <div>
-            <label htmlFor="confirmPw" className="block  font-medium text-gray-600 mb-1.5">
+            <label
+              htmlFor="confirmPw"
+              className="block  font-medium text-gray-600 mb-1.5"
+            >
               Confirm New Password
             </label>
             <input

@@ -59,7 +59,7 @@ const AdminNotes: React.FC = () => {
             *,
             subjects:subject_id (title, code),
             semesters:semester_id (name)
-          `
+          `,
           )
           .order("created_at", { ascending: false }),
         supabase
@@ -136,9 +136,7 @@ const AdminNotes: React.FC = () => {
       <div className="bg-gradient-to-r from-emerald-500 to-teal-600 rounded-lg shadow-lg p-5">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-white mb-2">
-              Manage Notes
-            </h1>
+            <h1 className="text-2xl font-bold text-white mb-2">Manage Notes</h1>
             <p className="text-emerald-100">
               Create, edit, and organize study notes for your subjects
             </p>
@@ -196,7 +194,7 @@ const AdminNotes: React.FC = () => {
                 value={selectedSemester}
                 onChange={(e) =>
                   setSelectedSemester(
-                    e.target.value ? Number(e.target.value) : ""
+                    e.target.value ? Number(e.target.value) : "",
                   )
                 }
                 className="w-full px-4 py-3 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-white transition-shadow duration-200 appearance-none cursor-pointer"

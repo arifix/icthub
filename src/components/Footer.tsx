@@ -1,58 +1,58 @@
 import React from "react";
-import { Heart, BookOpen, Mail, Phone, MapPin } from "lucide-react";
+import { BookOpen, MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Footer: React.FC = () => {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="bg-kuet-dark text-gray-300">
-      {/* Main footer */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-          {/* Brand column */}
-          <div>
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 bg-primary-700 rounded-lg flex items-center justify-center border border-primary-600">
-                <BookOpen className="h-5 w-5 text-white" />
+    <footer className="bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 text-white">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 mb-12">
+          {/* Brand */}
+          <div className="lg:col-span-2">
+            <div className="flex items-center mb-4">
+              <div className="w-11 h-11 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg">
+                <BookOpen className="h-6 w-6 text-white" />
               </div>
-              <div>
-                <p className="font-bold text-white text-base leading-none">ICTHub</p>
-                <p className=" text-gray-400 mt-0.5">M.Sc. ICT Study Portal</p>
+              <div className="ml-3">
+                <span className="text-xl font-bold text-white">ICTHub</span>
+                <p className="text-xs text-gray-400 leading-none mt-0.5">
+                  M.Sc. ICT Study Portal
+                </p>
               </div>
             </div>
-            <p className="text-sm text-gray-400 leading-relaxed mb-5">
-              A comprehensive academic portal for students of the M.Sc. Eng. in ICT
-              programme at the Institute of Information and Communication Technology (IICT), KUET.
+            <p className="text-gray-400 text-sm leading-relaxed mb-4 max-w-md">
+              A comprehensive academic portal for students of the M.Sc. Eng. in
+              ICT programme at the Institute of Information and Communication
+              Technology (IICT), KUET.
             </p>
-            <div className="space-y-2 text-sm">
-              <div className="flex items-start gap-2 text-gray-400">
-                <MapPin className="h-4 w-4 text-accent-500 mt-0.5 shrink-0" />
-                <span>IICT, KUET, Khulna-9203, Bangladesh</span>
-              </div>
+            <div className="flex items-start gap-2 text-sm text-gray-400">
+              <MapPin className="h-4 w-4 mt-0.5 shrink-0" />
+              <span>IICT, KUET, Khulna-9203, Bangladesh</span>
             </div>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-white font-semibold text-sm uppercase tracking-widest mb-4 pb-2 border-b border-white/10">
+            <h3 className="text-white font-semibold mb-4 text-sm uppercase tracking-wider">
               Quick Links
             </h3>
             <ul className="space-y-2">
               {[
                 { to: "/subjects", label: "Subjects" },
                 { to: "/notes", label: "Study Notes" },
-                { to: "/calendar", label: "Academic Calendar" },
+                { to: "/calendar", label: "Calendar" },
                 { to: "/files", label: "Files & Resources" },
-                { to: "/archive", label: "Past Semesters" },
+                { to: "/archive", label: "Archive" },
                 { to: "/notifications", label: "Notifications" },
               ].map(({ to, label }) => (
                 <li key={to}>
                   <Link
                     to={to}
-                    className="text-sm text-gray-400 hover:text-accent-500 transition-colors flex items-center gap-1.5"
+                    className="text-gray-400 hover:text-blue-400 transition-colors duration-200 text-sm flex items-center group"
                   >
-                    <span className="w-1 h-1 rounded-full bg-primary-500 inline-block"></span>
+                    <span className="w-1.5 h-1.5 bg-blue-400 rounded-full mr-2 opacity-0 group-hover:opacity-100 transition-opacity" />
                     {label}
                   </Link>
                 </li>
@@ -60,19 +60,22 @@ const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* About IICT */}
+          {/* About */}
           <div>
-            <h3 className="text-white font-semibold text-sm uppercase tracking-widest mb-4 pb-2 border-b border-white/10">
+            <h3 className="text-white font-semibold mb-4 text-sm uppercase tracking-wider">
               About IICT
             </h3>
-            <p className="text-sm text-gray-400 leading-relaxed mb-4">
-              IICT, the first institute of KUET, was established on 05/10/2010 by the
-              approval of University Grant Commission (UGC) of Bangladesh. The goal of
-              IICT is to fulfill the national and international demand of ICT.
+            <p className="text-gray-400 text-sm leading-relaxed mb-4">
+              IICT, the first institute of KUET, was established on 05/10/2010
+              by the approval of UGC Bangladesh. Dedicated to advancing ICT
+              education.
             </p>
             <ul className="space-y-2 text-sm">
               {[
-                { href: "https://www.kuet.ac.bd", label: "KUET Official Website" },
+                {
+                  href: "https://www.kuet.ac.bd",
+                  label: "KUET Official Website",
+                },
                 { href: "https://iict.kuet.ac.bd", label: "IICT Department" },
               ].map(({ href, label }) => (
                 <li key={href}>
@@ -80,9 +83,9 @@ const Footer: React.FC = () => {
                     href={href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-gray-400 hover:text-accent-500 transition-colors flex items-center gap-1.5"
+                    className="text-gray-400 hover:text-blue-400 transition-colors duration-200 flex items-center group"
                   >
-                    <span className="w-1 h-1 rounded-full bg-primary-500 inline-block"></span>
+                    <span className="w-1.5 h-1.5 bg-blue-400 rounded-full mr-2 opacity-0 group-hover:opacity-100 transition-opacity" />
                     {label}
                   </a>
                 </li>
@@ -90,25 +93,25 @@ const Footer: React.FC = () => {
             </ul>
           </div>
         </div>
-      </div>
 
-      {/* Bottom bar */}
-      <div className="border-t border-white/10 bg-kuet-darker">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-2">
-          <p className=" text-gray-500">
-            &copy; {year} ICTHub &mdash; Institute of ICT, KUET. All rights reserved.
-          </p>
-          <p className=" text-gray-500 flex items-center gap-1">
-            Made with <Heart className="h-3 w-3 text-red-400" /> by{" "}
-            <a
-              href="https://www.arif-khan.net"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-gray-300 hover:text-gray-200 transition-colors"
-            >
-              Arif Khan
-            </a>
-          </p>
+        {/* Bottom Bar */}
+        <div className="border-t border-gray-800 pt-8">
+          <div className="flex flex-col md:flex-row justify-between items-center space-y-3 md:space-y-0">
+            <div className="flex items-center space-x-2 text-sm text-gray-400">
+              <span>&copy; {year} ICTHub &mdash; Institute of ICT, KUET</span>
+            </div>
+            <div className="flex items-center space-x-2 text-sm text-gray-400">
+              <span>Made by</span>
+              <a
+                href="https://www.arif-khan.net"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-400 hover:text-blue-300 transition-colors font-medium"
+              >
+                Arif Khan
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </footer>

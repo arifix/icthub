@@ -59,7 +59,7 @@ const AdminEventForm: React.FC = () => {
           date: new Date().toISOString().split("T")[0],
           subject_id: null,
           semester_id: null,
-        }
+        },
       );
     } catch (error) {
       console.error("Error fetching event:", error);
@@ -80,10 +80,12 @@ const AdminEventForm: React.FC = () => {
       ] = await Promise.all([
         supabase
           .from("subjects")
-          .select(`
+          .select(
+            `
             *,
             semester:semesters(id, name, is_current)
-          `)
+          `,
+          )
           .eq("is_active", true)
           .order("title", { ascending: true }),
         supabase
@@ -96,9 +98,10 @@ const AdminEventForm: React.FC = () => {
       if (semestersError) throw semestersError;
 
       // Filter for current semester subjects only
-      const currentSemesterSubjects = allSubjects?.filter(
-        (subject: any) => subject.semester?.is_current === true
-      ) || [];
+      const currentSemesterSubjects =
+        allSubjects?.filter(
+          (subject: any) => subject.semester?.is_current === true,
+        ) || [];
 
       setSubjects(currentSemesterSubjects);
       setSemesters(semestersData || []);
@@ -121,7 +124,7 @@ const AdminEventForm: React.FC = () => {
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
+    >,
   ) => {
     const { name, value } = e.target;
 
@@ -168,20 +171,20 @@ const AdminEventForm: React.FC = () => {
         const { data: newEvent, error } = await supabase
           .from("events")
           .insert([
-          {
-            title: event.title,
-            description: event.description,
-            date: event.date,
-            subject_id: event.subject_id,
-            semester_id: event.semester_id,
-          },
-        ])
+            {
+              title: event.title,
+              description: event.description,
+              date: event.date,
+              subject_id: event.subject_id,
+              semester_id: event.semester_id,
+            },
+          ])
           .select(
             `
           *,
           subjects:subject_id (title, code),
           semesters:semester_id (name)
-        `
+        `,
           )
           .single();
 
@@ -191,12 +194,15 @@ const AdminEventForm: React.FC = () => {
         // Create in-app notification for new event
         if (newEvent) {
           try {
-            const eventDate = new Date(newEvent.date).toLocaleDateString('en-US', {
-              weekday: "long",
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            });
+            const eventDate = new Date(newEvent.date).toLocaleDateString(
+              "en-US",
+              {
+                weekday: "long",
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              },
+            );
 
             await createNotification({
               type: "event",

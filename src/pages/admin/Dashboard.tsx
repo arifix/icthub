@@ -114,7 +114,7 @@ const AdminDashboard: React.FC = () => {
           `
           *,
           semesters:semester_id (name)
-        `
+        `,
         )
         .eq("semester_id", selectedSemester)
         .order("created_at", { ascending: false })
@@ -130,7 +130,7 @@ const AdminDashboard: React.FC = () => {
           *,
           subjects:subject_id (title, code),
           semesters:semester_id (name)
-        `
+        `,
         )
         .eq("semester_id", selectedSemester)
         .order("created_at", { ascending: false })
@@ -147,7 +147,7 @@ const AdminDashboard: React.FC = () => {
           *,
           subjects:subject_id (title, code),
           semesters:semester_id (name)
-        `
+        `,
         )
         .eq("semester_id", selectedSemester)
         .gte("date", today)
@@ -217,7 +217,7 @@ const AdminDashboard: React.FC = () => {
       color: "purple",
       link: "/admin/files",
       addLink: "/admin/files/new",
-    }
+    },
   ];
 
   const getColorClasses = (color: string) => {
@@ -323,7 +323,7 @@ const AdminDashboard: React.FC = () => {
               value={selectedSemester}
               onChange={(e) =>
                 setSelectedSemester(
-                  e.target.value ? Number(e.target.value) : ""
+                  e.target.value ? Number(e.target.value) : "",
                 )
               }
               className="w-full px-4 py-2.5 pr-10 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-green-600 bg-white appearance-none cursor-pointer font-medium text-gray-700"
@@ -473,7 +473,7 @@ const AdminDashboard: React.FC = () => {
                                 dangerouslySetInnerHTML={{
                                   __html: stripHtmlAndTruncate(
                                     note.content,
-                                    100
+                                    100,
                                   ),
                                 }}
                               ></span>
@@ -545,7 +545,7 @@ const AdminDashboard: React.FC = () => {
                               undefined,
                               {
                                 weekday: "long",
-                              }
+                              },
                             )}
                           </div>
                           <div className="text-2xl font-bold my-1">
@@ -556,7 +556,7 @@ const AdminDashboard: React.FC = () => {
                               undefined,
                               {
                                 month: "long",
-                              }
+                              },
                             )}
                           </div>
                         </div>

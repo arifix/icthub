@@ -61,7 +61,7 @@ const NotificationDropdown: React.FC = () => {
     const now = new Date();
     const date = new Date(dateString);
     const diffInMinutes = Math.floor(
-      (now.getTime() - date.getTime()) / (1000 * 60)
+      (now.getTime() - date.getTime()) / (1000 * 60),
     );
 
     if (diffInMinutes < 1) return "Just now";
@@ -171,10 +171,10 @@ const NotificationDropdown: React.FC = () => {
                               notification.type === "note"
                                 ? "bg-gradient-to-br from-emerald-100 to-green-100"
                                 : notification.type === "file"
-                                ? "bg-gradient-to-br from-purple-100 to-fuchsia-100"
-                                : notification.type === "event"
-                                ? "bg-gradient-to-br from-amber-100 to-orange-100"
-                                : "bg-gradient-to-br from-gray-100 to-slate-100"
+                                  ? "bg-gradient-to-br from-purple-100 to-fuchsia-100"
+                                  : notification.type === "event"
+                                    ? "bg-gradient-to-br from-amber-100 to-orange-100"
+                                    : "bg-gradient-to-br from-gray-100 to-slate-100"
                             }`}
                           >
                             {getNotificationIcon(notification.type)}

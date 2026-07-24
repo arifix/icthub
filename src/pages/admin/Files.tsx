@@ -52,7 +52,7 @@ const AdminFiles: React.FC = () => {
             *,
             subjects:subject_id (title, code),
             semesters:semester_id (name)
-          `
+          `,
           )
           .order("created_at", { ascending: false }),
         supabase
@@ -150,9 +150,7 @@ const AdminFiles: React.FC = () => {
       <div className="bg-gradient-to-r from-purple-500 to-indigo-600 rounded-lg shadow-lg p-5">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-white mb-2">
-              Manage Files
-            </h1>
+            <h1 className="text-2xl font-bold text-white mb-2">Manage Files</h1>
             <p className="text-purple-100">
               Upload, organize, and manage study materials and resources
             </p>
@@ -210,7 +208,7 @@ const AdminFiles: React.FC = () => {
                 value={selectedSemester}
                 onChange={(e) =>
                   setSelectedSemester(
-                    e.target.value ? Number(e.target.value) : ""
+                    e.target.value ? Number(e.target.value) : "",
                   )
                 }
                 className="w-full px-4 py-2.5 pr-10 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 bg-white appearance-none cursor-pointer"

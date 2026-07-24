@@ -9,7 +9,7 @@ type PortalAccessContextType = {
 };
 
 const PortalAccessContext = createContext<PortalAccessContextType | undefined>(
-  undefined
+  undefined,
 );
 
 export const PortalAccessProvider: React.FC<{ children: React.ReactNode }> = ({

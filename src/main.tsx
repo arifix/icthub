@@ -19,5 +19,5 @@ createRoot(document.getElementById("root")!).render(
         </PortalAccessProvider>
       </AuthProvider>
     </Router>
-  </StrictMode>
+  </StrictMode>,
 );

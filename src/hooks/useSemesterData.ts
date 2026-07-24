@@ -32,7 +32,7 @@ export const useSemesterData = () => {
       } catch (err) {
         console.error("Error fetching semesters:", err);
         setError(
-          err instanceof Error ? err.message : "Failed to load semesters"
+          err instanceof Error ? err.message : "Failed to load semesters",
         );
       } finally {
         setLoading(false);

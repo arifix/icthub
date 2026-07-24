@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
-import { supabase } from '../lib/supabase';
-import { Database } from '../types/supabase';
-import { useSemesterData } from './useSemesterData';
+import { useState, useEffect } from "react";
+import { supabase } from "../lib/supabase";
+import { Database } from "../types/supabase";
+import { useSemesterData } from "./useSemesterData";
 
-type Notification = Database['public']['Tables']['notifications']['Row'] & {
+type Notification = Database["public"]["Tables"]["notifications"]["Row"] & {
   subjects?: { title: string; code: string } | null;
   semesters: { name: string };
 };
@@ -35,22 +35,24 @@ export const useNotifications = () => {
     try {
       setLoading(true);
       const { data, error } = await supabase
-        .from('notifications')
-        .select(`
+        .from("notifications")
+        .select(
+          `
           *,
           subjects:subject_id (title, code),
           semesters:semester_id (name)
-        `)
-        .eq('semester_id', currentSemester.id)
-        .order('created_at', { ascending: false })
+        `,
+        )
+        .eq("semester_id", currentSemester.id)
+        .order("created_at", { ascending: false })
         .limit(50);
 
       if (error) throw error;
 
       setNotifications(data || []);
-      setUnreadCount(data?.filter(n => !n.is_read).length || 0);
+      setUnreadCount(data?.filter((n) => !n.is_read).length || 0);
     } catch (error) {
-      console.error('Error fetching notifications:', error);
+      console.error("Error fetching notifications:", error);
     } finally {
       setLoading(false);
     }
@@ -60,18 +62,18 @@ export const useNotifications = () => {
     if (!currentSemester) return;
 
     const subscription = supabase
-      .channel('notifications')
+      .channel("notifications")
       .on(
-        'postgres_changes',
+        "postgres_changes",
         {
-          event: '*',
-          schema: 'public',
-          table: 'notifications',
+          event: "*",
+          schema: "public",
+          table: "notifications",
           filter: `semester_id=eq.${currentSemester.id}`,
         },
         () => {
           fetchNotifications();
-        }
+        },
       )
       .subscribe();
 
@@ -83,20 +85,20 @@ export const useNotifications = () => {
   const markAsRead = async (notificationId: number) => {
     try {
       const { error } = await supabase
-        .from('notifications')
+        .from("notifications")
         .update({ is_read: true })
-        .eq('id', notificationId);
+        .eq("id", notificationId);
 
       if (error) throw error;
 
-      setNotifications(prev =>
-        prev.map(n =>
-          n.id === notificationId ? { ...n, is_read: true } : n
-        )
+      setNotifications((prev) =>
+        prev.map((n) =>
+          n.id === notificationId ? { ...n, is_read: true } : n,
+        ),
       );
-      setUnreadCount(prev => Math.max(0, prev - 1));
+      setUnreadCount((prev) => Math.max(0, prev - 1));
     } catch (error) {
-      console.error('Error marking notification as read:', error);
+      console.error("Error marking notification as read:", error);
     }
   };
 
@@ -105,19 +107,17 @@ export const useNotifications = () => {
 
     try {
       const { error } = await supabase
-        .from('notifications')
+        .from("notifications")
         .update({ is_read: true })
-        .eq('semester_id', currentSemester.id)
-        .eq('is_read', false);
+        .eq("semester_id", currentSemester.id)
+        .eq("is_read", false);
 
       if (error) throw error;
 
-      setNotifications(prev =>
-        prev.map(n => ({ ...n, is_read: true }))
-      );
+      setNotifications((prev) => prev.map((n) => ({ ...n, is_read: true })));
       setUnreadCount(0);
     } catch (error) {
-      console.error('Error marking all notifications as read:', error);
+      console.error("Error marking all notifications as read:", error);
     }
   };
 

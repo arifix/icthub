@@ -49,7 +49,7 @@ const AdminCalendar: React.FC = () => {
             *,
             subjects:subject_id (title, code),
             semesters:semester_id (name)
-          `
+          `,
           )
           .order("date", { ascending: true }),
         supabase
@@ -127,7 +127,7 @@ const AdminCalendar: React.FC = () => {
       const dateString = localDate.toISOString().split("T")[0];
 
       const dayEvents = filteredEvents.filter(
-        (event) => event.date === dateString
+        (event) => event.date === dateString,
       );
 
       days.push({
@@ -143,13 +143,13 @@ const AdminCalendar: React.FC = () => {
 
   const goToPreviousMonth = () => {
     setCurrentMonth(
-      new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1)
+      new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1),
     );
   };
 
   const goToNextMonth = () => {
     setCurrentMonth(
-      new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1)
+      new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1),
     );
   };
 
@@ -176,7 +176,8 @@ const AdminCalendar: React.FC = () => {
   };
 
   const filteredEvents = events.filter(
-    (event) => selectedSemester === "" || event.semester_id === selectedSemester
+    (event) =>
+      selectedSemester === "" || event.semester_id === selectedSemester,
   );
 
   const calendarDays = generateCalendarDays();
@@ -234,7 +235,7 @@ const AdminCalendar: React.FC = () => {
               value={selectedSemester}
               onChange={(e) =>
                 setSelectedSemester(
-                  e.target.value ? Number(e.target.value) : ""
+                  e.target.value ? Number(e.target.value) : "",
                 )
               }
               className="px-4 py-2.5 pr-10 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 bg-white appearance-none cursor-pointer"
@@ -401,7 +402,8 @@ const AdminCalendar: React.FC = () => {
                 No Upcoming Events
               </h3>
               <p className="text-gray-600 mb-6">
-                No upcoming events scheduled. Add your first event to get started.
+                No upcoming events scheduled. Add your first event to get
+                started.
               </p>
               <Link
                 to="/admin/events/new"

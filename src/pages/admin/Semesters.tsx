@@ -47,7 +47,7 @@ const AdminSemesters: React.FC = () => {
   const handleSetCurrent = async (id: number) => {
     if (
       window.confirm(
-        "Are you sure you want to set this as the current semester?"
+        "Are you sure you want to set this as the current semester?",
       )
     ) {
       try {
@@ -80,7 +80,7 @@ const AdminSemesters: React.FC = () => {
 
     if (
       window.confirm(
-        "Are you sure you want to delete this semester? This will affect all related content."
+        "Are you sure you want to delete this semester? This will affect all related content.",
       )
     ) {
       try {
@@ -104,7 +104,7 @@ const AdminSemesters: React.FC = () => {
   };
 
   const filteredSemesters = semesters.filter((semester) =>
-    semester.name.toLowerCase().includes(searchTerm.toLowerCase())
+    semester.name.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   const formatDate = (dateString: string) => {
@@ -125,7 +125,8 @@ const AdminSemesters: React.FC = () => {
               Manage Semesters
             </h1>
             <p className="text-indigo-100">
-              Create and manage academic semesters. Set the current semester to control displayed content
+              Create and manage academic semesters. Set the current semester to
+              control displayed content
             </p>
           </div>
           <div className="flex items-center space-x-3">
@@ -204,15 +205,17 @@ const AdminSemesters: React.FC = () => {
             <div
               key={semester.id}
               className={`bg-white/80 backdrop-blur-sm rounded-2xl shadow-sm border hover:shadow-xl transition-all duration-300 overflow-hidden group ${
-                semester.is_current ? "border-green-400 bg-green-50/50" : "border-gray-100"
+                semester.is_current
+                  ? "border-green-400 bg-green-50/50"
+                  : "border-gray-100"
               }`}
             >
               <div className="p-6">
                 <div className="flex items-center justify-between mb-4">
                   <div
                     className={`w-12 h-12 rounded-xl flex items-center justify-center group-hover:shadow-lg transition-all duration-200 ${
-                      semester.is_current 
-                        ? "bg-gradient-to-br from-green-500 to-emerald-600" 
+                      semester.is_current
+                        ? "bg-gradient-to-br from-green-500 to-emerald-600"
                         : "bg-gradient-to-br from-indigo-500 to-purple-600"
                     }`}
                   >

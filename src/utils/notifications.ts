@@ -13,7 +13,7 @@ interface NotificationData {
 }
 
 export const createNotification = async (
-  data: NotificationData
+  data: NotificationData,
 ): Promise<boolean> => {
   try {
     const { error } = await supabase.from("notifications").insert({
@@ -36,7 +36,7 @@ export const createNotification = async (
 };
 
 export const markNotificationAsRead = async (
-  notificationId: number
+  notificationId: number,
 ): Promise<boolean> => {
   try {
     const { error } = await supabase

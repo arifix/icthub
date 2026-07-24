@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { usePortalAccess } from "../context/PortalAccessContext";
@@ -14,8 +14,8 @@ import {
   FolderOpen,
   Archive,
   Bell,
-  Mail,
-  Phone,
+  Shield,
+  ChevronDown,
 } from "lucide-react";
 
 const NAV_ITEMS = [
@@ -29,158 +29,211 @@ const NAV_ITEMS = [
 
 const Navbar: React.FC = () => {
   const { isAdmin, signOut: adminSignOut } = useAuth();
-  const { isAuthenticated: isPortalUser, signOut: portalSignOut } = usePortalAccess();
+  const { isAuthenticated: isPortalUser, signOut: portalSignOut } =
+    usePortalAccess();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
+  const profileRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (profileRef.current && !profileRef.current.contains(e.target as Node))
+        setProfileOpen(false);
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
 
   const handleSignOut = () => {
     if (isAdmin) adminSignOut();
     else portalSignOut();
     setMenuOpen(false);
+    setProfileOpen(false);
   };
 
-  const linkClass = ({ isActive }: { isActive: boolean }) =>
-    `flex items-center gap-1.5 px-3 py-2 text-sm font-medium transition-colors ${
-      isActive
-        ? "text-white border-b-2 border-white"
-        : "text-gray-300 hover:text-white"
-    }`;
+  const isAuthenticated = isPortalUser || isAdmin;
 
   return (
-    <header className="sticky top-0 z-50">
-      {/* Top bar */}
-      <div className="bg-kuet-dark border-b border-white/10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-9  text-gray-400">
-          <span className="font-semibold text-white/70 tracking-wide uppercase text-xs">
-            Institute of Information &amp; Communication Technology (IICT) — KUET
-          </span>
-        </div>
-      </div>
-
-      {/* Main nav */}
-      <div className="bg-primary-700 shadow-md">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-14">
+    <header className="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-50 border-b border-gray-200/50">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between h-20 items-center">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-3 shrink-0">
-            <div className="w-9 h-9 bg-white/15 rounded-lg flex items-center justify-center border border-white/20">
-              <BookOpen className="h-5 w-5 text-white" />
+          <Link to="/" className="flex items-center group">
+            <div className="w-11 h-11 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-md group-hover:shadow-lg transition-all duration-300">
+              <BookOpen className="h-6 w-6 text-white" />
             </div>
-            <div className="leading-tight">
-              <span className="font-bold text-white text-base tracking-wide">ICTHub</span>
-              <span className="hidden sm:block  text-white/60 leading-none mt-0.5 font-medium">
-                M.Sc. ICT Study Portal
+            <div className="ml-3">
+              <span className="text-lg font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                ICTHub
               </span>
+              <p className="text-xs text-gray-500 leading-none mt-0.5">
+                M.Sc. ICT Study Portal
+              </p>
             </div>
           </Link>
 
-          {/* Desktop nav */}
-          <nav className="hidden md:flex items-center">
+          {/* Desktop Nav */}
+          <nav className="hidden md:flex items-center space-x-1">
             {NAV_ITEMS.map((item) => (
-              <NavLink key={item.to} to={item.to} end={item.end} className={linkClass}>
-                {item.label}
+              <NavLink
+                key={item.to}
+                to={item.to}
+                end={item.end}
+                className={({ isActive }) =>
+                  `px-4 py-2.5 rounded-xl font-medium transition-all duration-200 flex items-center space-x-2 text-sm ${
+                    isActive
+                      ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md"
+                      : "text-gray-700 hover:bg-gray-100 hover:text-blue-600"
+                  }`
+                }
+              >
+                <item.icon className="h-4 w-4" />
+                <span>{item.label}</span>
               </NavLink>
             ))}
           </nav>
 
-          {/* Desktop right actions */}
-          <div className="hidden md:flex items-center gap-1">
-            {(isPortalUser || isAdmin) && (
+          {/* Desktop Right */}
+          <div className="hidden md:flex items-center space-x-2 pl-4 border-l border-gray-200">
+            {isAuthenticated && (
               <NavLink
                 to="/notifications"
                 className={({ isActive }) =>
-                  `p-2 rounded transition-colors ${isActive ? "text-accent-500" : "text-white/70 hover:text-white"}`
+                  `p-2.5 rounded-xl transition-all duration-200 ${
+                    isActive
+                      ? "bg-blue-50 text-blue-600"
+                      : "text-gray-600 hover:bg-gray-100 hover:text-blue-600"
+                  }`
                 }
                 title="Notifications"
               >
-                <Bell className="h-4 w-4" />
+                <Bell className="h-5 w-5" />
               </NavLink>
             )}
-            {isAdmin && (
-              <Link
-                to="/admin/dashboard"
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded  font-semibold bg-accent-500 text-white hover:bg-accent-400 transition-colors ml-2"
-              >
-                <Settings className="h-3.5 w-3.5" />
-                Admin
-              </Link>
-            )}
-            {(isPortalUser || isAdmin) && (
-              <button
-                onClick={handleSignOut}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded  font-medium text-white/70 hover:text-white hover:bg-white/10 transition-colors ml-1"
-              >
-                <LogOut className="h-3.5 w-3.5" />
-                Sign out
-              </button>
+
+            {isAuthenticated && (
+              <div className="relative" ref={profileRef}>
+                <button
+                  onClick={() => setProfileOpen(!profileOpen)}
+                  className="flex items-center space-x-2 px-3 py-2 rounded-xl hover:bg-gray-50 transition-all duration-200"
+                >
+                  <div className="w-9 h-9 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-sm">
+                    {isAdmin ? (
+                      <Shield className="h-4 w-4 text-white" />
+                    ) : (
+                      <BookOpen className="h-4 w-4 text-white" />
+                    )}
+                  </div>
+                  <div className="text-left hidden lg:block">
+                    <div className="text-sm font-semibold text-gray-900">
+                      {isAdmin ? "Admin" : "Student"}
+                    </div>
+                    <div className="text-xs text-gray-500">
+                      {isAdmin ? "Administrator" : "IICT, KUET"}
+                    </div>
+                  </div>
+                  <ChevronDown
+                    className={`h-4 w-4 text-gray-400 transition-transform duration-200 ${profileOpen ? "rotate-180" : ""}`}
+                  />
+                </button>
+
+                {profileOpen && (
+                  <div className="absolute right-0 mt-2 w-56 bg-white/95 backdrop-blur-md rounded-2xl shadow-xl border border-gray-100 py-2 z-50">
+                    {isAdmin && (
+                      <Link
+                        to="/admin/dashboard"
+                        className="flex items-center space-x-3 px-4 py-2.5 text-gray-700 hover:bg-gray-50 transition-colors mx-1 rounded-xl"
+                        onClick={() => setProfileOpen(false)}
+                      >
+                        <Settings className="h-4 w-4 text-blue-600" />
+                        <span className="text-sm">Admin Panel</span>
+                      </Link>
+                    )}
+                    <button
+                      onClick={handleSignOut}
+                      className="w-full flex items-center space-x-3 px-4 py-2.5 text-red-600 hover:bg-red-50 transition-colors mx-1 rounded-xl"
+                      style={{ width: "calc(100% - 8px)" }}
+                    >
+                      <LogOut className="h-4 w-4" />
+                      <span className="text-sm">Sign Out</span>
+                    </button>
+                  </div>
+                )}
+              </div>
             )}
           </div>
 
           {/* Mobile hamburger */}
           <button
             onClick={() => setMenuOpen(!menuOpen)}
-            className="md:hidden p-2 rounded text-white/80 hover:text-white hover:bg-white/10 transition-colors"
+            className="md:hidden p-2.5 rounded-xl text-gray-600 hover:bg-gray-100 transition-colors"
             aria-label="Toggle menu"
           >
-            {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            {menuOpen ? (
+              <X className="h-5 w-5" />
+            ) : (
+              <Menu className="h-5 w-5" />
+            )}
           </button>
         </div>
       </div>
 
       {/* Mobile menu */}
       {menuOpen && (
-        <div className="md:hidden bg-primary-800 border-t border-white/10 px-4 py-3 space-y-1">
+        <div className="md:hidden bg-white border-t border-gray-100 px-4 py-3 space-y-1">
           {NAV_ITEMS.map((item) => (
             <NavLink
               key={item.to}
               to={item.to}
               end={item.end}
               className={({ isActive }) =>
-                `flex items-center gap-2 px-3 py-2.5 rounded text-sm font-medium transition-colors ${
+                `flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${
                   isActive
-                    ? "bg-white/15 text-accent-500"
-                    : "text-gray-200 hover:bg-white/10 hover:text-white"
+                    ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-sm"
+                    : "text-gray-700 hover:bg-gray-100 hover:text-blue-600"
                 }`
               }
               onClick={() => setMenuOpen(false)}
             >
               <item.icon className="h-4 w-4" />
-              {item.label}
+              <span>{item.label}</span>
             </NavLink>
           ))}
-          <div className="pt-2 mt-2 border-t border-white/10 space-y-1">
-            {(isPortalUser || isAdmin) && (
+          {isAuthenticated && (
+            <div className="pt-2 mt-2 border-t border-gray-100 space-y-1">
               <NavLink
                 to="/notifications"
                 className={({ isActive }) =>
-                  `flex items-center gap-2 px-3 py-2.5 rounded text-sm font-medium transition-colors ${
-                    isActive ? "bg-white/15 text-accent-500" : "text-gray-200 hover:bg-white/10 hover:text-white"
+                  `flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${
+                    isActive
+                      ? "bg-blue-50 text-blue-600"
+                      : "text-gray-700 hover:bg-gray-100 hover:text-blue-600"
                   }`
                 }
                 onClick={() => setMenuOpen(false)}
               >
                 <Bell className="h-4 w-4" />
-                Notifications
+                <span>Notifications</span>
               </NavLink>
-            )}
-            {isAdmin && (
-              <Link
-                to="/admin/dashboard"
-                className="flex items-center gap-2 px-3 py-2.5 rounded text-sm font-medium text-kuet-dark bg-accent-500 hover:bg-accent-400 transition-colors"
-                onClick={() => setMenuOpen(false)}
-              >
-                <Settings className="h-4 w-4" />
-                Admin Panel
-              </Link>
-            )}
-            {(isPortalUser || isAdmin) && (
+              {isAdmin && (
+                <Link
+                  to="/admin/dashboard"
+                  className="flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 text-white"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  <Settings className="h-4 w-4" />
+                  <span>Admin Panel</span>
+                </Link>
+              )}
               <button
                 onClick={handleSignOut}
-                className="w-full flex items-center gap-2 px-3 py-2.5 rounded text-sm font-medium text-red-400 hover:bg-white/10"
+                className="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium text-red-600 hover:bg-red-50 transition-colors"
               >
                 <LogOut className="h-4 w-4" />
-                Sign out
+                <span>Sign Out</span>
               </button>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       )}
     </header>
@@ -188,5 +241,3 @@ const Navbar: React.FC = () => {
 };
 
 export default Navbar;
-
-

@@ -31,13 +31,53 @@ const AdminSidebar: React.FC = () => {
   const handleSignOut = () => adminSignOut();
 
   const navigationItems = [
-    { to: "/admin/dashboard",  label: "Dashboard",  icon: BarChart3,    description: "Overview" },
-    { to: "/admin/semesters",  label: "Semesters",  icon: Calendar,     description: "Academic Terms",       matchPaths: ["/admin/semesters/"] },
-    { to: "/admin/subjects",   label: "Subjects",   icon: BookOpen,     description: "Manage Courses",        matchPaths: ["/admin/subjects/"] },
-    { to: "/admin/notes",      label: "Notes",      icon: FileText,     description: "Study Materials",       matchPaths: ["/admin/notes/"] },
-    { to: "/admin/calendar",   label: "Calendar",   icon: Calendar,     description: "Events & Schedule",     matchPaths: ["/admin/events/"] },
-    { to: "/admin/files",      label: "Files",      icon: File,         description: "Resources & Docs",      matchPaths: ["/admin/files/"] },
-    { to: "/admin/settings",   label: "Settings",   icon: Settings,     description: "Portal Password" },
+    {
+      to: "/admin/dashboard",
+      label: "Dashboard",
+      icon: BarChart3,
+      description: "Overview",
+    },
+    {
+      to: "/admin/semesters",
+      label: "Semesters",
+      icon: Calendar,
+      description: "Academic Terms",
+      matchPaths: ["/admin/semesters/"],
+    },
+    {
+      to: "/admin/subjects",
+      label: "Subjects",
+      icon: BookOpen,
+      description: "Manage Courses",
+      matchPaths: ["/admin/subjects/"],
+    },
+    {
+      to: "/admin/notes",
+      label: "Notes",
+      icon: FileText,
+      description: "Study Materials",
+      matchPaths: ["/admin/notes/"],
+    },
+    {
+      to: "/admin/calendar",
+      label: "Calendar",
+      icon: Calendar,
+      description: "Events & Schedule",
+      matchPaths: ["/admin/events/"],
+    },
+    {
+      to: "/admin/files",
+      label: "Files",
+      icon: File,
+      description: "Resources & Docs",
+      matchPaths: ["/admin/files/"],
+    },
+    {
+      to: "/admin/settings",
+      label: "Settings",
+      icon: Settings,
+      description: "Portal Password",
+    },
   ];
 
   const isActiveRoute = (item: (typeof navigationItems)[0]) => {
@@ -48,8 +88,8 @@ const AdminSidebar: React.FC = () => {
     return false;
   };
 
-  const activeClass = `flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary-700 text-white shadow-sm transition-all duration-200`;
-  const inactiveClass = `flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 hover:bg-primary-50 hover:text-primary-700 transition-all duration-200 group`;
+  const activeClass = `flex items-center gap-3 px-3 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-sm transition-all duration-200`;
+  const inactiveClass = `flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-600 hover:bg-gray-100 hover:text-blue-600 transition-all duration-200 group`;
 
   return (
     <aside
@@ -58,20 +98,20 @@ const AdminSidebar: React.FC = () => {
       } flex flex-col`}
     >
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-4 border-b border-white/10">
+      <div className="flex items-center justify-between px-4 py-4 border-b border-gray-100">
         {!collapsed && (
           <div className="flex items-center gap-2.5">
-            <div className="bg-primary-700 p-1.5 rounded-md border border-primary-600">
+            <div className="bg-gradient-to-br from-blue-600 to-indigo-600 p-1.5 rounded-lg shadow-sm">
               <BookOpen className="h-4 w-4 text-white" />
             </div>
             <div>
-              <h1 className="text-sm font-bold">ICTHub</h1>
-              <p className=" text-gray-600">Admin Panel</p>
+              <h1 className="text-sm font-bold text-gray-900">ICTHub</h1>
+              <p className="text-xs text-gray-500">Admin Panel</p>
             </div>
           </div>
         )}
         <button
-          className="p-1.5 text-gray-400 hover:text-white hover:bg-white/10 rounded transition-all duration-200"
+          className={`p-1.5 text-gray-400 hover:text-blue-600 hover:bg-gray-100 rounded-lg transition-all duration-200`}
           onClick={toggleSidebar}
         >
           {collapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
@@ -92,7 +132,11 @@ const AdminSidebar: React.FC = () => {
               <div className="flex-shrink-0">
                 <item.icon
                   size={17}
-                  className={isActive ? "text-white" : "text-gray-400 group-hover:text-primary-700"}
+                  className={
+                    isActive
+                      ? "text-white"
+                      : "text-gray-400 group-hover:text-blue-600"
+                  }
                 />
               </div>
               {!collapsed && (
@@ -110,13 +154,18 @@ const AdminSidebar: React.FC = () => {
           className={`${inactiveClass} ${collapsed ? "justify-center" : ""}`}
           title={collapsed ? "View Portal" : undefined}
         >
-          <Globe size={17} className="text-gray-400 group-hover:text-primary-700 shrink-0" />
-          {!collapsed && <span className="text-sm font-medium">View Portal</span>}
+          <Globe
+            size={17}
+            className="text-gray-400 group-hover:text-blue-600 shrink-0"
+          />
+          {!collapsed && (
+            <span className="text-sm font-medium">View Portal</span>
+          )}
         </Link>
 
         <button
           onClick={handleSignOut}
-          className={`w-full text-red-500 hover:bg-red-50 hover:text-red-600 transition-all duration-200 flex items-center gap-3 px-3 py-2.5 rounded-lg ${
+          className={`w-full text-gray-600 hover:bg-gray-100 hover:text-blue-600 transition-all duration-200 flex items-center gap-3 px-3 py-2.5 rounded-xl ${
             collapsed ? "justify-center" : ""
           }`}
           title={collapsed ? "Sign Out" : undefined}
@@ -130,4 +179,3 @@ const AdminSidebar: React.FC = () => {
 };
 
 export default AdminSidebar;
-

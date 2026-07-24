@@ -55,7 +55,7 @@ const AdminFileForm: React.FC = () => {
           file_type: "",
           size: 0,
           semester_id: null,
-        }
+        },
       );
     } catch (error) {
       console.error("Error fetching file:", error);
@@ -76,10 +76,12 @@ const AdminFileForm: React.FC = () => {
       ] = await Promise.all([
         supabase
           .from("subjects")
-          .select(`
+          .select(
+            `
             *,
             semester:semesters(id, name, is_current)
-          `)
+          `,
+          )
           .eq("is_active", true)
           .order("title", { ascending: true }),
         supabase
@@ -92,9 +94,10 @@ const AdminFileForm: React.FC = () => {
       if (semestersError) throw semestersError;
 
       // Filter for current semester subjects only
-      const currentSemesterSubjects = allSubjects?.filter(
-        (subject: any) => subject.semester?.is_current === true
-      ) || [];
+      const currentSemesterSubjects =
+        allSubjects?.filter(
+          (subject: any) => subject.semester?.is_current === true,
+        ) || [];
 
       setSubjects(currentSemesterSubjects);
       setSemesters(semestersData || []);
@@ -115,7 +118,7 @@ const AdminFileForm: React.FC = () => {
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const { name, value } = e.target;
 
@@ -198,21 +201,21 @@ const AdminFileForm: React.FC = () => {
         const { data: newFile, error } = await supabase
           .from("files")
           .insert([
-          {
-            name: file.name,
-            subject_id: file.subject_id,
-            semester_id: file.semester_id,
-            file_path: filePath,
-            file_type: file.file_type,
-            size: file.size,
-          },
-        ])
+            {
+              name: file.name,
+              subject_id: file.subject_id,
+              semester_id: file.semester_id,
+              file_path: filePath,
+              file_type: file.file_type,
+              size: file.size,
+            },
+          ])
           .select(
             `
           *,
           subjects:subject_id (title, code),
           semesters:semester_id (name)
-        `
+        `,
           )
           .single();
 

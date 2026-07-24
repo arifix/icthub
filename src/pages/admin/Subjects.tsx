@@ -37,7 +37,7 @@ const AdminSubjects: React.FC = () => {
             `
             *,
             semesters:semester_id (name)
-          `
+          `,
           )
           .order("title", { ascending: true }),
         supabase
@@ -68,7 +68,7 @@ const AdminSubjects: React.FC = () => {
   const handleDelete = async (id: number) => {
     if (
       window.confirm(
-        "Are you sure you want to delete this subject? This will also delete all notes and files associated with it."
+        "Are you sure you want to delete this subject? This will also delete all notes and files associated with it.",
       )
     ) {
       try {
@@ -166,7 +166,7 @@ const AdminSubjects: React.FC = () => {
                 value={selectedSemester}
                 onChange={(e) =>
                   setSelectedSemester(
-                    e.target.value ? Number(e.target.value) : ""
+                    e.target.value ? Number(e.target.value) : "",
                   )
                 }
                 className="w-full px-4 py-2.5 pr-10 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white transition-shadow duration-200 appearance-none cursor-pointer"

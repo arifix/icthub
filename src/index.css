@@ -3,44 +3,290 @@
 @tailwind utilities;
 
 @layer base {
-  :root {
-    --kuet-green: #005b3a;
-    --kuet-amber: #ffb606;
-    --kuet-dark: #1e2a3b;
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
   }
 
   body {
-    font-family: 'Inter', system-ui, sans-serif;
-    color: #333333;
+    font-family:
+      "Inter",
+      system-ui,
+      -apple-system,
+      sans-serif;
+    color: #111827;
+    line-height: 1.6;
   }
 
-  h1, h2, h3, h4, h5, h6 {
-    font-family: 'Inter', system-ui, sans-serif;
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: "Inter", system-ui, sans-serif;
   }
 }
 
 @layer components {
-  .section-heading {
-    @apply text-2xl font-bold text-kuet-dark relative pb-3 mb-6;
-  }
-  .section-heading::after {
-    content: '';
-    @apply absolute bottom-0 left-0 w-12 h-0.5 bg-[#002147];
-  }
+  /* ── Buttons ──────────────────────────────────────────────── */
   .btn-primary {
-    @apply bg-primary-700 text-white px-5 py-2.5 rounded font-semibold hover:bg-primary-800 transition-colors text-sm;
+    @apply inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-semibold rounded-xl shadow-sm hover:shadow-md transition-all duration-200;
   }
   .btn-accent {
-    @apply bg-[#002147] text-white px-5 py-2.5 rounded font-semibold hover:bg-[#002147] transition-colors text-sm;
+    @apply inline-flex items-center gap-2 px-5 py-2.5 bg-white text-blue-600 text-sm font-semibold rounded-xl border border-blue-200 hover:bg-blue-50 transition-all duration-200;
   }
+
+  /* ── Cards ────────────────────────────────────────────────── */
   .card {
-    @apply bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden;
+    @apply bg-white rounded-2xl shadow-sm hover:shadow-xl border border-gray-100 transition-all duration-300 overflow-hidden;
   }
+
+  /* ── Section heading ──────────────────────────────────────── */
+  .section-heading {
+    @apply text-2xl font-bold text-gray-900 relative pb-3 mb-6;
+  }
+  .section-heading::after {
+    content: "";
+    @apply absolute bottom-0 left-0 w-10 h-0.5 bg-blue-400 rounded-full;
+  }
+
+  /* ── Section label ────────────────────────────────────────── */
+  .section-label {
+    @apply block text-xs font-semibold uppercase tracking-widest text-blue-600 mb-1;
+  }
+
+  /* ── Input field ──────────────────────────────────────────── */
+  .input-field {
+    @apply w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200;
+  }
+
+  /* ── Page header ──────────────────────────────────────────── */
+  .page-header {
+    @apply text-center mb-12;
+  }
+  .page-header__title {
+    @apply text-4xl font-bold text-gray-900 mb-4;
+  }
+  .page-header__subtitle {
+    @apply text-lg text-gray-600 max-w-2xl mx-auto;
+  }
+
+  /* ── Notice ticker ────────────────────────────────────────── */
   .notice-ticker {
     animation: ticker 30s linear infinite;
   }
   @keyframes ticker {
-    0%   { transform: translateX(100%); }
-    100% { transform: translateX(-100%); }
+    0% {
+      transform: translateX(100%);
+    }
+    100% {
+      transform: translateX(-100%);
+    }
+  }
+}
+
+@layer base {
+  :root {
+    --bg: #ffffff;
+    --bg-subtle: #f9fafb;
+    --bg-code: #f4f4f5;
+    --fg: #0a0a0a;
+    --fg-muted: #374151;
+    --fg-subtle: #6b7280;
+    --border: #e5e7eb;
+    --border-mid: #d1d5db;
+    --radius-sm: 4px;
+    --radius-md: 8px;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+
+  body {
+    font-family:
+      "Inter",
+      system-ui,
+      -apple-system,
+      sans-serif;
+    background-color: var(--bg);
+    color: var(--fg);
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: "Inter", system-ui, sans-serif;
+    letter-spacing: -0.02em;
+  }
+
+  img {
+    display: block;
+    max-width: 100%;
+  }
+}
+
+@layer components {
+  /* ── Section headings ─────────────────────────────────────── */
+  .section-heading {
+    @apply text-2xl font-bold relative pb-3 mb-6;
+    color: var(--fg);
+  }
+  .section-heading::after {
+    content: "";
+    @apply absolute bottom-0 left-0 w-10 h-0.5;
+    background: var(--border-mid);
+  }
+
+  /* ── Buttons ──────────────────────────────────────────────── */
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.625rem 1.25rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: var(--radius-sm);
+    background: var(--fg);
+    color: #ffffff;
+    border: 1px solid var(--fg);
+    text-decoration: none;
+    transition: all 0.15s;
+    cursor: pointer;
+    line-height: 1;
+  }
+  .btn-primary:hover {
+    background: #2d2d2d;
+    border-color: #2d2d2d;
+  }
+
+  .btn-accent {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.625rem 1.25rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--fg);
+    border: 1px solid var(--border-mid);
+    text-decoration: none;
+    transition: all 0.15s;
+    cursor: pointer;
+    line-height: 1;
+  }
+  .btn-accent:hover {
+    border-color: var(--fg);
+    background: var(--bg-subtle);
+  }
+
+  /* ── Cards ────────────────────────────────────────────────── */
+  .card {
+    background: var(--bg);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    transition:
+      border-color 0.2s,
+      box-shadow 0.2s;
+  }
+  .card:hover {
+    border-color: var(--border-mid);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+  }
+
+  /* ── Page header ──────────────────────────────────────────── */
+  .page-header {
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+  }
+  .page-header__inner {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 py-8;
+  }
+  .page-header__breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    font-size: 0.8125rem;
+    color: var(--fg-subtle);
+    margin-bottom: 0.75rem;
+  }
+  .page-header__breadcrumb a {
+    color: var(--fg-subtle);
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+  .page-header__breadcrumb a:hover {
+    color: var(--fg);
+  }
+  .page-header__title {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    color: var(--fg);
+    margin: 0 0 0.25rem;
+  }
+  .page-header__subtitle {
+    font-size: 0.9rem;
+    color: var(--fg-subtle);
+    margin: 0;
+  }
+
+  /* ── Section label ────────────────────────────────────────── */
+  .section-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--fg-subtle);
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  /* ── Notice ticker ────────────────────────────────────────── */
+  .notice-ticker {
+    animation: ticker 30s linear infinite;
+  }
+  @keyframes ticker {
+    0% {
+      transform: translateX(100%);
+    }
+    100% {
+      transform: translateX(-100%);
+    }
+  }
+
+  /* ── Form inputs ──────────────────────────────────────────── */
+  .input-field {
+    width: 100%;
+    padding: 0.625rem 0.875rem;
+    font-size: 0.9rem;
+    border: 1px solid var(--border-mid);
+    border-radius: var(--radius-sm);
+    background: var(--bg);
+    color: var(--fg);
+    transition:
+      border-color 0.15s,
+      box-shadow 0.15s;
+    outline: none;
+  }
+  .input-field:focus {
+    border-color: var(--fg);
+    box-shadow: 0 0 0 3px rgba(10, 10, 10, 0.06);
+  }
+  .input-field::placeholder {
+    color: var(--fg-subtle);
   }
 }

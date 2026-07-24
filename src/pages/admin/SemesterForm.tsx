@@ -43,7 +43,7 @@ const AdminSemesterForm: React.FC = () => {
           start_date: "",
           end_date: "",
           is_current: false,
-        }
+        },
       );
     } catch (error) {
       console.error("Error fetching semester:", error);
@@ -155,9 +155,7 @@ const AdminSemesterForm: React.FC = () => {
       {/* Form */}
       <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-sm border border-gray-100 overflow-hidden max-w-4xl mx-auto">
         <div className="px-6 py-4 border-b border-gray-100">
-          <h2 className="text-xl font-bold text-gray-900">
-            Semester Details
-          </h2>
+          <h2 className="text-xl font-bold text-gray-900">Semester Details</h2>
           <p className="text-sm text-gray-600 mt-1">
             Fill in the information below to {isEditing ? "update" : "create"}{" "}
             the semester.
