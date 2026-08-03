@@ -18,7 +18,7 @@ const Footer: React.FC = () => {
               <div className="ml-3">
                 <span className="text-xl font-bold text-white">ICTHub</span>
                 <p className="text-xs text-gray-400 leading-none mt-0.5">
-                  M.Sc. ICT Study Portal
+                  M.Sc. Eng. in ICT Study Portal
                 </p>
               </div>
             </div>
@@ -98,7 +98,7 @@ const Footer: React.FC = () => {
         <div className="border-t border-gray-800 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-3 md:space-y-0">
             <div className="flex items-center space-x-2 text-sm text-gray-400">
-              <span>&copy; {year} ICTHub &mdash; Institute of ICT, KUET</span>
+              <span>&copy; {year} ICTHub</span>
             </div>
             <div className="flex items-center space-x-2 text-sm text-gray-400">
               <span>Made by</span>

@@ -38,7 +38,7 @@ const PortalLogin: React.FC = () => {
           ICTHub
         </h1>
         <p className="text-sm text-gray-500 mt-1.5">
-          Institute of ICT, KUET &mdash; M.Sc. ICT Study Portal
+          Institute of IICT, KUET &mdash; M.Sc. Eng. in ICT Study Portal
         </p>
       </div>
 

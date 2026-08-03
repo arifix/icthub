@@ -67,7 +67,7 @@ const Navbar: React.FC = () => {
                 ICTHub
               </span>
               <p className="text-xs text-gray-500 leading-none mt-0.5">
-                M.Sc. ICT Study Portal
+                M.Sc. Eng. in ICT Study Portal
               </p>
             </div>
           </Link>

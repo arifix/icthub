@@ -108,15 +108,15 @@ const SubjectDetailPage: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-white flex justify-center items-center">
-        <div className="animate-spin rounded-full h-10 w-10 border-2 border-blue-600 border-t-transparent" />
+      <div className="min-h-screen bg-[#f9fafb] flex justify-center items-center">
+        <div className="animate-spin rounded-full h-10 w-10 border-2 border-[#0a0a0a] border-t-transparent" />
       </div>
     );
   }
 
   if (!subject) {
     return (
-      <div className="min-h-screen bg-white flex flex-col items-center justify-center px-4">
+      <div className="min-h-screen bg-[#f9fafb] flex flex-col items-center justify-center px-4">
         <BookOpen className="h-16 w-16 text-gray-300 mb-4" />
         <h1 className="text-xl font-bold text-gray-700 mb-2">
           Subject Not Found
@@ -135,38 +135,38 @@ const SubjectDetailPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+    <div className="min-h-screen bg-[#f9fafb]">
       {/* Page header */}
-      <div className="border-b border-gray-200/80 bg-white/80 backdrop-blur-sm">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="flex items-center gap-2 text-gray-400 text-xs mb-3">
-            <Link to="/" className="hover:text-blue-600 transition-colors">
+      <div className="bg-white border-b border-[#e5e7eb]">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-7">
+          <div className="flex items-center gap-2 text-[#9ca3af] text-xs mb-4">
+            <Link to="/" className="hover:text-[#0a0a0a] transition-colors">
               Home
             </Link>
             <ChevronRight className="h-3 w-3" />
             <Link
               to="/subjects"
-              className="hover:text-blue-600 transition-colors"
+              className="hover:text-[#0a0a0a] transition-colors"
             >
               Subjects
             </Link>
             <ChevronRight className="h-3 w-3" />
-            <span className="text-gray-600 truncate">{subject.title}</span>
+            <span className="text-[#6b7280] truncate">{subject.title}</span>
           </div>
 
           <div className="flex items-start gap-4">
-            <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-md shrink-0">
-              <BookOpen className="h-6 w-6 text-white" />
+            <div className="w-14 h-14 bg-[#0a0a0a] rounded-xl flex items-center justify-center shrink-0">
+              <BookOpen className="h-7 w-7 text-white" />
             </div>
             <div>
-              <div className="inline-block text-xs font-semibold text-blue-700 bg-blue-50 px-2.5 py-1 rounded-full mb-2 font-mono">
+              <div className="inline-block text-xs font-semibold text-[#374151] bg-[#f3f4f6] px-2.5 py-1 rounded-full mb-2 font-mono">
                 {subject.code}
               </div>
-              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">
+              <h1 className="text-2xl sm:text-3xl font-bold text-[#0a0a0a] tracking-tight">
                 {subject.title}
               </h1>
               {subject.semester && (
-                <div className="flex items-center gap-2 mt-2 text-sm text-gray-500">
+                <div className="flex items-center gap-2 mt-2 text-sm text-[#6b7280]">
                   <Calendar className="h-3.5 w-3.5" />
                   {subject.semester.name}
                 </div>
@@ -175,7 +175,7 @@ const SubjectDetailPage: React.FC = () => {
           </div>
 
           {subject.description && (
-            <p className="mt-4 text-sm text-gray-600 max-w-3xl leading-relaxed border-t border-gray-100 pt-4">
+            <p className="mt-4 text-sm text-[#374151] max-w-3xl leading-relaxed border-t border-[#e5e7eb] pt-4">
               {subject.description}
             </p>
           )}
@@ -184,27 +184,27 @@ const SubjectDetailPage: React.FC = () => {
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
         {/* Notes */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-          <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-gray-50">
+        <div className="bg-white rounded-xl border border-[#e5e7eb] overflow-hidden">
+          <div className="flex items-center justify-between px-6 py-4 border-b border-[#e5e7eb] bg-[#f9fafb]">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-blue-50 rounded-xl flex items-center justify-center">
-                <FileText className="h-4 w-4 text-blue-600" />
+              <div className="w-8 h-8 bg-[#f3f4f6] rounded-xl flex items-center justify-center">
+                <FileText className="h-4 w-4 text-teal-600" />
               </div>
-              <h2 className="text-base font-bold text-gray-900">Notes</h2>
-              <span className="text-xs bg-blue-50 text-blue-700 font-semibold px-2 py-0.5 rounded-full">
+              <h2 className="text-sm font-bold text-[#0a0a0a]">Notes</h2>
+              <span className="text-xs bg-[#f3f4f6] text-[#6b7280] font-semibold px-2 py-0.5 rounded-full">
                 {notes.length}
               </span>
             </div>
             <Link
               to="/notes"
-              className="text-sm text-blue-600 hover:text-blue-700 font-medium transition-colors"
+              className="text-sm text-[#6b7280] hover:text-[#0a0a0a] font-medium transition-colors"
             >
               View all →
             </Link>
           </div>
-          <div className="divide-y divide-gray-100">
+          <div className="divide-y divide-[#e5e7eb]">
             {notes.length === 0 ? (
-              <div className="text-center py-10 text-gray-400 text-sm">
+              <div className="text-center py-10 text-[#9ca3af] text-sm">
                 No notes for this subject yet.
               </div>
             ) : (
@@ -212,20 +212,20 @@ const SubjectDetailPage: React.FC = () => {
                 <Link
                   key={note.id}
                   to={`/notes/${note.id}`}
-                  className="flex items-center gap-4 px-6 py-4 hover:bg-blue-50 transition-colors group"
+                  className="flex items-center gap-4 px-6 py-4 hover:bg-[#f9fafb] transition-colors group"
                 >
-                  <div className="w-8 h-8 bg-teal-50 group-hover:bg-teal-100 rounded-xl flex items-center justify-center shrink-0 transition-colors">
+                  <div className="w-8 h-8 bg-[#f3f4f6] group-hover:bg-[#e5e7eb] rounded-xl flex items-center justify-center shrink-0 transition-colors">
                     <FileText className="h-4 w-4 text-teal-600" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-semibold text-gray-900 group-hover:text-blue-600 transition-colors truncate">
+                    <p className="text-sm font-semibold text-[#0a0a0a] group-hover:text-[#374151] transition-colors truncate">
                       {note.title}
                     </p>
-                    <p className="text-xs text-gray-400">
+                    <p className="text-xs text-[#9ca3af]">
                       {formatDate(note.created_at)}
                     </p>
                   </div>
-                  <ChevronRight className="h-4 w-4 text-gray-300 group-hover:text-blue-600 shrink-0 transition-colors" />
+                  <ChevronRight className="h-4 w-4 text-[#d1d5db] group-hover:text-[#6b7280] shrink-0 transition-colors" />
                 </Link>
               ))
             )}
@@ -233,29 +233,29 @@ const SubjectDetailPage: React.FC = () => {
         </div>
 
         {/* Events */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-          <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-gray-50">
+        <div className="bg-white rounded-xl border border-[#e5e7eb] overflow-hidden">
+          <div className="flex items-center justify-between px-6 py-4 border-b border-[#e5e7eb] bg-[#f9fafb]">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-amber-50 rounded-xl flex items-center justify-center">
-                <Calendar className="h-4 w-4 text-amber-600" />
+              <div className="w-8 h-8 bg-[#f3f4f6] rounded-xl flex items-center justify-center">
+                <Calendar className="h-4 w-4 text-amber-500" />
               </div>
-              <h2 className="text-base font-bold text-gray-900">
+              <h2 className="text-sm font-bold text-[#0a0a0a]">
                 Events &amp; Schedule
               </h2>
-              <span className="text-xs bg-amber-50 text-amber-700 font-semibold px-2 py-0.5 rounded-full">
+              <span className="text-xs bg-[#f3f4f6] text-[#6b7280] font-semibold px-2 py-0.5 rounded-full">
                 {events.length}
               </span>
             </div>
             <Link
               to="/calendar"
-              className="text-sm text-blue-600 hover:text-blue-700 font-medium transition-colors"
+              className="text-sm text-[#6b7280] hover:text-[#0a0a0a] font-medium transition-colors"
             >
               View calendar →
             </Link>
           </div>
-          <div className="divide-y divide-gray-100">
+          <div className="divide-y divide-[#e5e7eb]">
             {events.length === 0 ? (
-              <div className="text-center py-10 text-gray-400 text-sm">
+              <div className="text-center py-10 text-[#9ca3af] text-sm">
                 No events for this subject yet.
               </div>
             ) : (
@@ -266,8 +266,8 @@ const SubjectDetailPage: React.FC = () => {
                     key={event.id}
                     className="flex items-start gap-4 px-6 py-4"
                   >
-                    <div className="text-center bg-gradient-to-br from-amber-500 to-amber-600 text-white rounded-xl px-3 py-2 min-w-[48px] shrink-0 shadow-sm">
-                      <div className="text-[9px] font-bold uppercase">
+                    <div className="text-center bg-[#0a0a0a] text-white rounded-xl px-3 py-2 min-w-[48px] shrink-0">
+                      <div className="text-[9px] font-bold uppercase opacity-70">
                         {d.toLocaleDateString(undefined, { month: "short" })}
                       </div>
                       <div className="text-lg font-bold leading-none">
@@ -275,11 +275,11 @@ const SubjectDetailPage: React.FC = () => {
                       </div>
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-semibold text-gray-900">
+                      <p className="text-sm font-semibold text-[#0a0a0a]">
                         {event.title}
                       </p>
                       <div
-                        className="text-xs text-gray-400 mt-1 line-clamp-2"
+                        className="text-xs text-[#9ca3af] mt-1 line-clamp-2"
                         dangerouslySetInnerHTML={{ __html: event.description }}
                       />
                     </div>
@@ -291,28 +291,28 @@ const SubjectDetailPage: React.FC = () => {
         </div>
 
         {/* Files */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-          <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-gray-50">
+        <div className="bg-white rounded-xl border border-[#e5e7eb] overflow-hidden">
+          <div className="flex items-center justify-between px-6 py-4 border-b border-[#e5e7eb] bg-[#f9fafb]">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-indigo-50 rounded-xl flex items-center justify-center">
-                <File className="h-4 w-4 text-indigo-600" />
+              <div className="w-8 h-8 bg-[#f3f4f6] rounded-xl flex items-center justify-center">
+                <File className="h-4 w-4 text-[#374151]" />
               </div>
-              <h2 className="text-base font-bold text-gray-900">
+              <h2 className="text-sm font-bold text-[#0a0a0a]">
                 Files &amp; Resources
               </h2>
-              <span className="text-xs bg-indigo-50 text-indigo-700 font-semibold px-2 py-0.5 rounded-full">
+              <span className="text-xs bg-[#f3f4f6] text-[#6b7280] font-semibold px-2 py-0.5 rounded-full">
                 {files.length}
               </span>
             </div>
             <Link
               to="/files"
-              className="text-sm text-blue-600 hover:text-blue-700 font-medium transition-colors"
+              className="text-sm text-[#6b7280] hover:text-[#0a0a0a] font-medium transition-colors"
             >
               View all →
             </Link>
           </div>
           {files.length === 0 ? (
-            <div className="text-center py-10 text-gray-400 text-sm">
+            <div className="text-center py-10 text-[#9ca3af] text-sm">
               No files for this subject yet.
             </div>
           ) : (
@@ -323,23 +323,23 @@ const SubjectDetailPage: React.FC = () => {
                   href={file.file_path}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group flex items-center gap-3 p-4 border border-gray-100 hover:border-blue-200 rounded-xl hover:shadow-md transition-all bg-gray-50 hover:bg-blue-50"
+                  className="group flex items-center gap-3 p-4 border border-[#e5e7eb] hover:border-[#d1d5db] rounded-xl hover:shadow-sm transition-all bg-white hover:bg-[#f9fafb]"
                 >
-                  <div className="w-9 h-9 bg-blue-50 group-hover:bg-blue-100 rounded-xl flex items-center justify-center shrink-0 transition-colors">
-                    <File className="h-4 w-4 text-blue-600" />
+                  <div className="w-9 h-9 bg-[#f3f4f6] group-hover:bg-[#e5e7eb] rounded-xl flex items-center justify-center shrink-0 transition-colors">
+                    <File className="h-4 w-4 text-[#374151]" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-900 truncate group-hover:text-blue-600 transition-colors">
+                    <p className="text-sm font-medium text-[#0a0a0a] truncate group-hover:text-[#374151] transition-colors">
                       {file.name}
                     </p>
-                    <p className="text-xs text-gray-400">
+                    <p className="text-xs text-[#9ca3af]">
                       <span className="uppercase font-semibold">
                         {file.file_type}
                       </span>{" "}
                       &middot; {formatFileSize(file.size)}
                     </p>
                   </div>
-                  <Download className="h-4 w-4 text-gray-300 group-hover:text-blue-600 shrink-0 transition-colors" />
+                  <Download className="h-4 w-4 text-[#d1d5db] group-hover:text-[#6b7280] shrink-0 transition-colors" />
                 </a>
               ))}
             </div>

@@ -29,21 +29,21 @@ const SubjectCard: React.FC<{ subject: Subject }> = ({ subject }) => (
     to={`/subjects/${subject.id}`}
     className="group bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-blue-200"
   >
-    <div className="p-6">
-      <div className="flex items-center justify-between mb-4">
-        <div className="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl shadow-sm group-hover:scale-110 transition-transform duration-300">
-          <BookOpen className="h-6 w-6 text-white" />
+    <div className="p-7">
+      <div className="flex items-center justify-between mb-5">
+        <div className="inline-flex items-center justify-center w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl shadow-md group-hover:scale-110 transition-transform duration-300">
+          <BookOpen className="h-7 w-7 text-white" />
         </div>
         <span className="px-3 py-1 bg-blue-50 text-blue-700 text-xs font-semibold rounded-full font-mono">
           {subject.code}
         </span>
       </div>
-      <h2 className="text-base font-bold mb-2 text-gray-900 group-hover:text-blue-600 transition-colors duration-200 line-clamp-2">
+      <h2 className="text-lg font-bold mb-2 text-gray-900 group-hover:text-blue-600 transition-colors duration-200 line-clamp-2">
         {subject.title}
       </h2>
       {subject.semester && (
-        <div className="flex items-center text-sm text-gray-500 mb-4">
-          <div className="w-1.5 h-1.5 bg-blue-400 rounded-full mr-2" />
+        <div className="flex items-center text-sm text-gray-500 mb-5">
+          <div className="w-2 h-2 bg-blue-400 rounded-full mr-2" />
           <span>{subject.semester.name}</span>
         </div>
       )}
@@ -135,6 +135,7 @@ const Home: React.FC = () => {
   const [recentSubjects, setRecentSubjects] = useState<Subject[]>([]);
   const [recentNotes, setRecentNotes] = useState<Note[]>([]);
   const [upcomingEvents, setUpcomingEvents] = useState<Event[]>([]);
+  const [filesCount, setFilesCount] = useState(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -195,6 +196,16 @@ const Home: React.FC = () => {
             )
             .slice(0, 4) || [];
         setUpcomingEvents(currentEvents);
+
+        const { data: allFiles, error: filesError } = await supabase
+          .from("files")
+          .select(`*, semester:semesters(id, is_current)`)
+          .eq("is_active", true);
+        if (filesError) throw filesError;
+        setFilesCount(
+          allFiles?.filter((f: any) => f.semester?.is_current === true)
+            .length ?? 0,
+        );
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -202,7 +213,7 @@ const Home: React.FC = () => {
       }
     };
 
-    document.title = "ICTHub — M.Sc. ICT @ IICT, KUET";
+    document.title = "ICTHub — M.Sc. Eng. in ICT @ IICT, KUET";
     fetchData();
   }, []);
 
@@ -231,7 +242,7 @@ const Home: React.FC = () => {
               },
               {
                 icon: FileText,
-                value: recentNotes.length + "+",
+                value: recentNotes.length,
                 label: "Notes",
                 color: "text-teal-600",
               },
@@ -243,20 +254,22 @@ const Home: React.FC = () => {
               },
               {
                 icon: File,
-                value: "IICT",
-                label: "KUET",
+                value: filesCount,
+                label: "Files",
                 color: "text-indigo-600",
               },
             ].map(({ icon: Icon, value, label, color }) => (
               <div
                 key={label}
-                className="bg-white/80 backdrop-blur-sm rounded-xl p-4 shadow-sm border border-gray-100"
+                className="bg-white/80 backdrop-blur-sm rounded-xl p-7 shadow-sm border border-gray-100"
               >
                 <div className="flex items-center justify-center mb-2">
-                  <Icon className={`h-5 w-5 ${color}`} />
+                  <Icon className={`h-6 w-6 ${color}`} />
                 </div>
                 <div className="text-2xl font-bold text-gray-900">{value}</div>
-                <div className="text-sm text-gray-500">{label}</div>
+                <div className="mt-1 text-sm font-medium text-gray-500">
+                  {label}
+                </div>
               </div>
             ))}
           </div>
@@ -267,65 +280,69 @@ const Home: React.FC = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 pb-16 space-y-10">
         {/* Quick Access */}
         <div>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="mb-5">
+            <span className="section-label">Navigate</span>
+            <h2 className="text-xl font-bold text-gray-900">Quick Access</h2>
+          </div>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
             <Link
               to="/subjects"
               className="group relative bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-blue-200"
             >
-              <div className="absolute top-0 right-0 w-24 h-24 bg-blue-50 rounded-bl-full transform translate-x-4 -translate-y-4 opacity-60" />
-              <div className="relative p-5">
-                <div className="inline-flex items-center justify-center w-11 h-11 bg-blue-600 rounded-xl mb-3 shadow-sm group-hover:scale-110 transition-transform duration-300">
-                  <BookOpen className="h-5 w-5 text-white" />
+              <div className="absolute top-0 right-0 w-28 h-28 bg-blue-50 rounded-bl-full transform translate-x-4 -translate-y-4 opacity-60" />
+              <div className="relative p-6 sm:p-7">
+                <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-600 rounded-2xl mb-4 shadow-md group-hover:scale-110 transition-transform duration-300">
+                  <BookOpen className="h-8 w-8 text-white" />
                 </div>
-                <h3 className="text-sm font-semibold text-gray-900 mb-0.5 group-hover:text-blue-600 transition-colors">
+                <h3 className="text-base font-bold text-gray-900 mb-1 group-hover:text-blue-600 transition-colors">
                   Subjects
                 </h3>
-                <p className="text-xs text-gray-400">Courses & materials</p>
+                <p className="text-sm text-gray-500">Courses & materials</p>
               </div>
             </Link>
             <Link
               to="/notes"
               className="group relative bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-teal-200"
             >
-              <div className="absolute top-0 right-0 w-24 h-24 bg-teal-50 rounded-bl-full transform translate-x-4 -translate-y-4 opacity-60" />
-              <div className="relative p-5">
-                <div className="inline-flex items-center justify-center w-11 h-11 bg-teal-600 rounded-xl mb-3 shadow-sm group-hover:scale-110 transition-transform duration-300">
-                  <FileText className="h-5 w-5 text-white" />
+              <div className="absolute top-0 right-0 w-28 h-28 bg-teal-50 rounded-bl-full transform translate-x-4 -translate-y-4 opacity-60" />
+              <div className="relative p-6 sm:p-7">
+                <div className="inline-flex items-center justify-center w-16 h-16 bg-teal-600 rounded-2xl mb-4 shadow-md group-hover:scale-110 transition-transform duration-300">
+                  <FileText className="h-8 w-8 text-white" />
                 </div>
-                <h3 className="text-sm font-semibold text-gray-900 mb-0.5 group-hover:text-teal-600 transition-colors">
+                <h3 className="text-base font-bold text-gray-900 mb-1 group-hover:text-teal-600 transition-colors">
                   Notes
                 </h3>
-                <p className="text-xs text-gray-400">Study materials</p>
+                <p className="text-sm text-gray-500">Study materials</p>
               </div>
             </Link>
             <Link
               to="/calendar"
               className="group relative bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-amber-200"
             >
-              <div className="absolute top-0 right-0 w-24 h-24 bg-amber-50 rounded-bl-full transform translate-x-4 -translate-y-4 opacity-60" />
-              <div className="relative p-5">
-                <div className="inline-flex items-center justify-center w-11 h-11 bg-amber-500 rounded-xl mb-3 shadow-sm group-hover:scale-110 transition-transform duration-300">
-                  <Calendar className="h-5 w-5 text-white" />
+              <div className="absolute top-0 right-0 w-28 h-28 bg-amber-50 rounded-bl-full transform translate-x-4 -translate-y-4 opacity-60" />
+              <div className="relative p-6 sm:p-7">
+                <div className="inline-flex items-center justify-center w-16 h-16 bg-amber-500 rounded-2xl mb-4 shadow-md group-hover:scale-110 transition-transform duration-300">
+                  <Calendar className="h-8 w-8 text-white" />
                 </div>
-                <h3 className="text-sm font-semibold text-gray-900 mb-0.5 group-hover:text-amber-600 transition-colors">
+                <h3 className="text-base font-bold text-gray-900 mb-1 group-hover:text-amber-600 transition-colors">
                   Calendar
                 </h3>
-                <p className="text-xs text-gray-400">Events & schedule</p>
+                <p className="text-sm text-gray-500">Events & schedule</p>
               </div>
             </Link>
             <Link
               to="/files"
               className="group relative bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-indigo-200"
             >
-              <div className="absolute top-0 right-0 w-24 h-24 bg-indigo-50 rounded-bl-full transform translate-x-4 -translate-y-4 opacity-60" />
-              <div className="relative p-5">
-                <div className="inline-flex items-center justify-center w-11 h-11 bg-indigo-600 rounded-xl mb-3 shadow-sm group-hover:scale-110 transition-transform duration-300">
-                  <File className="h-5 w-5 text-white" />
+              <div className="absolute top-0 right-0 w-28 h-28 bg-indigo-50 rounded-bl-full transform translate-x-4 -translate-y-4 opacity-60" />
+              <div className="relative p-6 sm:p-7">
+                <div className="inline-flex items-center justify-center w-16 h-16 bg-indigo-600 rounded-2xl mb-4 shadow-md group-hover:scale-110 transition-transform duration-300">
+                  <File className="h-8 w-8 text-white" />
                 </div>
-                <h3 className="text-sm font-semibold text-gray-900 mb-0.5 group-hover:text-indigo-600 transition-colors">
+                <h3 className="text-base font-bold text-gray-900 mb-1 group-hover:text-indigo-600 transition-colors">
                   Files
                 </h3>
-                <p className="text-xs text-gray-400">Resources & docs</p>
+                <p className="text-sm text-gray-500">Resources & docs</p>
               </div>
             </Link>
           </div>

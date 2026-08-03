@@ -85,98 +85,100 @@ const NotesPage: React.FC = () => {
   });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Hero */}
-        <div className="max-w-4xl mx-auto text-center mb-10">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Study Notes</h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+    <div className="min-h-screen bg-[#f9fafb]">
+      {/* Page header */}
+      <div className="bg-white border-b border-[#e5e7eb]">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-7">
+          <h1 className="text-2xl sm:text-3xl font-bold text-[#0a0a0a] tracking-tight mb-1">
+            Study Notes
+          </h1>
+          <p className="text-sm text-[#6b7280]">
             Browse and search through study materials for the current semester
           </p>
         </div>
+      </div>
 
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Filters */}
-        <div className="max-w-3xl mx-auto mb-10">
-          <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-md p-5 border border-gray-100">
-            <div className="flex flex-col sm:flex-row gap-3">
-              <div className="relative flex-1">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-                <input
-                  type="text"
-                  placeholder="Search by title, content or subject..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full px-5 py-3.5 pl-12 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all bg-white"
-                />
-              </div>
-              <div className="relative w-full sm:w-56">
-                <select
-                  value={selectedSubject}
-                  onChange={(e) =>
-                    setSelectedSubject(
-                      e.target.value ? Number(e.target.value) : "",
-                    )
-                  }
-                  className="w-full pl-4 pr-10 py-3.5 border border-gray-200 rounded-xl text-sm bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
-                >
-                  <option value="">All Subjects</option>
-                  {subjects.map((s) => (
-                    <option key={s.id} value={s.id}>
-                      {s.title} ({s.code})
-                    </option>
-                  ))}
-                </select>
-                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 pointer-events-none" />
-              </div>
+        <div className="max-w-3xl mb-8">
+          <div className="flex flex-col sm:flex-row gap-3">
+            <div className="relative flex-1">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-[#9ca3af]" />
+              <input
+                type="text"
+                placeholder="Search by title, content or subject..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full px-5 py-3 pl-11 border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0a0a0a] focus:border-[#0a0a0a] transition-all bg-white text-sm"
+              />
+            </div>
+            <div className="relative w-full sm:w-56">
+              <select
+                value={selectedSubject}
+                onChange={(e) =>
+                  setSelectedSubject(
+                    e.target.value ? Number(e.target.value) : "",
+                  )
+                }
+                className="w-full pl-4 pr-10 py-3 border border-[#e5e7eb] rounded-xl text-sm bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-[#0a0a0a] cursor-pointer"
+              >
+                <option value="">All Subjects</option>
+                {subjects.map((s) => (
+                  <option key={s.id} value={s.id}>
+                    {s.title} ({s.code})
+                  </option>
+                ))}
+              </select>
+              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#9ca3af] pointer-events-none" />
             </div>
           </div>
         </div>
 
         {loading ? (
           <div className="flex justify-center py-16">
-            <div className="animate-spin rounded-full h-10 w-10 border-2 border-blue-600 border-t-transparent" />
+            <div className="animate-spin rounded-full h-10 w-10 border-2 border-[#0a0a0a] border-t-transparent" />
           </div>
         ) : filteredNotes.length === 0 ? (
-          <div className="bg-white rounded-2xl border border-gray-100 p-16 text-center shadow-sm">
-            <FileText className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-            <h2 className="text-lg font-semibold text-gray-700 mb-1">
+          <div className="bg-white rounded-xl border border-[#e5e7eb] p-16 text-center">
+            <FileText className="h-12 w-12 text-[#d1d5db] mx-auto mb-4" />
+            <h2 className="text-base font-semibold text-[#374151] mb-1">
               {notes.length === 0 ? "No notes yet" : "No results found"}
             </h2>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-[#6b7280]">
               {notes.length === 0
                 ? "No notes have been added for this semester."
                 : "Try different search terms."}
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {filteredNotes.map((note) => (
               <Link
                 key={note.id}
                 to={`/notes/${note.id}`}
-                className="group bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-teal-200 flex flex-col"
+                className="group bg-white rounded-xl border border-[#e5e7eb] hover:border-[#d1d5db] hover:shadow-md transition-all duration-200 overflow-hidden flex flex-col"
               >
                 <div className="p-6 flex flex-col flex-1">
                   <div className="flex items-center justify-between gap-2 mb-4">
                     <div className="flex items-center space-x-2">
-                      <div className="inline-flex items-center justify-center w-9 h-9 bg-teal-100 rounded-lg">
+                      <div className="inline-flex items-center justify-center w-9 h-9 bg-[#f3f4f6] rounded-xl">
                         <FileText className="h-4 w-4 text-teal-600" />
                       </div>
-                      <span className="px-2.5 py-1 bg-teal-50 text-teal-700 text-xs font-semibold rounded-full font-mono">
+                      <span className="px-2.5 py-1 bg-[#f3f4f6] text-[#374151] text-xs font-semibold rounded-full font-mono">
                         {note.subjects?.code}
                       </span>
                     </div>
-                    <span className="text-xs text-gray-400 flex items-center gap-1">
+                    <span className="text-xs text-[#9ca3af] flex items-center gap-1">
                       <Clock className="h-3 w-3" />
                       {new Date(note.created_at).toLocaleDateString()}
                     </span>
                   </div>
 
-                  <h2 className="text-sm font-bold text-gray-900 group-hover:text-teal-600 transition-colors line-clamp-2 mb-2">
+                  <h2 className="text-sm font-bold text-[#0a0a0a] group-hover:text-[#374151] transition-colors line-clamp-2 mb-2">
                     {note.title}
                   </h2>
 
-                  <p className="text-sm text-gray-500 line-clamp-3 flex-1 mb-4">
+                  <p className="text-sm text-[#6b7280] line-clamp-3 flex-1 mb-4">
                     <span
                       dangerouslySetInnerHTML={{
                         __html: stripHtmlAndTruncate(note.content, 150),
@@ -184,12 +186,12 @@ const NotesPage: React.FC = () => {
                     />
                   </p>
 
-                  <div className="border-t border-gray-100 pt-3 flex items-center justify-between">
-                    <span className="text-xs text-gray-500 flex items-center gap-1 truncate">
-                      <BookOpen className="h-3 w-3 text-gray-400 shrink-0" />
+                  <div className="border-t border-[#e5e7eb] pt-3 flex items-center justify-between">
+                    <span className="text-xs text-[#6b7280] flex items-center gap-1 truncate">
+                      <BookOpen className="h-3 w-3 text-[#9ca3af] shrink-0" />
                       <span className="truncate">{note.subjects?.title}</span>
                     </span>
-                    <span className="text-xs text-gray-400 flex items-center gap-1 shrink-0">
+                    <span className="text-xs text-[#9ca3af] flex items-center gap-1 shrink-0">
                       <MessageCircle className="h-3 w-3" />
                       {note.comment_count}
                     </span>
