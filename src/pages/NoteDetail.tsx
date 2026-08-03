@@ -8,18 +8,73 @@ import {
   Clock,
   ArrowLeft,
   Calendar,
+  MessageSquare,
+  Reply,
+  Send,
+  User,
 } from "lucide-react";
 import { supabase } from "../lib/supabase";
 import { Database } from "../types/supabase";
 
 type Note = Database["public"]["Tables"]["notes"]["Row"];
 type Subject = Database["public"]["Tables"]["subjects"]["Row"];
+type Comment = Database["public"]["Tables"]["note_comments"]["Row"];
+
+const AUTHOR_KEY = "ict_comment_author";
+
+const formatCommentTime = (iso: string) => {
+  const d = new Date(iso);
+  const diffSec = Math.floor((Date.now() - d.getTime()) / 1000);
+  if (diffSec < 60) return "just now";
+  if (diffSec < 3600) return `${Math.floor(diffSec / 60)}m ago`;
+  if (diffSec < 86400) return `${Math.floor(diffSec / 3600)}h ago`;
+  return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+};
 
 const NoteDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [note, setNote] = useState<Note | null>(null);
   const [subject, setSubject] = useState<Subject | null>(null);
   const [loading, setLoading] = useState(true);
+  const [comments, setComments] = useState<Comment[]>([]);
+  const [replyingTo, setReplyingTo] = useState<number | null>(null);
+  const [authorName, setAuthorName] = useState(() => localStorage.getItem(AUTHOR_KEY) ?? "");
+  const [newComment, setNewComment] = useState("");
+  const [replyTexts, setReplyTexts] = useState<Record<number, string>>({});
+  const [submitting, setSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (!id) return;
+    supabase
+      .from("note_comments")
+      .select("*")
+      .eq("note_id", id)
+      .order("created_at", { ascending: true })
+      .then(({ data }) => setComments((data as Comment[]) ?? []));
+  }, [id]);
+
+  const submitComment = async (parentId: number | null, text: string, name: string) => {
+    const trimText = text.trim();
+    const trimName = name.trim();
+    if (!trimText || !trimName || !id) return;
+    setSubmitting(true);
+    localStorage.setItem(AUTHOR_KEY, trimName);
+    const { data, error } = await supabase
+      .from("note_comments")
+      .insert({ note_id: Number(id), parent_id: parentId, author_name: trimName, content: trimText })
+      .select()
+      .single();
+    if (!error && data) {
+      setComments((prev) => [...prev, data as Comment]);
+      if (parentId === null) setNewComment("");
+      else setReplyTexts((prev) => ({ ...prev, [parentId]: "" }));
+      setReplyingTo(null);
+    }
+    setSubmitting(false);
+  };
+
+  const rootComments = comments.filter((c) => c.parent_id === null);
+  const getReplies = (pid: number) => comments.filter((c) => c.parent_id === pid);
 
   useEffect(() => {
     const fetchNoteData = async () => {
@@ -169,6 +224,154 @@ const NoteDetailPage: React.FC = () => {
         <div className="bg-white rounded-xl border border-[#e5e7eb] p-6 sm:p-10 mb-8">
           <div className="prose prose-gray max-w-none prose-headings:font-bold prose-headings:text-[#0a0a0a] prose-p:text-[#374151] prose-p:leading-7 prose-a:text-[#0a0a0a] prose-a:underline prose-code:bg-[#f3f4f6] prose-code:px-1 prose-code:rounded">
             <div dangerouslySetInnerHTML={{ __html: note.content }} />
+          </div>
+        </div>
+
+        {/* Comments */}
+        <div className="bg-white rounded-xl border border-[#e5e7eb] mb-8">
+          <div className="bg-[#f9fafb] border-b border-[#e5e7eb] px-6 py-4 flex items-center gap-2">
+            <MessageSquare className="h-4 w-4 text-[#374151]" />
+            <span className="text-sm font-bold text-[#0a0a0a]">Comments</span>
+            <span className="ml-auto text-xs bg-[#f3f4f6] text-[#6b7280] font-semibold px-2 py-0.5 rounded-full">
+              {comments.length}
+            </span>
+          </div>
+
+          {rootComments.length > 0 && (
+            <div className="divide-y divide-[#e5e7eb]">
+              {rootComments.map((comment) => {
+                const replies = getReplies(comment.id);
+                const isReplying = replyingTo === comment.id;
+                return (
+                  <div key={comment.id} className="px-6 py-5">
+                    <div className="flex items-start gap-3">
+                      <div className="w-8 h-8 bg-[#f3f4f6] rounded-full flex items-center justify-center shrink-0">
+                        <span className="text-xs font-bold text-[#374151]">
+                          {comment.author_name[0].toUpperCase()}
+                        </span>
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className="text-sm font-semibold text-[#0a0a0a]">{comment.author_name}</span>
+                          <span className="text-xs text-[#9ca3af]">{formatCommentTime(comment.created_at)}</span>
+                        </div>
+                        <p className="text-sm text-[#374151] leading-relaxed whitespace-pre-wrap">{comment.content}</p>
+                        {!isReplying && replies.length === 0 && (
+                          <button
+                            onClick={() => setReplyingTo(comment.id)}
+                            className="inline-flex items-center gap-1 mt-2 text-xs text-[#6b7280] hover:text-[#0a0a0a] transition-colors"
+                          >
+                            <Reply className="h-3 w-3" />
+                            Reply
+                          </button>
+                        )}
+                        {!isReplying && replies.length > 0 && (
+                          <button
+                            onClick={() => setReplyingTo(comment.id)}
+                            className="inline-flex items-center gap-1 mt-2 text-xs text-[#6b7280] hover:text-[#0a0a0a] transition-colors"
+                          >
+                            <Reply className="h-3 w-3" />
+                            Reply
+                          </button>
+                        )}
+                      </div>
+                    </div>
+
+                    {replies.length > 0 && (
+                      <div className="ml-11 mt-4 space-y-4">
+                        {replies.map((reply) => (
+                          <div key={reply.id} className="flex items-start gap-3">
+                            <div className="w-7 h-7 bg-[#f3f4f6] rounded-full flex items-center justify-center shrink-0">
+                              <span className="text-xs font-bold text-[#374151]">
+                                {reply.author_name[0].toUpperCase()}
+                              </span>
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-2 mb-1">
+                                <span className="text-sm font-semibold text-[#0a0a0a]">{reply.author_name}</span>
+                                <span className="text-xs text-[#9ca3af]">{formatCommentTime(reply.created_at)}</span>
+                              </div>
+                              <p className="text-sm text-[#374151] leading-relaxed whitespace-pre-wrap">{reply.content}</p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    {isReplying && (
+                      <div className="ml-11 mt-4 space-y-2">
+                        <div className="relative">
+                          <User className="absolute left-3 top-2.5 h-3.5 w-3.5 text-[#9ca3af]" />
+                          <input
+                            type="text"
+                            placeholder="Your name"
+                            value={authorName}
+                            onChange={(e) => setAuthorName(e.target.value)}
+                            className="w-full pl-8 pr-3 py-2 text-sm border border-[#e5e7eb] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0a0a0a] focus:border-[#0a0a0a]"
+                          />
+                        </div>
+                        <textarea
+                          rows={2}
+                          placeholder="Write a reply…"
+                          value={replyTexts[comment.id] ?? ""}
+                          onChange={(e) =>
+                            setReplyTexts((prev) => ({ ...prev, [comment.id]: e.target.value }))
+                          }
+                          className="w-full px-3 py-2 text-sm border border-[#e5e7eb] rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-[#0a0a0a] focus:border-[#0a0a0a]"
+                        />
+                        <div className="flex items-center gap-2">
+                          <button
+                            disabled={submitting || !authorName.trim() || !(replyTexts[comment.id] ?? "").trim()}
+                            onClick={() => submitComment(comment.id, replyTexts[comment.id] ?? "", authorName)}
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#0a0a0a] text-white text-xs font-semibold rounded-lg disabled:opacity-40 transition-opacity"
+                          >
+                            <Send className="h-3 w-3" />
+                            Post reply
+                          </button>
+                          <button
+                            onClick={() => setReplyingTo(null)}
+                            className="text-xs text-[#6b7280] hover:text-[#0a0a0a] transition-colors"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
+          <div className="px-6 py-5 border-t border-[#e5e7eb]">
+            <p className="text-xs font-semibold text-[#6b7280] uppercase tracking-wide mb-3">Add a comment</p>
+            <div className="space-y-2">
+              <div className="relative">
+                <User className="absolute left-3 top-2.5 h-3.5 w-3.5 text-[#9ca3af]" />
+                <input
+                  type="text"
+                  placeholder="Your name"
+                  value={authorName}
+                  onChange={(e) => setAuthorName(e.target.value)}
+                  className="w-full pl-8 pr-3 py-2 text-sm border border-[#e5e7eb] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0a0a0a] focus:border-[#0a0a0a]"
+                />
+              </div>
+              <textarea
+                rows={3}
+                placeholder="Share your thoughts…"
+                value={newComment}
+                onChange={(e) => setNewComment(e.target.value)}
+                className="w-full px-3 py-2 text-sm border border-[#e5e7eb] rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-[#0a0a0a] focus:border-[#0a0a0a]"
+              />
+              <button
+                disabled={submitting || !authorName.trim() || !newComment.trim()}
+                onClick={() => submitComment(null, newComment, authorName)}
+                className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#0a0a0a] text-white text-sm font-semibold rounded-lg disabled:opacity-40 transition-opacity"
+              >
+                <Send className="h-3.5 w-3.5" />
+                Post comment
+              </button>
+            </div>
           </div>
         </div>
 

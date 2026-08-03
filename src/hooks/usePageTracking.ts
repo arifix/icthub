@@ -23,12 +23,13 @@ const getGeoData = async (): Promise<{
   const cached = sessionStorage.getItem(GEO_CACHE_KEY);
   if (cached) return JSON.parse(cached);
   try {
-    const res = await fetch("https://ipapi.co/json/");
+    const res = await fetch("https://ipwho.is/");
     if (!res.ok) return null;
     const data = await res.json();
+    if (!data.success) return null;
     const geo = {
       ip: data.ip ?? "",
-      country: data.country_name ?? "",
+      country: data.country ?? "",
       city: data.city ?? "",
     };
     sessionStorage.setItem(GEO_CACHE_KEY, JSON.stringify(geo));

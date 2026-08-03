@@ -64,6 +64,32 @@ export interface Database {
           semester_id?: number | null;
         };
       };
+      note_comments: {
+        Row: {
+          id: number;
+          created_at: string;
+          note_id: number;
+          parent_id: number | null;
+          author_name: string;
+          content: string;
+        };
+        Insert: {
+          id?: number;
+          created_at?: string;
+          note_id: number;
+          parent_id?: number | null;
+          author_name: string;
+          content: string;
+        };
+        Update: {
+          id?: number;
+          created_at?: string;
+          note_id?: number;
+          parent_id?: number | null;
+          author_name?: string;
+          content?: string;
+        };
+      };
       notes: {
         Row: {
           id: number;

@@ -3,6 +3,7 @@ import {
   Activity,
   Globe,
   Monitor,
+  Navigation,
   Smartphone,
   TrendingUp,
   Users,
@@ -124,6 +125,25 @@ const AdminAnalytics: React.FC = () => {
 
   const maxPageCount = topPages[0]?.[1] || 1;
   const maxCountryCount = topCountries[0]?.[1] || 1;
+
+  // Group visits by session for user journey view
+  const sessionJourneys = Object.entries(
+    visits.reduce<Record<string, Visit[]>>((acc, v) => {
+      const key = v.session_id ?? `_${v.id}`;
+      (acc[key] = acc[key] || []).push(v);
+      return acc;
+    }, {})
+  )
+    .map(([sid, svs]) => ({
+      sid,
+      pages: [...svs].sort((a, b) => +new Date(a.created_at) - +new Date(b.created_at)),
+    }))
+    .sort(
+      (a, b) =>
+        +new Date(b.pages[b.pages.length - 1].created_at) -
+        +new Date(a.pages[a.pages.length - 1].created_at)
+    )
+    .slice(0, 25);
 
   const formatTime = (iso: string) => {
     const d = new Date(iso);
@@ -272,6 +292,91 @@ const AdminAnalytics: React.FC = () => {
               </div>
             </div>
 
+            {/* User Session Journeys */}
+            <div className="bg-white rounded-xl border border-[#e5e7eb]">
+              <div className="bg-[#f9fafb] border-b border-[#e5e7eb] px-6 py-4 flex items-center gap-2">
+                <Navigation className="h-4 w-4 text-[#374151]" />
+                <span className="text-sm font-bold text-[#0a0a0a]">User Journeys</span>
+                <span className="ml-auto text-xs bg-[#f3f4f6] text-[#6b7280] font-semibold px-2 py-0.5 rounded-full">
+                  {sessionJourneys.length} sessions
+                </span>
+              </div>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-[#e5e7eb]">
+                      {["Session", "Started", "Location", "Device", "Page Flow"].map((h) => (
+                        <th
+                          key={h}
+                          className="text-left px-5 py-3 text-xs font-semibold text-[#6b7280] uppercase tracking-wide"
+                        >
+                          {h}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-[#e5e7eb]">
+                    {sessionJourneys.map(({ sid, pages }) => {
+                      const first = pages[0];
+                      const ip = first.ip_address;
+                      const location = [first.city, first.country].filter(Boolean).join(", ");
+                      const mobile = isMobile(first.user_agent);
+                      const isAnon = sid.startsWith("_");
+                      return (
+                        <tr key={sid} className="hover:bg-[#f9fafb]">
+                          <td className="px-5 py-3">
+                            <span className="font-mono text-xs text-[#9ca3af]">
+                              {isAnon ? "—" : sid.slice(0, 8) + "…"}
+                            </span>
+                            <span className="ml-2 text-xs text-[#d1d5db]">
+                              {pages.length}p
+                            </span>
+                          </td>
+                          <td className="px-5 py-3 text-[#6b7280] whitespace-nowrap text-xs">
+                            {formatTime(first.created_at)}
+                          </td>
+                          <td className="px-5 py-3 text-xs">
+                            <div className="font-mono text-[#6b7280]">{ip || "—"}</div>
+                            <div className="text-[#9ca3af]">{location || "—"}</div>
+                          </td>
+                          <td className="px-5 py-3">
+                            <div className="flex items-center gap-1 text-[#6b7280]">
+                              {mobile ? (
+                                <Smartphone className="h-3.5 w-3.5" />
+                              ) : (
+                                <Monitor className="h-3.5 w-3.5" />
+                              )}
+                              <span className="text-xs">{mobile ? "Mobile" : "Desktop"}</span>
+                            </div>
+                          </td>
+                          <td className="px-5 py-3">
+                            <div className="flex items-center gap-1 flex-wrap">
+                              {pages.slice(0, 6).map((p, i) => (
+                                <React.Fragment key={p.id}>
+                                  {i > 0 && (
+                                    <span className="text-[#d1d5db] text-xs select-none">→</span>
+                                  )}
+                                  <span className="text-xs bg-[#f3f4f6] text-[#374151] px-2 py-0.5 rounded-full font-medium whitespace-nowrap">
+                                    {getPageLabel(p.page)}
+                                  </span>
+                                </React.Fragment>
+                              ))}
+                              {pages.length > 6 && (
+                                <span className="text-xs text-[#9ca3af]">+{pages.length - 6} more</span>
+                              )}
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+                {sessionJourneys.length === 0 && (
+                  <div className="text-center py-12 text-[#9ca3af] text-sm">No sessions recorded yet</div>
+                )}
+              </div>
+            </div>
+
             {/* Recent visits table */}
             <div className="bg-white rounded-xl border border-[#e5e7eb]">
               <div className="bg-[#f9fafb] border-b border-[#e5e7eb] px-6 py-4 flex items-center gap-2">
@@ -296,7 +401,7 @@ const AdminAnalytics: React.FC = () => {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-[#e5e7eb]">
-                    {visits.slice(0, 50).map((v) => (
+                    {visits.slice(0, 30).map((v) => (
                       <tr key={v.id} className="hover:bg-[#f9fafb]">
                         <td className="px-5 py-3 text-[#6b7280] whitespace-nowrap">
                           <div className="flex items-center gap-1.5">
