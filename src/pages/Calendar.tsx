@@ -198,7 +198,7 @@ const CalendarPage: React.FC = () => {
                                 day.events.slice(0, 2).map((event: Event) => (
                                   <div
                                     key={event.id}
-                                    className="text-[9px] bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded px-1 py-0.5 truncate mb-0.5 font-medium"
+                                    className="text-[12px] bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded px-1 py-0.5 truncate mb-0.5 font-medium"
                                     title={event.title}
                                   >
                                     {event.title}
@@ -275,7 +275,7 @@ const CalendarPage: React.FC = () => {
                             {event.subjects ? (
                               <>
                                 <BookOpen className="h-3 w-3 text-[#9ca3af]" />
-                                {event.subjects.code}
+                                {event.subjects.title} ({event.subjects.code})
                               </>
                             ) : (
                               <>
