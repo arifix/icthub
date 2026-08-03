@@ -509,7 +509,7 @@ const Home: React.FC = () => {
                             <div className="flex items-center text-xs text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full w-fit">
                               <BookOpen className="h-3 w-3 mr-1" />
                               <span className="font-medium">
-                                {event.subjects.code}
+                                {event.subjects.title} ({event.subjects.code})
                               </span>
                             </div>
                           ) : (
