@@ -12,6 +12,7 @@ import {
   BarChart3,
   Globe,
   Settings,
+  Activity,
 } from "lucide-react";
 
 const AdminSidebar: React.FC = () => {
@@ -71,6 +72,12 @@ const AdminSidebar: React.FC = () => {
       icon: File,
       description: "Resources & Docs",
       matchPaths: ["/admin/files/"],
+    },
+    {
+      to: "/admin/analytics",
+      label: "Analytics",
+      icon: Activity,
+      description: "Visitor Tracking",
     },
     {
       to: "/admin/settings",

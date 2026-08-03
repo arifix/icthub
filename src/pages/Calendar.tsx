@@ -175,7 +175,7 @@ const CalendarPage: React.FC = () => {
                             day.day === 0
                               ? "bg-transparent"
                               : day.date && isToday(day.date)
-                                ? "bg-gradient-to-br from-blue-600 to-indigo-600 text-white rounded-xl"
+                                ? "bg-gradient-to-br from-blue-500 to-indigo-500 text-white rounded-xl"
                                 : isWeekend
                                   ? "bg-red-50 hover:bg-red-100/60 border border-red-100 rounded-lg"
                                   : "bg-white hover:bg-blue-50 border border-gray-100 rounded-lg"

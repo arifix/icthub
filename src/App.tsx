@@ -35,6 +35,7 @@ import AdminEventForm from "./pages/admin/EventForm";
 import AdminFiles from "./pages/admin/Files";
 import AdminFileForm from "./pages/admin/FileForm";
 import AdminSettings from "./pages/admin/Settings";
+import AdminAnalytics from "./pages/admin/Analytics";
 
 // Admin-only protected route
 const AdminRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -107,6 +108,7 @@ function App() {
         <Route path="files/new" element={<AdminFileForm />} />
         <Route path="files/:id" element={<AdminFileForm />} />
         <Route path="settings" element={<AdminSettings />} />
+        <Route path="analytics" element={<AdminAnalytics />} />
       </Route>
 
       <Route path="*" element={<Navigate to="/login" />} />
