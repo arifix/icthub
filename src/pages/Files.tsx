@@ -130,7 +130,7 @@ const FilesPage: React.FC = () => {
                 <option value="">All Subjects</option>
                 {subjects.map((s) => (
                   <option key={s.id} value={s.id}>
-                    {s.code}
+                    {s.title} ({s.code})
                   </option>
                 ))}
               </select>

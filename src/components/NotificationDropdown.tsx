@@ -80,8 +80,8 @@ const NotificationDropdown: React.FC = () => {
       >
         <Bell className="h-6 w-6" />
         {unreadCount > 0 && (
-          <span className="absolute -top-1 -right-1 bg-gradient-to-br from-red-500 to-pink-600 text-white  rounded-full h-5 w-5 flex items-center justify-center font-bold shadow-lg">
-            {unreadCount > 9 ? "9+" : unreadCount}
+          <span className="absolute -top-1 -right-1 bg-gradient-to-br from-red-500 to-pink-600 text-white rounded-full h-5 w-5 flex items-center justify-center font-bold shadow-lg text-[10px]">
+            {unreadCount > 10 ? "10+" : unreadCount}
           </span>
         )}
       </button>

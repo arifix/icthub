@@ -6,7 +6,6 @@ import { Database } from "../../types/supabase";
 import { toast } from "react-hot-toast";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import { createNotification } from "../../utils/notifications";
 
 type Event = Database["public"]["Tables"]["events"]["Row"];
 type Subject = Database["public"]["Tables"]["subjects"]["Row"];
@@ -190,36 +189,6 @@ const AdminEventForm: React.FC = () => {
 
         if (error) throw error;
         toast.success("Event created successfully");
-
-        // Create in-app notification for new event
-        if (newEvent) {
-          try {
-            const eventDate = new Date(newEvent.date).toLocaleDateString(
-              "en-US",
-              {
-                weekday: "long",
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              },
-            );
-
-            await createNotification({
-              type: "event",
-              title: newEvent.title,
-              message: `New event scheduled for ${eventDate}${
-                newEvent.subjects ? ` in ${newEvent.subjects.title}` : ""
-              }`,
-              related_id: newEvent.id,
-              semester_id: newEvent.semester_id,
-              subject_id: newEvent.subject_id,
-              created_by: "Admin",
-            });
-          } catch (notificationError) {
-            console.error("Failed to create notification:", notificationError);
-            // Don't show error to user as the main action succeeded
-          }
-        }
       }
 
       navigate("/admin/calendar");

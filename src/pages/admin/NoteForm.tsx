@@ -6,7 +6,6 @@ import { Database } from "../../types/supabase";
 import { toast } from "react-hot-toast";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import { createNotification } from "../../utils/notifications";
 
 type Note = Database["public"]["Tables"]["notes"]["Row"];
 type Subject = Database["public"]["Tables"]["subjects"]["Row"];
@@ -166,26 +165,6 @@ const AdminNoteForm: React.FC = () => {
 
         if (error) throw error;
         toast.success("Note created successfully");
-
-        // Create in-app notification for new note
-        if (newNote) {
-          try {
-            await createNotification({
-              type: "note",
-              title: newNote.title,
-              message: `New study note added${
-                newNote.subjects ? ` for ${newNote.subjects.title}` : ""
-              }`,
-              related_id: newNote.id,
-              semester_id: newNote.semester_id,
-              subject_id: newNote.subject_id,
-              created_by: "Admin",
-            });
-          } catch (notificationError) {
-            console.error("Failed to create notification:", notificationError);
-            // Don't show error to user as the main action succeeded
-          }
-        }
       }
 
       navigate("/admin/notes", { state: { refresh: true } });

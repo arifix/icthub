@@ -4,7 +4,6 @@ import { ArrowLeft, File, Save, Upload, AlertCircle } from "lucide-react";
 import { supabase } from "../../lib/supabase";
 import { Database } from "../../types/supabase";
 import { toast } from "react-hot-toast";
-import { createNotification } from "../../utils/notifications";
 
 type FileData = Database["public"]["Tables"]["files"]["Row"];
 type Subject = Database["public"]["Tables"]["subjects"]["Row"];
@@ -174,11 +173,11 @@ const AdminFileForm: React.FC = () => {
 
       if (selectedFile) {
         const { data, error } = await supabase.storage
-          .from("files")
+          .from("icthub-files")
           .upload(`${Date.now()}_${selectedFile.name}`, selectedFile);
         if (error) throw error;
         filePath =
-          "https://fxercuesfbcpizrggehw.supabase.co/storage/v1/object/public/files/" +
+          "https://fxercuesfbcpizrggehw.supabase.co/storage/v1/object/public/icthub-files/" +
           data.path;
       }
 
@@ -221,24 +220,6 @@ const AdminFileForm: React.FC = () => {
 
         if (error) throw error;
         toast.success("File uploaded successfully");
-
-        // Create in-app notification for new file
-        if (newFile) {
-          try {
-            await createNotification({
-              type: "file",
-              title: newFile.name,
-              message: `New ${newFile.file_type.toUpperCase()} file uploaded`,
-              related_id: newFile.id,
-              semester_id: newFile.semester_id,
-              subject_id: newFile.subject_id,
-              created_by: "Admin",
-            });
-          } catch (notificationError) {
-            console.error("Failed to create notification:", notificationError);
-            // Don't show error to user as the main action succeeded
-          }
-        }
       }
 
       navigate("/admin/files");

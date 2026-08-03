@@ -135,7 +135,7 @@ CREATE POLICY "events_write_admin" ON public.events FOR ALL TO authenticated USI
 CREATE TABLE IF NOT EXISTS public.files (
     id          bigserial    PRIMARY KEY,
     created_at  timestamptz  NOT NULL DEFAULT now(),
-    subject_id  bigint       NOT NULL REFERENCES public.subjects(id) ON DELETE CASCADE,
+    subject_id  bigint       REFERENCES public.subjects(id) ON DELETE SET NULL,
     name        text         NOT NULL,
     file_path   text         NOT NULL,
     file_type   text         NOT NULL DEFAULT '',

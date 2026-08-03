@@ -57,7 +57,7 @@ const NotificationsPage: React.FC = () => {
       (now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24),
     );
     if (diffInDays === 0)
-      return `Today at ${date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`;
+      return `Today at ${date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: true })}`;
     if (diffInDays === 1) return "Yesterday";
     if (diffInDays < 7) return `${diffInDays} days ago`;
     return date.toLocaleDateString(undefined, {
@@ -146,7 +146,7 @@ const NotificationsPage: React.FC = () => {
                 }`}
               >
                 <div
-                  className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 ${
+                  className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${
                     !notification.is_read ? "bg-blue-100" : "bg-gray-100"
                   }`}
                 >
@@ -157,7 +157,7 @@ const NotificationsPage: React.FC = () => {
                     <span
                       className={
                         typeBadge[notification.type] ||
-                        "text-xs bg-[#f3f4f6] text-[#6b7280] font-semibold px-1.5 py-0.5 rounded"
+                        "text-sm bg-[#f3f4f6] text-[#6b7280] font-semibold px-1.5 py-0.5 rounded"
                       }
                     >
                       {typeLabel[notification.type] || notification.type}
@@ -166,14 +166,14 @@ const NotificationsPage: React.FC = () => {
                       <span className="w-2 h-2 rounded-full bg-[#0a0a0a] shrink-0" />
                     )}
                   </div>
-                  <p className="text-sm font-semibold text-[#0a0a0a] truncate">
+                  <p className="font-semibold text-[#0a0a0a] truncate">
                     {notification.title}
                   </p>
-                  <p className="text-xs text-[#9ca3af] mt-0.5 line-clamp-1">
+                  <p className="text-sm text-[#9ca3af] mt-0.5 line-clamp-1">
                     {notification.message}
                   </p>
                 </div>
-                <div className="text-xs text-[#9ca3af] shrink-0 text-right">
+                <div className="text-sm text-[#9ca3af] shrink-0 text-right">
                   <div>{formatDate(notification.created_at)}</div>
                 </div>
               </Link>
