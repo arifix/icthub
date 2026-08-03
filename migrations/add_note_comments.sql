@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS public.note_comments (
     created_at  timestamptz  NOT NULL DEFAULT now(),
     note_id     bigint       NOT NULL REFERENCES public.notes(id) ON DELETE CASCADE,
     parent_id   bigint       REFERENCES public.note_comments(id) ON DELETE CASCADE,
+    user_id     uuid         REFERENCES auth.users(id) ON DELETE SET NULL,
     author_name text         NOT NULL CHECK (trim(author_name) <> ''),
     content     text         NOT NULL CHECK (trim(content) <> '')
 );

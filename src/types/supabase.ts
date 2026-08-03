@@ -70,6 +70,7 @@ export interface Database {
           created_at: string;
           note_id: number;
           parent_id: number | null;
+          user_id: string | null;
           author_name: string;
           content: string;
         };
@@ -78,6 +79,7 @@ export interface Database {
           created_at?: string;
           note_id: number;
           parent_id?: number | null;
+          user_id?: string | null;
           author_name: string;
           content: string;
         };
@@ -86,6 +88,7 @@ export interface Database {
           created_at?: string;
           note_id?: number;
           parent_id?: number | null;
+          user_id?: string | null;
           author_name?: string;
           content?: string;
         };
