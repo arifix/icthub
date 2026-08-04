@@ -116,60 +116,53 @@ const AdminSemesterForm: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-[60vh]">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-600"></div>
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="animate-spin rounded-full h-8 w-8 border-2 border-[#0a0a0a] border-t-transparent" />
       </div>
     );
   }
 
   return (
-    <div className="space-y-8">
-      {/* Hero Header */}
-      <div className="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-lg shadow-lg p-5">
-        <div className="flex items-center justify-between">
+    <div className="min-h-screen bg-[#f9fafb]">
+      {/* Header */}
+      <div className="bg-white border-b border-[#e5e7eb] px-6 py-7">
+        <div className="max-w-3xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-white mb-2">
-              {isEditing ? "Edit Semester" : "Add New Semester"}
+            <h1 className="text-2xl sm:text-3xl font-bold text-[#0a0a0a] tracking-tight">
+              {isEditing ? "Edit Semester" : "New Semester"}
             </h1>
-            <p className="text-indigo-100">
+            <p className="text-sm text-[#6b7280] mt-1">
               {isEditing
                 ? "Update semester information"
                 : "Create a new academic semester"}
             </p>
           </div>
-          <div className="flex items-center space-x-3">
-            <button
-              onClick={() => navigate("/admin/semesters")}
-              className="inline-flex items-center px-4 py-2 bg-white/10 backdrop-blur-sm text-white rounded-lg hover:bg-white/20 transition-all duration-200 font-medium border border-white/20"
-            >
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to Semesters
-            </button>
-            <div className="hidden lg:flex items-center justify-center w-12 h-12 bg-white/10 rounded-xl">
-              <Calendar className="h-6 w-6 text-white" />
-            </div>
-          </div>
+          <button
+            onClick={() => navigate("/admin/semesters")}
+            className="inline-flex items-center gap-2 px-3 py-2 text-sm text-[#374151] border border-[#e5e7eb] rounded-lg hover:bg-[#f9fafb] transition-colors"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back to Semesters
+          </button>
         </div>
       </div>
 
-      {/* Form */}
-      <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-sm border border-gray-100 overflow-hidden max-w-4xl mx-auto">
-        <div className="px-6 py-4 border-b border-gray-100">
-          <h2 className="text-xl font-bold text-gray-900">Semester Details</h2>
-          <p className="text-sm text-gray-600 mt-1">
-            Fill in the information below to {isEditing ? "update" : "create"}{" "}
-            the semester.
-          </p>
-        </div>
+      <div className="max-w-3xl mx-auto px-6 py-8">
+        <div className="bg-white rounded-xl border border-[#e5e7eb]">
+          <div className="bg-[#f9fafb] border-b border-[#e5e7eb] px-6 py-4 flex items-center gap-2">
+            <Calendar className="h-4 w-4 text-[#374151]" />
+            <span className="text-sm font-bold text-[#0a0a0a]">
+              Semester Details
+            </span>
+          </div>
 
-        <form onSubmit={handleSubmit} className="p-6">
-          <div className="space-y-6">
+          <form onSubmit={handleSubmit} className="p-6 space-y-5">
             <div>
               <label
                 htmlFor="name"
-                className="block text-sm font-medium text-gray-700 mb-2"
+                className="block text-xs font-semibold text-[#6b7280] uppercase tracking-wide mb-1.5"
               >
-                Semester Name <span className="text-red-500">*</span>
+                Semester Name <span className="text-red-400">*</span>
               </label>
               <input
                 type="text"
@@ -177,19 +170,19 @@ const AdminSemesterForm: React.FC = () => {
                 name="name"
                 value={semester.name}
                 onChange={handleChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-shadow duration-200"
                 placeholder="e.g., Spring 2025, Fall 2025"
                 required
+                className="w-full px-3 py-2.5 border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0a0a0a] focus:border-[#0a0a0a] text-[#374151]"
               />
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div>
                 <label
                   htmlFor="start_date"
-                  className="block text-sm font-medium text-gray-700 mb-2"
+                  className="block text-xs font-semibold text-[#6b7280] uppercase tracking-wide mb-1.5"
                 >
-                  Start Date <span className="text-red-500">*</span>
+                  Start Date <span className="text-red-400">*</span>
                 </label>
                 <input
                   type="date"
@@ -197,17 +190,16 @@ const AdminSemesterForm: React.FC = () => {
                   name="start_date"
                   value={semester.start_date}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-shadow duration-200"
                   required
+                  className="w-full px-3 py-2.5 border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0a0a0a] focus:border-[#0a0a0a] text-[#374151]"
                 />
               </div>
-
               <div>
                 <label
                   htmlFor="end_date"
-                  className="block text-sm font-medium text-gray-700 mb-2"
+                  className="block text-xs font-semibold text-[#6b7280] uppercase tracking-wide mb-1.5"
                 >
-                  End Date <span className="text-red-500">*</span>
+                  End Date <span className="text-red-400">*</span>
                 </label>
                 <input
                   type="date"
@@ -215,61 +207,63 @@ const AdminSemesterForm: React.FC = () => {
                   name="end_date"
                   value={semester.end_date}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-shadow duration-200"
                   required
+                  className="w-full px-3 py-2.5 border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0a0a0a] focus:border-[#0a0a0a] text-[#374151]"
                 />
               </div>
             </div>
 
-            <div className="bg-gray-50 p-4 rounded-lg">
-              <label className="inline-flex items-center">
-                <input
-                  type="checkbox"
-                  name="is_current"
-                  checked={semester.is_current ?? false}
-                  onChange={handleChange}
-                  className="form-checkbox h-5 w-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500 transition-colors duration-200"
-                />
-                <span className="ml-3 text-sm font-medium text-gray-700">
+            <div className="flex items-start gap-3 p-4 bg-[#f9fafb] rounded-xl border border-[#e5e7eb]">
+              <input
+                type="checkbox"
+                id="is_current"
+                name="is_current"
+                checked={semester.is_current ?? false}
+                onChange={handleChange}
+                className="h-4 w-4 mt-0.5 rounded border-[#d1d5db] text-[#0a0a0a] focus:ring-[#0a0a0a]"
+              />
+              <div>
+                <label
+                  htmlFor="is_current"
+                  className="text-sm font-medium text-[#374151] cursor-pointer"
+                >
                   Set as Current Semester
-                </span>
-              </label>
-              <p className=" text-gray-500 mt-1 ml-8">
-                Only one semester can be current at a time. Setting this will
-                make other semesters inactive.
-              </p>
+                </label>
+                <p className="text-xs text-[#9ca3af] mt-0.5">
+                  Only one semester can be current. Other semesters will become
+                  inactive.
+                </p>
+              </div>
             </div>
-          </div>
 
-          <div className="mt-8 flex justify-end space-x-4">
-            <button
-              type="button"
-              onClick={() => navigate("/admin/semesters")}
-              className="px-6 py-3 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition-colors duration-200 font-semibold"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              disabled={saving}
-              className={`px-6 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-xl hover:shadow-lg transition-all duration-200 flex items-center font-semibold ${
-                saving ? "opacity-70 cursor-not-allowed" : ""
-              }`}
-            >
-              {saving ? (
-                <>
-                  <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white mr-2"></div>
-                  Saving...
-                </>
-              ) : (
-                <>
-                  <Save className="h-5 w-5 mr-2" />
-                  {isEditing ? "Update Semester" : "Create Semester"}
-                </>
-              )}
-            </button>
-          </div>
-        </form>
+            <div className="flex justify-end gap-3 pt-2">
+              <button
+                type="button"
+                onClick={() => navigate("/admin/semesters")}
+                className="px-4 py-2.5 text-sm font-medium text-[#374151] border border-[#e5e7eb] rounded-lg hover:bg-[#f9fafb] transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                disabled={saving}
+                className="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium bg-[#0a0a0a] text-white rounded-lg hover:bg-[#374151] transition-colors disabled:opacity-60"
+              >
+                {saving ? (
+                  <>
+                    <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent" />
+                    Saving…
+                  </>
+                ) : (
+                  <>
+                    <Save className="h-4 w-4" />
+                    {isEditing ? "Update Semester" : "Create Semester"}
+                  </>
+                )}
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );

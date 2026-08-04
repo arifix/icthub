@@ -241,61 +241,54 @@ const AdminFileForm: React.FC = () => {
 
   if (loading || loadingData) {
     return (
-      <div className="flex justify-center items-center min-h-[60vh]">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-600"></div>
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="animate-spin rounded-full h-8 w-8 border-2 border-[#0a0a0a] border-t-transparent" />
       </div>
     );
   }
 
   return (
-    <div className="space-y-8">
-      {/* Hero Header */}
-      <div className="bg-gradient-to-r from-purple-500 to-indigo-600 rounded-lg shadow-lg p-5">
-        <div className="flex items-center justify-between">
+    <div className="min-h-screen bg-[#f9fafb]">
+      {/* Header */}
+      <div className="bg-white border-b border-[#e5e7eb] px-6 py-7">
+        <div className="max-w-3xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-white mb-2">
-              {isEditing ? "Edit File" : "Upload New File"}
+            <h1 className="text-2xl sm:text-3xl font-bold text-[#0a0a0a] tracking-tight">
+              {isEditing ? "Edit File" : "Upload File"}
             </h1>
-            <p className="text-purple-100">
+            <p className="text-sm text-[#6b7280] mt-1">
               {isEditing
-                ? "Update file information and settings"
+                ? "Update file information"
                 : "Add a new file resource for students"}
             </p>
           </div>
-          <div className="flex items-center space-x-3">
-            <button
-              onClick={() => navigate("/admin/files")}
-              className="inline-flex items-center px-4 py-2 bg-white/10 backdrop-blur-sm text-white rounded-lg hover:bg-white/20 transition-all duration-200 font-medium border border-white/20"
-            >
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to Files
-            </button>
-            <div className="hidden lg:flex items-center justify-center w-12 h-12 bg-white/10 rounded-xl">
-              <File className="h-6 w-6 text-white" />
-            </div>
-          </div>
+          <button
+            onClick={() => navigate("/admin/files")}
+            className="inline-flex items-center gap-2 px-3 py-2 text-sm text-[#374151] border border-[#e5e7eb] rounded-lg hover:bg-[#f9fafb] transition-colors"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back to Files
+          </button>
         </div>
       </div>
 
-      {/* Form */}
-      <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-sm border border-gray-100 overflow-hidden max-w-4xl mx-auto">
-        <div className="px-6 py-4 border-b border-gray-200 bg-gray-50/50">
-          <h2 className="text-xl font-bold text-gray-900">File Details</h2>
-          <p className="text-sm text-gray-600 mt-1">
-            Fill in the information below to {isEditing ? "update" : "upload"}{" "}
-            the file.
-          </p>
-        </div>
+      <div className="max-w-3xl mx-auto px-6 py-8">
+        <div className="bg-white rounded-xl border border-[#e5e7eb]">
+          <div className="bg-[#f9fafb] border-b border-[#e5e7eb] px-6 py-4 flex items-center gap-2">
+            <File className="h-4 w-4 text-[#374151]" />
+            <span className="text-sm font-bold text-[#0a0a0a]">
+              File Details
+            </span>
+          </div>
 
-        <form onSubmit={handleSubmit} className="p-6">
-          <div className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <form onSubmit={handleSubmit} className="p-6 space-y-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div>
                 <label
                   htmlFor="name"
-                  className="block text-sm font-semibold text-gray-700 mb-2"
+                  className="block text-xs font-semibold text-[#6b7280] uppercase tracking-wide mb-1.5"
                 >
-                  File Name <span className="text-red-500">*</span>
+                  File Name <span className="text-red-400">*</span>
                 </label>
                 <input
                   type="text"
@@ -303,31 +296,30 @@ const AdminFileForm: React.FC = () => {
                   name="name"
                   value={file.name}
                   onChange={handleChange}
-                  className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-shadow duration-200"
                   placeholder="e.g., Lecture Notes Week 1"
                   required
+                  className="w-full px-3 py-2.5 border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0a0a0a] focus:border-[#0a0a0a] text-[#374151]"
                 />
               </div>
-
               <div>
                 <label
                   htmlFor="semester_id"
-                  className="block text-sm font-semibold text-gray-700 mb-2"
+                  className="block text-xs font-semibold text-[#6b7280] uppercase tracking-wide mb-1.5"
                 >
-                  Semester <span className="text-red-500">*</span>
+                  Semester <span className="text-red-400">*</span>
                 </label>
                 <select
                   id="semester_id"
                   name="semester_id"
                   value={file.semester_id || ""}
                   onChange={handleChange}
-                  className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-shadow duration-200"
                   required
+                  className="w-full px-3 py-2.5 border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0a0a0a] focus:border-[#0a0a0a] bg-white text-[#374151]"
                 >
                   <option value="">Select a semester</option>
-                  {semesters.map((semester) => (
-                    <option key={semester.id} value={semester.id}>
-                      {semester.name}
+                  {semesters.map((s) => (
+                    <option key={s.id} value={s.id}>
+                      {s.name}
                     </option>
                   ))}
                 </select>
@@ -337,7 +329,7 @@ const AdminFileForm: React.FC = () => {
             <div>
               <label
                 htmlFor="subject_id"
-                className="block text-sm font-semibold text-gray-700 mb-2"
+                className="block text-xs font-semibold text-[#6b7280] uppercase tracking-wide mb-1.5"
               >
                 Subject (Optional)
               </label>
@@ -346,134 +338,113 @@ const AdminFileForm: React.FC = () => {
                 name="subject_id"
                 value={file.subject_id || ""}
                 onChange={handleChange}
-                className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-shadow duration-200"
+                className="w-full px-3 py-2.5 border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0a0a0a] focus:border-[#0a0a0a] bg-white text-[#374151]"
               >
                 <option value="">General File (No Subject)</option>
-                {subjects.map((subject) => (
-                  <option key={subject.id} value={subject.id}>
-                    {subject.code}: {subject.title}
+                {subjects.map((s) => (
+                  <option key={s.id} value={s.id}>
+                    {s.code}: {s.title}
                   </option>
                 ))}
               </select>
-              <p className=" text-gray-500 mt-1">
-                Leave as "General File" for notices, routines, or other general
-                documents
+              <p className="text-xs text-[#9ca3af] mt-1.5">
+                Leave blank for notices, routines, or other general documents
               </p>
             </div>
 
-            {(file.file_type || file.size > 0) && (
-              <div className="bg-gradient-to-r from-purple-50 to-indigo-50 p-4 rounded-lg border border-purple-200">
-                <h3 className="text-sm font-medium text-gray-900 mb-2">
-                  File Information
-                </h3>
-                <div className="grid grid-cols-2 gap-4 text-sm">
-                  <div>
-                    <span className="text-gray-600">Type:</span>
-                    <span className="ml-2 font-medium text-purple-700">
-                      {file.file_type.toUpperCase() || "Unknown"}
-                    </span>
-                  </div>
-                  <div>
-                    <span className="text-gray-600">Size:</span>
-                    <span className="ml-2 font-medium text-purple-700">
-                      {formatFileSize(file.size)}
-                    </span>
-                  </div>
-                </div>
+            {(file.file_type || (file.size ?? 0) > 0) && (
+              <div className="flex items-center gap-4 p-4 bg-[#f9fafb] rounded-xl border border-[#e5e7eb] text-sm">
+                <span className="text-xs font-semibold text-[#374151] bg-[#f3f4f6] px-2 py-0.5 rounded-full font-mono">
+                  {file.file_type?.toUpperCase() || "?"}
+                </span>
+                <span className="text-[#6b7280]">
+                  {formatFileSize(file.size ?? 0)}
+                </span>
               </div>
             )}
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                {isEditing ? "Replace File (Optional)" : "Select File"}{" "}
-                {!isEditing && <span className="text-red-500">*</span>}
+              <label className="block text-xs font-semibold text-[#6b7280] uppercase tracking-wide mb-1.5">
+                {isEditing ? (
+                  "Replace File (Optional)"
+                ) : (
+                  <>
+                    Select File <span className="text-red-400">*</span>
+                  </>
+                )}
               </label>
-              <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg hover:border-purple-400 transition-colors duration-200">
-                <div className="space-y-1 text-center">
-                  <Upload className="mx-auto h-12 w-12 text-gray-400" />
-                  <div className="flex text-sm text-gray-600">
-                    <label
-                      htmlFor="file-upload"
-                      className="relative cursor-pointer bg-white rounded-md font-medium text-purple-600 hover:text-purple-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-purple-500"
-                    >
-                      <span>Upload a file</span>
-                      <input
-                        id="file-upload"
-                        name="file-upload"
-                        type="file"
-                        className="sr-only"
-                        onChange={handleFileChange}
-                      />
-                    </label>
-                    <p className="pl-1">or drag and drop</p>
+              <div className="border-2 border-dashed border-[#e5e7eb] rounded-xl p-8 text-center hover:border-[#d1d5db] transition-colors">
+                <Upload className="mx-auto h-10 w-10 text-[#d1d5db] mb-3" />
+                <label htmlFor="file-upload" className="cursor-pointer">
+                  <span className="text-sm font-medium text-[#374151] hover:text-[#0a0a0a]">
+                    Click to upload
+                  </span>
+                  <span className="text-sm text-[#9ca3af]">
+                    {" "}
+                    or drag and drop
+                  </span>
+                  <input
+                    id="file-upload"
+                    name="file-upload"
+                    type="file"
+                    className="sr-only"
+                    onChange={handleFileChange}
+                  />
+                </label>
+                <p className="text-xs text-[#9ca3af] mt-1">
+                  PDF, DOC, PPT, TXT, JPG, PNG up to 10MB
+                </p>
+                {selectedFile && (
+                  <div className="mt-3 inline-flex items-center gap-2 text-xs bg-[#f0fdf4] text-[#16a34a] px-3 py-1.5 rounded-full font-medium">
+                    <File className="h-3.5 w-3.5" />
+                    {selectedFile.name}
                   </div>
-                  <p className=" text-gray-500">
-                    PDF, DOC, PPT, TXT, JPG, PNG up to 10MB
-                  </p>
-                  {selectedFile && (
-                    <div className="mt-3 p-3 bg-green-50 border border-green-200 rounded-lg">
-                      <p className="text-sm text-green-700 font-medium flex items-center">
-                        <File className="h-4 w-4 mr-2" />
-                        Selected: {selectedFile.name}
-                      </p>
-                    </div>
-                  )}
-                </div>
+                )}
               </div>
             </div>
 
             {!isEditing && !selectedFile && (
-              <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
-                <div className="flex items-start">
-                  <AlertCircle className="h-5 w-5 text-amber-600 mt-0.5 mr-3 flex-shrink-0" />
-                  <div className="text-sm text-amber-800">
-                    <p className="font-medium">File Required</p>
-                    <p>
-                      Please select a file to upload before submitting the form.
-                    </p>
-                  </div>
-                </div>
+              <div className="flex items-start gap-3 p-4 bg-amber-50 rounded-xl border border-amber-200">
+                <AlertCircle className="h-4 w-4 text-amber-600 mt-0.5 shrink-0" />
+                <p className="text-xs text-amber-800">
+                  <span className="font-semibold">File required</span> — please
+                  select a file before submitting.
+                </p>
               </div>
             )}
-          </div>
 
-          <div className="mt-8 flex justify-end space-x-4">
-            <button
-              type="button"
-              onClick={() => navigate("/admin/files")}
-              className="px-6 py-2.5 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition-colors duration-200 font-semibold"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              disabled={
-                saving ||
-                semesters.length === 0 ||
-                (!isEditing && !selectedFile)
-              }
-              className={`px-6 py-2.5 bg-gradient-to-r from-purple-500 to-indigo-600 text-white rounded-xl hover:shadow-lg transition-all duration-200 flex items-center font-semibold ${
-                saving ||
-                semesters.length === 0 ||
-                (!isEditing && !selectedFile)
-                  ? "opacity-70 cursor-not-allowed"
-                  : ""
-              }`}
-            >
-              {saving ? (
-                <>
-                  <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white mr-2"></div>
-                  {isEditing ? "Updating..." : "Uploading..."}
-                </>
-              ) : (
-                <>
-                  <Save className="h-5 w-5 mr-2" />
-                  {isEditing ? "Update File" : "Upload File"}
-                </>
-              )}
-            </button>
-          </div>
-        </form>
+            <div className="flex justify-end gap-3 pt-2">
+              <button
+                type="button"
+                onClick={() => navigate("/admin/files")}
+                className="px-4 py-2.5 text-sm font-medium text-[#374151] border border-[#e5e7eb] rounded-lg hover:bg-[#f9fafb] transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                disabled={
+                  saving ||
+                  semesters.length === 0 ||
+                  (!isEditing && !selectedFile)
+                }
+                className="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium bg-[#0a0a0a] text-white rounded-lg hover:bg-[#374151] transition-colors disabled:opacity-60"
+              >
+                {saving ? (
+                  <>
+                    <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent" />
+                    {isEditing ? "Updating…" : "Uploading…"}
+                  </>
+                ) : (
+                  <>
+                    <Save className="h-4 w-4" />
+                    {isEditing ? "Update File" : "Upload File"}
+                  </>
+                )}
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );

@@ -31,6 +31,7 @@ const AdminCalendar: React.FC = () => {
   const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
+    document.title = "Calendar — ICTHub Admin";
     fetchData();
   }, []);
 
@@ -193,297 +194,249 @@ const AdminCalendar: React.FC = () => {
     .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
   return (
-    <div className="space-y-8">
-      {/* Hero Header */}
-      <div className="bg-gradient-to-r from-amber-500 to-orange-600 rounded-lg shadow-lg p-5">
-        <div className="flex items-center justify-between">
+    <div className="min-h-screen bg-[#f9fafb]">
+      {/* Header */}
+      <div className="bg-white border-b border-[#e5e7eb] px-6 py-7">
+        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-white mb-2">
-              Manage Calendar
+            <h1 className="text-2xl sm:text-3xl font-bold text-[#0a0a0a] tracking-tight">
+              Calendar
             </h1>
-            <p className="text-amber-100">
-              Schedule and manage academic events and important dates
+            <p className="text-sm text-[#6b7280] mt-1">
+              Schedule and manage academic events
             </p>
           </div>
-          <div className="flex items-center space-x-3">
-            <Link
-              to="/admin/events/new"
-              className="inline-flex items-center px-4 py-2 bg-white/10 backdrop-blur-sm text-white rounded-lg hover:bg-white/20 transition-all duration-200 font-medium border border-white/20"
-            >
-              <Plus className="h-4 w-4 mr-2" />
-              New Event
-            </Link>
-            <div className="hidden lg:flex items-center justify-center w-12 h-12 bg-white/10 rounded-xl">
-              <CalendarIcon className="h-6 w-6 text-white" />
-            </div>
-          </div>
+          <Link
+            to="/admin/events/new"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-[#0a0a0a] text-white rounded-lg text-sm font-medium hover:bg-[#374151] transition-colors"
+          >
+            <Plus className="h-4 w-4" />
+            New Event
+          </Link>
         </div>
       </div>
 
-      {/* Semester Filter */}
-      <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-sm border border-gray-100 p-6">
-        <div className="flex items-center gap-4">
-          <div className="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center flex-shrink-0">
-            <CalendarIcon className="h-5 w-5 text-amber-600" />
-          </div>
-          <label htmlFor="semester" className="font-semibold text-gray-700">
-            Filter by Semester:
-          </label>
-          <div className="relative flex-1 max-w-xs">
-            <select
-              id="semester"
-              value={selectedSemester}
-              onChange={(e) =>
-                setSelectedSemester(
-                  e.target.value ? Number(e.target.value) : "",
-                )
-              }
-              className="px-4 py-2.5 pr-10 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 bg-white appearance-none cursor-pointer"
+      <div className="max-w-6xl mx-auto px-6 py-8 space-y-6">
+        {/* Semester Filter */}
+        <div className="bg-white rounded-xl border border-[#e5e7eb] px-6 py-4">
+          <div className="flex flex-wrap items-center gap-4">
+            <div className="bg-[#f3f4f6] p-1.5 rounded-lg">
+              <CalendarIcon className="h-4 w-4 text-[#374151]" />
+            </div>
+            <label
+              htmlFor="semester"
+              className="text-sm font-semibold text-[#374151]"
             >
-              <option value="">All Semesters</option>
-              {semesters.map((semester) => (
-                <option key={semester.id} value={semester.id}>
-                  {semester.name}
-                </option>
-              ))}
-            </select>
-            <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-              <ChevronDown className="h-5 w-5 text-gray-400" />
+              Filter by semester:
+            </label>
+            <div className="relative">
+              <select
+                id="semester"
+                value={selectedSemester}
+                onChange={(e) =>
+                  setSelectedSemester(
+                    e.target.value ? Number(e.target.value) : "",
+                  )
+                }
+                className="pl-3 pr-8 py-2 border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0a0a0a] focus:border-[#0a0a0a] bg-white appearance-none cursor-pointer text-[#374151]"
+              >
+                <option value="">All Semesters</option>
+                {semesters.map((s) => (
+                  <option key={s.id} value={s.id}>
+                    {s.name}
+                  </option>
+                ))}
+              </select>
+              <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 h-4 w-4 text-[#9ca3af] pointer-events-none" />
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Calendar */}
-      <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-        <div className="px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-amber-50/50 to-orange-50/50">
-          <div className="flex flex-wrap justify-between items-center">
-            <div className="flex items-center mb-2 sm:mb-0">
-              <div className="w-10 h-10 bg-gradient-to-br from-amber-500 to-orange-600 rounded-xl flex items-center justify-center mr-3">
-                <CalendarIcon className="h-5 w-5 text-white" />
-              </div>
-              <h2 className="text-xl font-bold text-gray-900">
-                {currentMonth.toLocaleDateString("en-US", {
-                  month: "long",
-                  year: "numeric",
-                })}
-              </h2>
-            </div>
-            <div className="flex space-x-2">
+        {/* Calendar */}
+        <div className="bg-white rounded-xl border border-[#e5e7eb]">
+          <div className="bg-[#f9fafb] border-b border-[#e5e7eb] px-6 py-4 flex items-center gap-2">
+            <CalendarIcon className="h-4 w-4 text-[#374151]" />
+            <span className="text-sm font-bold text-[#0a0a0a]">
+              {currentMonth.toLocaleDateString("en-US", {
+                month: "long",
+                year: "numeric",
+              })}
+            </span>
+            <div className="ml-auto flex items-center gap-1">
               <button
                 onClick={goToCurrentMonth}
-                className="px-3 py-1 bg-amber-100 text-amber-700 rounded-md hover:bg-amber-200 transition-colors duration-200 font-medium"
+                className="px-3 py-1 text-xs font-semibold text-[#374151] border border-[#e5e7eb] rounded-lg hover:bg-[#f3f4f6] transition-colors"
               >
                 Today
               </button>
               <button
                 onClick={goToPreviousMonth}
-                className="p-2 rounded-md hover:bg-gray-100 transition-colors duration-200"
+                className="p-1.5 text-[#374151] hover:text-[#0a0a0a] hover:bg-[#f3f4f6] rounded-lg"
               >
-                <ChevronLeft className="h-5 w-5" />
+                <ChevronLeft className="h-4 w-4" />
               </button>
               <button
                 onClick={goToNextMonth}
-                className="p-2 rounded-md hover:bg-gray-100 transition-colors duration-200"
+                className="p-1.5 text-[#374151] hover:text-[#0a0a0a] hover:bg-[#f3f4f6] rounded-lg"
               >
-                <ChevronRight className="h-5 w-5" />
+                <ChevronRight className="h-4 w-4" />
               </button>
             </div>
           </div>
-        </div>
 
-        {loading ? (
-          <div className="flex justify-center py-12">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-amber-600"></div>
-          </div>
-        ) : (
-          <div className="p-6">
-            <div className="grid grid-cols-7 gap-1">
-              {weekdays.map((day) => (
-                <div
-                  key={day}
-                  className="text-center font-medium text-gray-500 p-3 bg-gray-50 rounded-lg"
-                >
-                  {day}
-                </div>
-              ))}
-
-              {calendarDays.map((day, index) => (
-                <div
-                  key={index}
-                  className={`min-h-24 border rounded-lg overflow-hidden transition-colors duration-200 ${
-                    day.day === 0
-                      ? "bg-gray-50"
-                      : day.date && isToday(day.date)
-                        ? "bg-amber-50 border-amber-200"
-                        : "bg-white hover:bg-gray-50 border-gray-200"
-                  }`}
-                >
-                  {day.day > 0 && (
-                    <>
-                      <div className="p-2 text-right">
-                        <span
-                          className={`inline-block w-6 h-6 text-center rounded-full text-sm ${
-                            day.date && isToday(day.date)
-                              ? "bg-amber-600 text-white font-bold"
-                              : "text-gray-700"
-                          }`}
-                        >
-                          {day.day}
-                        </span>
-                      </div>
-                      <div className="px-2 pb-2">
-                        {day.events && day.events.length > 0 ? (
-                          <div className="space-y-1">
-                            {day.events.map((event) => (
+          {loading ? (
+            <div className="flex items-center justify-center py-16">
+              <div className="animate-spin rounded-full h-8 w-8 border-2 border-[#0a0a0a] border-t-transparent" />
+            </div>
+          ) : (
+            <div className="p-4">
+              <div className="grid grid-cols-7 gap-1 mb-1">
+                {weekdays.map((day) => (
+                  <div
+                    key={day}
+                    className="text-center text-xs font-semibold text-[#6b7280] py-2"
+                  >
+                    {day}
+                  </div>
+                ))}
+              </div>
+              <div className="grid grid-cols-7 gap-1">
+                {calendarDays.map((day, index) => (
+                  <div
+                    key={index}
+                    className={`min-h-20 border rounded-lg overflow-hidden ${
+                      day.day === 0
+                        ? "border-transparent"
+                        : day.date && isToday(day.date)
+                          ? "border-[#0a0a0a] bg-white"
+                          : "border-[#f3f4f6] bg-white hover:border-[#e5e7eb]"
+                    }`}
+                  >
+                    {day.day > 0 && (
+                      <>
+                        <div className="p-1.5 flex justify-end">
+                          <span
+                            className={`inline-flex items-center justify-center w-6 h-6 rounded-full text-xs font-semibold ${
+                              day.date && isToday(day.date)
+                                ? "bg-[#0a0a0a] text-white"
+                                : "text-[#374151]"
+                            }`}
+                          >
+                            {day.day}
+                          </span>
+                        </div>
+                        <div className="px-1.5 pb-1.5 space-y-0.5">
+                          {day.events && day.events.length > 0 ? (
+                            day.events.map((event) => (
                               <Link
                                 key={event.id}
                                 to={`/admin/events/${event.id}`}
-                                className=" p-1 rounded bg-amber-100 text-amber-800 truncate flex flex-col gap-1 hover:bg-amber-200 transition-colors duration-150"
+                                className="block text-xs bg-[#f3f4f6] text-[#374151] px-1.5 py-0.5 rounded truncate hover:bg-[#e5e7eb] transition-colors"
                                 title={event.title}
                               >
-                                <span>{event.title}</span>
-                                <span className="flex items-center">
-                                  {event.subjects ? (
-                                    <>
-                                      <BookOpen className="h-3 w-3 mr-1" />
-                                      {event.subjects.title}
-                                    </>
-                                  ) : (
-                                    <>
-                                      <Globe className="h-3 w-3 mr-1" />
-                                      General
-                                    </>
-                                  )}
-                                </span>
+                                {event.title}
                               </Link>
-                            ))}
-                          </div>
-                        ) : (
-                          <Link
-                            to={`/admin/events/new?date=${day.dateString}`}
-                            className=" text-amber-600 hover:text-amber-800 flex items-center justify-center p-1 rounded hover:bg-amber-50"
-                          >
-                            <Plus className="h-3 w-3" />
-                          </Link>
-                        )}
-                      </div>
-                    </>
-                  )}
-                </div>
-              ))}
+                            ))
+                          ) : (
+                            <Link
+                              to={`/admin/events/new?date=${day.dateString}`}
+                              className="flex items-center justify-center p-1 text-[#d1d5db] hover:text-[#9ca3af] rounded"
+                            >
+                              <Plus className="h-3 w-3" />
+                            </Link>
+                          )}
+                        </div>
+                      </>
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
-        )}
-      </div>
-
-      {/* Upcoming Events */}
-      <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-        <div className="px-6 py-4 border-b border-gray-100">
-          <h2 className="text-xl font-bold text-gray-900 flex items-center">
-            <div className="w-10 h-10 bg-gradient-to-br from-amber-500 to-orange-600 rounded-xl flex items-center justify-center mr-3">
-              <CalendarIcon className="h-5 w-5 text-white" />
-            </div>
-            Upcoming Events
-          </h2>
+          )}
         </div>
 
-        <div className="p-6">
+        {/* Upcoming Events */}
+        <div className="bg-white rounded-xl border border-[#e5e7eb]">
+          <div className="bg-[#f9fafb] border-b border-[#e5e7eb] px-6 py-4 flex items-center gap-2">
+            <CalendarIcon className="h-4 w-4 text-[#374151]" />
+            <span className="text-sm font-bold text-[#0a0a0a]">
+              Upcoming Events
+            </span>
+            <span className="ml-auto text-xs bg-[#f3f4f6] text-[#6b7280] font-semibold px-2 py-0.5 rounded-full">
+              {upcomingEvents.length}
+            </span>
+          </div>
           {loading ? (
-            <div className="flex justify-center p-8">
-              <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-amber-600"></div>
+            <div className="flex items-center justify-center py-12">
+              <div className="animate-spin rounded-full h-8 w-8 border-2 border-[#0a0a0a] border-t-transparent" />
             </div>
           ) : upcomingEvents.length === 0 ? (
             <div className="text-center py-12">
-              <div className="w-20 h-20 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                <CalendarIcon className="h-10 w-10 text-gray-400" />
+              <div className="bg-[#f3f4f6] p-3 rounded-xl w-fit mx-auto mb-4">
+                <CalendarIcon className="h-8 w-8 text-[#9ca3af]" />
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-2">
-                No Upcoming Events
-              </h3>
-              <p className="text-gray-600 mb-6">
-                No upcoming events scheduled. Add your first event to get
-                started.
+              <p className="text-sm font-semibold text-[#374151]">
+                No upcoming events
               </p>
               <Link
                 to="/admin/events/new"
-                className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-600 text-white rounded-xl hover:shadow-lg transition-all duration-200 font-semibold"
+                className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-[#0a0a0a] text-white rounded-lg text-sm font-medium"
               >
-                <Plus className="h-5 w-5 mr-2" />
+                <Plus className="h-4 w-4" />
                 Add Event
               </Link>
             </div>
           ) : (
-            <div className="space-y-4">
+            <div className="divide-y divide-[#e5e7eb]">
               {upcomingEvents.map((event) => (
                 <div
                   key={event.id}
-                  className="p-5 bg-white/80 backdrop-blur-sm border border-gray-100 rounded-2xl hover:border-amber-200 hover:shadow-md transition-all duration-200"
+                  className="flex items-center gap-4 px-6 py-4 hover:bg-[#f9fafb]"
                 >
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                    <div className="flex items-start">
-                      <div className="bg-gradient-to-br from-amber-500 to-amber-600 text-white rounded-lg px-4 py-3 text-center min-w-[120px] mr-4">
-                        <div className="text-sm opacity-90">
-                          {new Date(event.date).toLocaleDateString(undefined, {
-                            weekday: "long",
-                          })}
-                        </div>
-                        <div className="text-2xl font-bold">
-                          {new Date(event.date).getDate()}
-                        </div>
-                        <div className="text-sm opacity-90">
-                          {new Date(event.date).toLocaleDateString(undefined, {
-                            month: "long",
-                          })}
-                        </div>
-                      </div>
-                      <div>
-                        <h3 className="font-medium text-lg mb-1">
-                          {event.title}
-                        </h3>
-                        <div className="flex items-center text-sm text-gray-500 mb-2">
-                          {event.subjects ? (
-                            <>
-                              <BookOpen className="h-4 w-4 mr-1" />
-                              <span>
-                                {event.subjects.title} ({event.subjects.code})
-                              </span>
-                            </>
-                          ) : (
-                            <>
-                              <Globe className="h-4 w-4 mr-1" />
-                              <span>General Event</span>
-                            </>
-                          )}
-                        </div>
-                        <div className="text-sm text-gray-500 mb-2">
-                          <span className="font-medium">Semester:</span>{" "}
-                          {event.semesters?.name}
-                        </div>
-                        <p className="text-gray-700">
-                          <span
-                            dangerouslySetInnerHTML={{
-                              __html: event.description,
-                            }}
-                          ></span>
-                        </p>
-                      </div>
+                  <div className="bg-[#0a0a0a] text-white rounded-lg px-3 py-2 text-center min-w-[56px] shrink-0">
+                    <div className="text-xs font-medium opacity-70">
+                      {new Date(event.date).toLocaleDateString(undefined, {
+                        month: "short",
+                      })}
                     </div>
-                    <div className="flex space-x-2">
-                      <Link
-                        to={`/admin/events/${event.id}`}
-                        className="p-2 text-amber-600 hover:text-amber-800 hover:bg-amber-100 rounded-lg transition-colors duration-200"
-                      >
-                        <Edit className="h-5 w-5" />
-                      </Link>
-                      <button
-                        onClick={() => handleDelete(event.id)}
-                        disabled={isDeleting}
-                        className="p-2 text-red-600 hover:text-red-800 hover:bg-red-50 rounded-lg transition-colors duration-200 disabled:opacity-50"
-                      >
-                        <Trash className="h-5 w-5" />
-                      </button>
+                    <div className="text-lg font-bold leading-none">
+                      {new Date(event.date).getDate()}
                     </div>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-[#374151] truncate">
+                      {event.title}
+                    </p>
+                    <div className="flex items-center gap-1 text-xs text-[#9ca3af] mt-0.5">
+                      {event.subjects ? (
+                        <>
+                          <BookOpen className="h-3 w-3 shrink-0" />
+                          <span>
+                            {event.subjects.title} ({event.subjects.code})
+                          </span>
+                        </>
+                      ) : (
+                        <>
+                          <Globe className="h-3 w-3 shrink-0" />
+                          <span>General</span>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-1 shrink-0">
+                    <Link
+                      to={`/admin/events/${event.id}`}
+                      className="p-1.5 text-[#374151] hover:text-[#0a0a0a] hover:bg-[#f3f4f6] rounded-lg"
+                    >
+                      <Edit className="h-4 w-4" />
+                    </Link>
+                    <button
+                      onClick={() => handleDelete(event.id)}
+                      disabled={isDeleting}
+                      className="p-1.5 text-[#6b7280] hover:text-red-600 hover:bg-red-50 rounded-lg disabled:opacity-50"
+                    >
+                      <Trash className="h-4 w-4" />
+                    </button>
                   </div>
                 </div>
               ))}

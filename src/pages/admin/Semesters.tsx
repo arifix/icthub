@@ -23,6 +23,7 @@ const AdminSemesters: React.FC = () => {
   const [isUpdating, setIsUpdating] = useState(false);
 
   useEffect(() => {
+    document.title = "Semesters — ICTHub Admin";
     fetchSemesters();
   }, []);
 
@@ -116,175 +117,154 @@ const AdminSemesters: React.FC = () => {
   };
 
   return (
-    <div className="space-y-8">
-      {/* Hero Header */}
-      <div className="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-lg shadow-lg p-5">
-        <div className="flex items-center justify-between">
+    <div className="min-h-screen bg-[#f9fafb]">
+      {/* Header */}
+      <div className="bg-white border-b border-[#e5e7eb] px-6 py-7">
+        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-white mb-2">
-              Manage Semesters
+            <h1 className="text-2xl sm:text-3xl font-bold text-[#0a0a0a] tracking-tight">
+              Semesters
             </h1>
-            <p className="text-indigo-100">
-              Create and manage academic semesters. Set the current semester to
-              control displayed content
+            <p className="text-sm text-[#6b7280] mt-1">
+              Manage academic semesters and set the active one
             </p>
           </div>
-          <div className="flex items-center space-x-3">
-            <Link
-              to="/admin/semesters/new"
-              className="inline-flex items-center px-4 py-2 bg-white/10 backdrop-blur-sm text-white rounded-lg hover:bg-white/20 transition-all duration-200 font-medium border border-white/20"
-            >
-              <Plus className="h-4 w-4 mr-2" />
-              New Semester
-            </Link>
-            <div className="hidden lg:flex items-center justify-center w-12 h-12 bg-white/10 rounded-xl">
-              <Calendar className="h-6 w-6 text-white" />
-            </div>
-          </div>
+          <Link
+            to="/admin/semesters/new"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-[#0a0a0a] text-white rounded-lg text-sm font-medium hover:bg-[#374151] transition-colors"
+          >
+            <Plus className="h-4 w-4" />
+            New Semester
+          </Link>
         </div>
       </div>
 
-      {/* Search */}
-      <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-sm border border-gray-100 p-6">
-        <div className="flex flex-wrap gap-6 items-end">
-          <div className="flex-1 min-w-[300px]">
-            <label
-              htmlFor="search"
-              className="block font-semibold text-gray-700 mb-2"
-            >
-              Search Semesters
-            </label>
-            <div className="relative">
-              <input
-                id="search"
-                type="text"
-                placeholder="Search by semester name..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full px-4 py-2.5 pl-10 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-              />
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Search className="h-5 w-5 text-gray-400" />
-              </div>
-            </div>
+      <div className="max-w-6xl mx-auto px-6 py-8 space-y-6">
+        {/* Search */}
+        <div className="bg-white rounded-xl border border-[#e5e7eb] px-6 py-4">
+          <div className="relative max-w-sm">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#9ca3af]" />
+            <input
+              type="text"
+              placeholder="Search semesters..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-9 pr-3 py-2 border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0a0a0a] focus:border-[#0a0a0a] text-[#374151]"
+            />
           </div>
         </div>
-      </div>
 
-      {/* Content */}
-      {loading ? (
-        <div className="flex justify-center py-12">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-600"></div>
-        </div>
-      ) : filteredSemesters.length === 0 ? (
-        <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-sm border border-gray-100 p-12 text-center">
-          <div className="w-20 h-20 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
-            <Calendar className="h-10 w-10 text-gray-400" />
+        {/* Table */}
+        {loading ? (
+          <div className="flex items-center justify-center py-24">
+            <div className="animate-spin rounded-full h-8 w-8 border-2 border-[#0a0a0a] border-t-transparent" />
           </div>
-          <h3 className="text-2xl font-bold text-gray-900 mb-2">
-            No Semesters Found
-          </h3>
-          <p className="text-gray-600 mb-6">
-            {semesters.length === 0
-              ? "Start by creating your first semester to organize your academic content."
-              : "No semesters match your search criteria. Try adjusting your filters."}
-          </p>
-          {semesters.length === 0 && (
-            <Link
-              to="/admin/semesters/new"
-              className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-xl hover:shadow-lg transition-all duration-200 font-semibold"
-            >
-              <Plus className="h-5 w-5 mr-2" />
-              Create Semester
-            </Link>
-          )}
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredSemesters.map((semester) => (
-            <div
-              key={semester.id}
-              className={`bg-white/80 backdrop-blur-sm rounded-2xl shadow-sm border hover:shadow-xl transition-all duration-300 overflow-hidden group ${
-                semester.is_current
-                  ? "border-green-400 bg-green-50/50"
-                  : "border-gray-100"
-              }`}
-            >
-              <div className="p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <div
-                    className={`w-12 h-12 rounded-xl flex items-center justify-center group-hover:shadow-lg transition-all duration-200 ${
-                      semester.is_current
-                        ? "bg-gradient-to-br from-green-500 to-emerald-600"
-                        : "bg-gradient-to-br from-indigo-500 to-purple-600"
-                    }`}
+        ) : (
+          <div className="bg-white rounded-xl border border-[#e5e7eb]">
+            <div className="bg-[#f9fafb] border-b border-[#e5e7eb] px-6 py-4 flex items-center gap-2">
+              <Calendar className="h-4 w-4 text-[#374151]" />
+              <span className="text-sm font-bold text-[#0a0a0a]">
+                Semesters
+              </span>
+              <span className="ml-auto text-xs bg-[#f3f4f6] text-[#6b7280] font-semibold px-2 py-0.5 rounded-full">
+                {filteredSemesters.length}{" "}
+                {filteredSemesters.length !== semesters.length &&
+                  `/ ${semesters.length}`}
+              </span>
+            </div>
+            {filteredSemesters.length === 0 ? (
+              <div className="text-center py-16">
+                <div className="bg-[#f3f4f6] p-3 rounded-xl w-fit mx-auto mb-4">
+                  <Calendar className="h-8 w-8 text-[#9ca3af]" />
+                </div>
+                <p className="text-sm font-semibold text-[#374151]">
+                  {semesters.length === 0
+                    ? "No semesters yet"
+                    : "No semesters match your search"}
+                </p>
+                {semesters.length === 0 && (
+                  <Link
+                    to="/admin/semesters/new"
+                    className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-[#0a0a0a] text-white rounded-lg text-sm font-medium"
                   >
-                    <Calendar className="h-6 w-6 text-white" />
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    {semester.is_current ? (
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full  font-medium bg-green-100 text-green-800">
-                        <CheckCircle className="h-3 w-3 mr-1" />
-                        Current
-                      </span>
-                    ) : (
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full  font-medium bg-gray-100 text-gray-800">
-                        <Clock className="h-3 w-3 mr-1" />
-                        Inactive
-                      </span>
-                    )}
-                  </div>
-                </div>
-
-                <div className="mb-4">
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2 group-hover:text-indigo-600 transition-colors duration-200">
-                    {semester.name}
-                  </h3>
-                  <div className="space-y-2 text-sm text-gray-600">
-                    <div>
-                      <span className="font-medium">Start:</span>{" "}
-                      {formatDate(semester.start_date)}
-                    </div>
-                    <div>
-                      <span className="font-medium">End:</span>{" "}
-                      {formatDate(semester.end_date)}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-                  {!semester.is_current && (
-                    <button
-                      onClick={() => handleSetCurrent(semester.id)}
-                      disabled={isUpdating}
-                      className="text-sm text-green-600 hover:text-green-800 font-medium disabled:opacity-50"
-                    >
-                      Set as Current
-                    </button>
-                  )}
-                  <div className="flex space-x-2 ml-auto">
-                    <Link
-                      to={`/admin/semesters/${semester.id}`}
-                      className="p-2 text-indigo-600 hover:text-indigo-800 hover:bg-indigo-50 rounded-lg transition-colors duration-200"
-                    >
-                      <Edit className="h-4 w-4" />
-                    </Link>
-                    {!semester.is_current && (
-                      <button
-                        onClick={() => handleDelete(semester.id)}
-                        disabled={isDeleting}
-                        className="p-2 text-red-600 hover:text-red-800 hover:bg-red-50 rounded-lg transition-colors duration-200 disabled:opacity-50"
-                      >
-                        <Trash className="h-4 w-4" />
-                      </button>
-                    )}
-                  </div>
-                </div>
+                    <Plus className="h-4 w-4" />
+                    Create Semester
+                  </Link>
+                )}
               </div>
-            </div>
-          ))}
-        </div>
-      )}
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-[#e5e7eb]">
+                      {["Name", "Start", "End", "Status", ""].map((h) => (
+                        <th
+                          key={h}
+                          className="text-left px-5 py-3 text-xs font-semibold text-[#6b7280] uppercase tracking-wide"
+                        >
+                          {h}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-[#e5e7eb]">
+                    {filteredSemesters.map((semester) => (
+                      <tr key={semester.id} className="hover:bg-[#f9fafb]">
+                        <td className="px-5 py-3">
+                          <p className="font-medium text-[#374151]">
+                            {semester.name}
+                          </p>
+                        </td>
+                        <td className="px-5 py-3 text-xs text-[#6b7280]">
+                          {formatDate(semester.start_date)}
+                        </td>
+                        <td className="px-5 py-3 text-xs text-[#6b7280]">
+                          {formatDate(semester.end_date)}
+                        </td>
+                        <td className="px-5 py-3">
+                          {semester.is_current ? (
+                            <span className="inline-flex items-center gap-1 text-xs font-semibold bg-[#f0fdf4] text-[#16a34a] px-2 py-0.5 rounded-full">
+                              <CheckCircle className="h-3 w-3" />
+                              Current
+                            </span>
+                          ) : (
+                            <button
+                              onClick={() => handleSetCurrent(semester.id)}
+                              disabled={isUpdating}
+                              className="text-xs text-[#6b7280] hover:text-[#0a0a0a] font-medium disabled:opacity-50"
+                            >
+                              Set as current
+                            </button>
+                          )}
+                        </td>
+                        <td className="px-5 py-3">
+                          <div className="flex items-center gap-1 justify-end">
+                            <Link
+                              to={`/admin/semesters/${semester.id}`}
+                              className="p-1.5 text-[#374151] hover:text-[#0a0a0a] hover:bg-[#f3f4f6] rounded-lg"
+                            >
+                              <Edit className="h-4 w-4" />
+                            </Link>
+                            {!semester.is_current && (
+                              <button
+                                onClick={() => handleDelete(semester.id)}
+                                disabled={isDeleting}
+                                className="p-1.5 text-[#6b7280] hover:text-red-600 hover:bg-red-50 rounded-lg disabled:opacity-50"
+                              >
+                                <Trash className="h-4 w-4" />
+                              </button>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
     </div>
   );
 };

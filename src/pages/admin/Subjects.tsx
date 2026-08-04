@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { BookOpen, Edit, Plus, Search, Trash, ChevronDown } from "lucide-react";
 import { supabase } from "../../lib/supabase";
 import { Database } from "../../types/supabase";
@@ -17,9 +17,9 @@ const AdminSubjects: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedSemester, setSelectedSemester] = useState<number | "">("");
   const [isDeleting, setIsDeleting] = useState(false);
-  const navigate = useNavigate();
 
   useEffect(() => {
+    document.title = "Subjects — ICTHub Admin";
     fetchData();
   }, []);
 
@@ -101,196 +101,187 @@ const AdminSubjects: React.FC = () => {
   });
 
   return (
-    <div className="space-y-8">
-      {/* Hero Header */}
-      <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg shadow-lg p-5">
-        <div className="flex items-center justify-between">
+    <div className="min-h-screen bg-[#f9fafb]">
+      {/* Header */}
+      <div className="bg-white border-b border-[#e5e7eb] px-6 py-7">
+        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-white mb-2">
-              Manage Subjects
+            <h1 className="text-2xl sm:text-3xl font-bold text-[#0a0a0a] tracking-tight">
+              Subjects
             </h1>
-            <p className="text-blue-100">
-              Add, edit, or remove subjects from your curriculum
+            <p className="text-sm text-[#6b7280] mt-1">
+              Add, edit, or remove subjects from the curriculum
             </p>
           </div>
-          <div className="flex items-center space-x-3">
-            <Link
-              to="/admin/subjects/new"
-              className="inline-flex items-center px-4 py-2 bg-white/10 backdrop-blur-sm text-white rounded-lg hover:bg-white/20 transition-all duration-200 font-semibold"
-            >
-              <Plus className="h-4 w-4 mr-2" />
-              New Subject
-            </Link>
-            <div className="hidden lg:flex items-center bg-white/10 backdrop-blur-sm rounded-lg p-3">
-              <BookOpen className="h-6 w-6 text-white" />
-            </div>
-          </div>
+          <Link
+            to="/admin/subjects/new"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-[#0a0a0a] text-white rounded-lg text-sm font-medium hover:bg-[#374151] transition-colors"
+          >
+            <Plus className="h-4 w-4" />
+            New Subject
+          </Link>
         </div>
       </div>
 
-      {/* Search and Filters */}
-      <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-sm border border-gray-100 p-6">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div>
-            <label
-              htmlFor="search"
-              className="block font-semibold text-gray-700 mb-2"
-            >
-              Search Subjects
-            </label>
-            <div className="relative">
+      <div className="max-w-6xl mx-auto px-6 py-8 space-y-6">
+        {/* Filters */}
+        <div className="bg-white rounded-xl border border-[#e5e7eb] px-6 py-4">
+          <div className="flex flex-wrap gap-3">
+            <div className="relative flex-1 min-w-[200px]">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#9ca3af]" />
               <input
-                id="search"
                 type="text"
-                placeholder="Search by title, code, or description..."
+                placeholder="Search subjects..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full px-4 py-2.5 pl-10 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-shadow duration-200"
+                className="w-full pl-9 pr-3 py-2 border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0a0a0a] focus:border-[#0a0a0a] text-[#374151]"
               />
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Search className="h-5 w-5 text-gray-400" />
-              </div>
             </div>
-          </div>
-
-          <div>
-            <label
-              htmlFor="semester"
-              className="block font-semibold text-gray-700 mb-2"
-            >
-              Filter by Semester
-            </label>
             <div className="relative">
               <select
-                id="semester"
                 value={selectedSemester}
                 onChange={(e) =>
                   setSelectedSemester(
                     e.target.value ? Number(e.target.value) : "",
                   )
                 }
-                className="w-full px-4 py-2.5 pr-10 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white transition-shadow duration-200 appearance-none cursor-pointer"
+                className="pl-3 pr-8 py-2 border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0a0a0a] focus:border-[#0a0a0a] bg-white appearance-none cursor-pointer text-[#374151]"
               >
                 <option value="">All Semesters</option>
-                {semesters.map((semester) => (
-                  <option key={semester.id} value={semester.id}>
-                    {semester.name}
+                {semesters.map((s) => (
+                  <option key={s.id} value={s.id}>
+                    {s.name}
                   </option>
                 ))}
               </select>
-              <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                <ChevronDown className="h-5 w-5 text-gray-400" />
-              </div>
+              <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 h-4 w-4 text-[#9ca3af] pointer-events-none" />
             </div>
+            {(searchTerm || selectedSemester !== "") && (
+              <button
+                onClick={() => {
+                  setSearchTerm("");
+                  setSelectedSemester("");
+                }}
+                className="px-3 py-2 text-sm text-[#6b7280] hover:text-[#0a0a0a] border border-[#e5e7eb] rounded-xl hover:bg-[#f9fafb] transition-colors"
+              >
+                Clear
+              </button>
+            )}
           </div>
+        </div>
 
-          <div className="flex items-end">
-            <button
-              onClick={() => {
-                setSearchTerm("");
-                setSelectedSemester("");
-              }}
-              className="w-full px-4 py-2.5 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition-colors duration-200 font-semibold"
-            >
-              Clear Filters
-            </button>
+        {/* Table */}
+        {loading ? (
+          <div className="flex items-center justify-center py-24">
+            <div className="animate-spin rounded-full h-8 w-8 border-2 border-[#0a0a0a] border-t-transparent" />
           </div>
-        </div>
-      </div>
-
-      {/* Content */}
-      {loading ? (
-        <div className="flex justify-center py-12">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600"></div>
-        </div>
-      ) : filteredSubjects.length === 0 ? (
-        <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-sm border border-gray-100 p-16 text-center">
-          <div className="w-20 h-20 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
-            <BookOpen className="h-10 w-10 text-gray-400" />
-          </div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">
-            No Subjects Found
-          </h2>
-          <p className="text-gray-600 mb-6">
-            {subjects.length === 0
-              ? "Start by adding your first subject."
-              : "No subjects match your search criteria."}
-          </p>
-          {subjects.length === 0 && (
-            <Link
-              to="/admin/subjects/new"
-              className="inline-flex items-center bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-6 py-3 rounded-xl hover:shadow-lg transition-all duration-200 font-semibold"
-            >
-              <Plus className="h-5 w-5 mr-2" />
-              Add Subject
-            </Link>
-          )}
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredSubjects.map((subject) => (
-            <div
-              key={subject.id}
-              className="group bg-white/80 backdrop-blur-sm rounded-2xl shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300 overflow-hidden"
-            >
-              <div className="p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center">
-                    <BookOpen className="h-6 w-6 text-white" />
-                  </div>
-                  <span
-                    className={`inline-flex items-center px-3 py-1 rounded-full  font-semibold ${
-                      subject.is_active
-                        ? "bg-green-100 text-green-700"
-                        : "bg-red-100 text-red-700"
-                    }`}
+        ) : (
+          <div className="bg-white rounded-xl border border-[#e5e7eb]">
+            <div className="bg-[#f9fafb] border-b border-[#e5e7eb] px-6 py-4 flex items-center gap-2">
+              <BookOpen className="h-4 w-4 text-[#374151]" />
+              <span className="text-sm font-bold text-[#0a0a0a]">Subjects</span>
+              <span className="ml-auto text-xs bg-[#f3f4f6] text-[#6b7280] font-semibold px-2 py-0.5 rounded-full">
+                {filteredSubjects.length}{" "}
+                {filteredSubjects.length !== subjects.length &&
+                  `/ ${subjects.length}`}
+              </span>
+            </div>
+            {filteredSubjects.length === 0 ? (
+              <div className="text-center py-16">
+                <div className="bg-[#f3f4f6] p-3 rounded-xl w-fit mx-auto mb-4">
+                  <BookOpen className="h-8 w-8 text-[#9ca3af]" />
+                </div>
+                <p className="text-sm font-semibold text-[#374151]">
+                  {subjects.length === 0
+                    ? "No subjects yet"
+                    : "No subjects match your filters"}
+                </p>
+                {subjects.length === 0 && (
+                  <Link
+                    to="/admin/subjects/new"
+                    className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-[#0a0a0a] text-white rounded-lg text-sm font-medium"
                   >
-                    {subject.is_active ? "Active" : "Inactive"}
-                  </span>
-                </div>
-
-                <div className="mb-4">
-                  <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors duration-200">
-                    {subject.title}
-                  </h3>
-                  <p className="text-sm font-semibold text-blue-600 mb-2">
-                    {subject.code}
-                  </p>
-                  {subject.semesters && (
-                    <p className="text-sm text-gray-600 font-medium mb-2">
-                      {subject.semesters.name}
-                    </p>
-                  )}
-                  <p className="text-sm text-gray-600 line-clamp-3">
-                    {subject.description}
-                  </p>
-                </div>
-
-                <div className="flex items-center justify-between pt-4 border-t border-gray-200">
-                  <div className=" text-gray-500 font-medium">
-                    {new Date(subject.created_at).toLocaleDateString()}
-                  </div>
-                  <div className="flex space-x-2">
-                    <Link
-                      to={`/admin/subjects/${subject.id}`}
-                      className="p-2 text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-lg transition-colors duration-200"
-                    >
-                      <Edit className="h-4 w-4" />
-                    </Link>
-                    <button
-                      onClick={() => handleDelete(subject.id)}
-                      disabled={isDeleting}
-                      className="p-2 text-red-600 hover:text-red-800 hover:bg-red-50 rounded-lg transition-colors duration-200 disabled:opacity-50"
-                    >
-                      <Trash className="h-4 w-4" />
-                    </button>
-                  </div>
-                </div>
+                    <Plus className="h-4 w-4" />
+                    Add Subject
+                  </Link>
+                )}
               </div>
-            </div>
-          ))}
-        </div>
-      )}
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-[#e5e7eb]">
+                      {["Title", "Code", "Semester", "Status", "Date", ""].map(
+                        (h) => (
+                          <th
+                            key={h}
+                            className="text-left px-5 py-3 text-xs font-semibold text-[#6b7280] uppercase tracking-wide"
+                          >
+                            {h}
+                          </th>
+                        ),
+                      )}
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-[#e5e7eb]">
+                    {filteredSubjects.map((subject) => (
+                      <tr key={subject.id} className="hover:bg-[#f9fafb]">
+                        <td className="px-5 py-3">
+                          <p className="font-medium text-[#374151] truncate max-w-[220px]">
+                            {subject.title}
+                          </p>
+                        </td>
+                        <td className="px-5 py-3">
+                          <span className="text-xs font-semibold text-[#374151] bg-[#f3f4f6] px-2.5 py-1 rounded-full font-mono">
+                            {subject.code}
+                          </span>
+                        </td>
+                        <td className="px-5 py-3 text-xs text-[#6b7280]">
+                          {subject.semesters?.name || "—"}
+                        </td>
+                        <td className="px-5 py-3">
+                          <span
+                            className={`text-xs font-semibold px-2 py-0.5 rounded-full ${
+                              subject.is_active
+                                ? "bg-[#f0fdf4] text-[#16a34a]"
+                                : "bg-[#fef2f2] text-[#dc2626]"
+                            }`}
+                          >
+                            {subject.is_active ? "Active" : "Inactive"}
+                          </span>
+                        </td>
+                        <td className="px-5 py-3 text-xs text-[#9ca3af] whitespace-nowrap">
+                          {new Date(subject.created_at).toLocaleDateString(
+                            undefined,
+                            { year: "numeric", month: "short", day: "numeric" },
+                          )}
+                        </td>
+                        <td className="px-5 py-3">
+                          <div className="flex items-center gap-1 justify-end">
+                            <Link
+                              to={`/admin/subjects/${subject.id}`}
+                              className="p-1.5 text-[#374151] hover:text-[#0a0a0a] hover:bg-[#f3f4f6] rounded-lg"
+                            >
+                              <Edit className="h-4 w-4" />
+                            </Link>
+                            <button
+                              onClick={() => handleDelete(subject.id)}
+                              disabled={isDeleting}
+                              className="p-1.5 text-[#6b7280] hover:text-red-600 hover:bg-red-50 rounded-lg disabled:opacity-50"
+                            >
+                              <Trash className="h-4 w-4" />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
     </div>
   );
 };

@@ -202,61 +202,54 @@ const AdminEventForm: React.FC = () => {
 
   if (loading || loadingData) {
     return (
-      <div className="flex justify-center items-center min-h-[60vh]">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-amber-600"></div>
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="animate-spin rounded-full h-8 w-8 border-2 border-[#0a0a0a] border-t-transparent" />
       </div>
     );
   }
 
   return (
-    <div className="space-y-8">
+    <div className="min-h-screen bg-[#f9fafb]">
       {/* Header */}
-      <div className="bg-gradient-to-r from-amber-500 to-orange-600 rounded-lg shadow-lg p-5">
-        <div className="flex items-center justify-between">
+      <div className="bg-white border-b border-[#e5e7eb] px-6 py-7">
+        <div className="max-w-3xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-white mb-2">
-              {isEditing ? "Edit Event" : "Add New Event"}
+            <h1 className="text-2xl sm:text-3xl font-bold text-[#0a0a0a] tracking-tight">
+              {isEditing ? "Edit Event" : "New Event"}
             </h1>
-            <p className="text-amber-100">
+            <p className="text-sm text-[#6b7280] mt-1">
               {isEditing
-                ? "Update event details and information"
+                ? "Update event details"
                 : "Schedule a new academic event"}
             </p>
           </div>
-          <div className="flex items-center space-x-3">
-            <button
-              onClick={() => navigate("/admin/calendar")}
-              className="inline-flex items-center px-4 py-2 bg-white/10 backdrop-blur-sm text-white rounded-lg hover:bg-white/20 transition-all duration-200 font-medium border border-white/20"
-            >
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to Calendar
-            </button>
-            <div className="hidden lg:flex items-center justify-center w-12 h-12 bg-white/10 rounded-xl">
-              <Calendar className="h-6 w-6 text-white" />
-            </div>
-          </div>
+          <button
+            onClick={() => navigate("/admin/calendar")}
+            className="inline-flex items-center gap-2 px-3 py-2 text-sm text-[#374151] border border-[#e5e7eb] rounded-lg hover:bg-[#f9fafb] transition-colors"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back to Calendar
+          </button>
         </div>
       </div>
 
-      {/* Form */}
-      <div className="bg-white rounded-xl shadow-md overflow-hidden">
-        <div className="px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-amber-50 to-orange-50">
-          <h2 className="text-lg font-semibold text-gray-900">Event Details</h2>
-          <p className="text-sm text-gray-600 mt-1">
-            Fill in the information below to {isEditing ? "update" : "create"}{" "}
-            the event.
-          </p>
-        </div>
+      <div className="max-w-3xl mx-auto px-6 py-8">
+        <div className="bg-white rounded-xl border border-[#e5e7eb]">
+          <div className="bg-[#f9fafb] border-b border-[#e5e7eb] px-6 py-4 flex items-center gap-2">
+            <Calendar className="h-4 w-4 text-[#374151]" />
+            <span className="text-sm font-bold text-[#0a0a0a]">
+              Event Details
+            </span>
+          </div>
 
-        <form onSubmit={handleSubmit} className="p-6">
-          <div className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <form onSubmit={handleSubmit} className="p-6 space-y-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div>
                 <label
                   htmlFor="title"
-                  className="block text-sm font-medium text-gray-700 mb-2"
+                  className="block text-xs font-semibold text-[#6b7280] uppercase tracking-wide mb-1.5"
                 >
-                  Event Title <span className="text-red-500">*</span>
+                  Event Title <span className="text-red-400">*</span>
                 </label>
                 <input
                   type="text"
@@ -264,18 +257,17 @@ const AdminEventForm: React.FC = () => {
                   name="title"
                   value={event.title}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-shadow duration-200"
                   placeholder="e.g., Midterm Exam"
                   required
+                  className="w-full px-3 py-2.5 border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0a0a0a] focus:border-[#0a0a0a] text-[#374151]"
                 />
               </div>
-
               <div>
                 <label
                   htmlFor="date"
-                  className="block text-sm font-medium text-gray-700 mb-2"
+                  className="block text-xs font-semibold text-[#6b7280] uppercase tracking-wide mb-1.5"
                 >
-                  Date <span className="text-red-500">*</span>
+                  Date <span className="text-red-400">*</span>
                 </label>
                 <input
                   type="date"
@@ -283,41 +275,40 @@ const AdminEventForm: React.FC = () => {
                   name="date"
                   value={event.date}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-shadow duration-200"
                   required
+                  className="w-full px-3 py-2.5 border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0a0a0a] focus:border-[#0a0a0a] text-[#374151]"
                 />
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div>
                 <label
                   htmlFor="semester_id"
-                  className="block text-sm font-medium text-gray-700 mb-2"
+                  className="block text-xs font-semibold text-[#6b7280] uppercase tracking-wide mb-1.5"
                 >
-                  Semester <span className="text-red-500">*</span>
+                  Semester <span className="text-red-400">*</span>
                 </label>
                 <select
                   id="semester_id"
                   name="semester_id"
                   value={event.semester_id || ""}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-shadow duration-200"
                   required
+                  className="w-full px-3 py-2.5 border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0a0a0a] focus:border-[#0a0a0a] bg-white text-[#374151]"
                 >
                   <option value="">Select a semester</option>
-                  {semesters.map((semester) => (
-                    <option key={semester.id} value={semester.id}>
-                      {semester.name}
+                  {semesters.map((s) => (
+                    <option key={s.id} value={s.id}>
+                      {s.name}
                     </option>
                   ))}
                 </select>
               </div>
-
               <div>
                 <label
                   htmlFor="subject_id"
-                  className="block text-sm font-medium text-gray-700 mb-2"
+                  className="block text-xs font-semibold text-[#6b7280] uppercase tracking-wide mb-1.5"
                 >
                   Subject (Optional)
                 </label>
@@ -326,40 +317,34 @@ const AdminEventForm: React.FC = () => {
                   name="subject_id"
                   value={event.subject_id || ""}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-shadow duration-200"
+                  className="w-full px-3 py-2.5 border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0a0a0a] focus:border-[#0a0a0a] bg-white text-[#374151]"
                 >
                   <option value="">General Event (No Subject)</option>
-                  {subjects.map((subject) => (
-                    <option key={subject.id} value={subject.id}>
-                      {subject.code}: {subject.title}
+                  {subjects.map((s) => (
+                    <option key={s.id} value={s.id}>
+                      {s.code}: {s.title}
                     </option>
                   ))}
                 </select>
-                <p className=" text-gray-500 mt-1">
-                  Leave as "General Event" for university-wide events, holidays,
-                  or other general announcements
-                </p>
               </div>
             </div>
 
             <div>
               <label
                 htmlFor="description"
-                className="block text-sm font-medium text-gray-700 mb-2"
+                className="block text-xs font-semibold text-[#6b7280] uppercase tracking-wide mb-1.5"
               >
-                Description <span className="text-red-500">*</span>
+                Description <span className="text-red-400">*</span>
               </label>
-              <div className="border border-gray-300 rounded-lg overflow-hidden">
+              <div className="border border-[#e5e7eb] rounded-xl overflow-hidden">
                 <ReactQuill
-                  id="description"
-                  name="description"
                   value={event.description}
                   onChange={(description) =>
                     setEvent((prev) => ({ ...prev, description }))
                   }
                   theme="snow"
                   className="h-48 lg:h-64"
-                  placeholder="Enter event details..."
+                  placeholder="Enter event details…"
                   modules={{
                     toolbar: [
                       [{ header: [1, 2, 3, false] }],
@@ -373,39 +358,35 @@ const AdminEventForm: React.FC = () => {
                 />
               </div>
             </div>
-          </div>
 
-          <div className="mt-16 lg:mt-12 flex justify-end space-x-4">
-            <button
-              type="button"
-              onClick={() => navigate("/admin/calendar")}
-              className="px-6 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors duration-200 font-medium"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              disabled={saving || semesters.length === 0}
-              className={`px-6 py-3 bg-gradient-to-r from-amber-600 to-orange-600 text-white rounded-lg hover:from-amber-700 hover:to-orange-700 transition-all duration-200 flex items-center font-medium shadow-md hover:shadow-lg ${
-                saving || semesters.length === 0
-                  ? "opacity-70 cursor-not-allowed"
-                  : ""
-              }`}
-            >
-              {saving ? (
-                <>
-                  <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white mr-2"></div>
-                  Saving...
-                </>
-              ) : (
-                <>
-                  <Save className="h-5 w-5 mr-2" />
-                  {isEditing ? "Update Event" : "Create Event"}
-                </>
-              )}
-            </button>
-          </div>
-        </form>
+            <div className="flex justify-end gap-3 pt-14 lg:pt-10">
+              <button
+                type="button"
+                onClick={() => navigate("/admin/calendar")}
+                className="px-4 py-2.5 text-sm font-medium text-[#374151] border border-[#e5e7eb] rounded-lg hover:bg-[#f9fafb] transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                disabled={saving || semesters.length === 0}
+                className="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium bg-[#0a0a0a] text-white rounded-lg hover:bg-[#374151] transition-colors disabled:opacity-60"
+              >
+                {saving ? (
+                  <>
+                    <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent" />
+                    Saving…
+                  </>
+                ) : (
+                  <>
+                    <Save className="h-4 w-4" />
+                    {isEditing ? "Update Event" : "Create Event"}
+                  </>
+                )}
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );

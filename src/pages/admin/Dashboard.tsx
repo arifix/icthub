@@ -7,15 +7,10 @@ import {
   Calendar,
   Plus,
   ArrowRight,
-  Users,
-  GraduationCap,
-  TrendingUp,
-  UserCheck,
   ChevronDown,
 } from "lucide-react";
 import { supabase } from "../../lib/supabase";
 import { Database } from "../../types/supabase";
-import { stripHtmlAndTruncate } from "../../utils/helper.js";
 
 type Subject = Database["public"]["Tables"]["subjects"]["Row"] & {
   semesters?: { name: string } | null;
@@ -160,29 +155,18 @@ const AdminDashboard: React.FC = () => {
     }
   };
 
-  const formatDate = (dateString: string) => {
-    const options: Intl.DateTimeFormatOptions = {
+  const formatDate = (dateString: string) =>
+    new Date(dateString).toLocaleDateString(undefined, {
       year: "numeric",
       month: "short",
       day: "numeric",
-    };
-    return new Date(dateString).toLocaleDateString(undefined, options);
-  };
-
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-green-600"></div>
-      </div>
-    );
-  }
+    });
 
   const statCards = [
     {
       title: "Semesters",
       count: stats.semesters,
       icon: Calendar,
-      color: "indigo",
       link: "/admin/semesters",
       addLink: "/admin/semesters/new",
     },
@@ -190,7 +174,6 @@ const AdminDashboard: React.FC = () => {
       title: "Subjects",
       count: stats.subjects,
       icon: BookOpen,
-      color: "blue",
       link: "/admin/subjects",
       addLink: "/admin/subjects/new",
     },
@@ -198,7 +181,6 @@ const AdminDashboard: React.FC = () => {
       title: "Notes",
       count: stats.notes,
       icon: FileText,
-      color: "emerald",
       link: "/admin/notes",
       addLink: "/admin/notes/new",
     },
@@ -206,7 +188,6 @@ const AdminDashboard: React.FC = () => {
       title: "Events",
       count: stats.events,
       icon: Calendar,
-      color: "amber",
       link: "/admin/calendar",
       addLink: "/admin/events/new",
     },
@@ -214,393 +195,293 @@ const AdminDashboard: React.FC = () => {
       title: "Files",
       count: stats.files,
       icon: File,
-      color: "purple",
       link: "/admin/files",
       addLink: "/admin/files/new",
     },
   ];
 
-  const getColorClasses = (color: string) => {
-    const colors = {
-      blue: "from-green-600 to-green-700 bg-green-100 text-green-700",
-      emerald:
-        "from-emerald-500 to-emerald-600 bg-emerald-100 text-emerald-600",
-      amber: "from-amber-500 to-amber-600 bg-amber-100 text-amber-600",
-      purple: "from-violet-500 to-violet-600 bg-violet-100 text-violet-600",
-      indigo: "from-green-700 to-green-800 bg-green-100 text-green-800",
-      rose: "from-rose-500 to-rose-600 bg-rose-100 text-rose-600",
-      green: "from-green-500 to-green-600 bg-green-100 text-green-600",
-    };
-    return colors[color as keyof typeof colors] || colors.blue;
-  };
-
   return (
-    <div className="space-y-8">
-      {/* Hero Header */}
-      <div className="bg-green-700 rounded-lg shadow-lg p-5">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold text-white mb-2">
-              ICTHub Admin Dashboard — IICT, KUET
-            </h1>
-            <p className="text-green-100">
-              Welcome to your study portal admin dashboard. Manage all aspects
-              of your educational platform from here.
-            </p>
-          </div>
-          <div className="flex items-center space-x-3">
-            <div className="hidden lg:flex items-center bg-white/10 backdrop-blur-sm rounded-lg p-3">
-              <TrendingUp className="h-6 w-6 text-white mr-2" />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-        {statCards.map((card) => {
-          const colorClasses = getColorClasses(card.color);
-          const [gradientClasses, iconBgClasses] = colorClasses.split(" bg-");
-
-          return (
-            <Link
-              key={card.title}
-              to={card.link}
-              className="group bg-white/80 backdrop-blur-sm rounded-2xl shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300 overflow-hidden"
-            >
-              <div className="p-6">
-                <div className="flex items-center justify-center mb-4">
-                  <div
-                    className={`w-12 h-12 rounded-xl flex items-center justify-center bg-gradient-to-br ${gradientClasses}`}
-                  >
-                    <card.icon className="h-6 w-6 text-white" />
-                  </div>
-                </div>
-                <div className="text-center mb-4">
-                  <div className="text-3xl font-bold text-gray-900 mb-1">
-                    {card.count}
-                  </div>
-                  <div className="text-sm text-gray-600 font-medium">
-                    {card.title}
-                  </div>
-                </div>
-
-                <div className="flex items-center justify-center gap-3 pt-4 border-t border-gray-100">
-                  <Link
-                    to={card.addLink}
-                    className={`inline-flex items-center  font-semibold hover:underline ${
-                      iconBgClasses.split(" ")[1]
-                    }`}
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <Plus className="h-3.5 w-3.5 mr-1" />
-                    Add New
-                  </Link>
-                  <span className="text-gray-300">•</span>
-                  <div className="flex items-center text-gray-500 group-hover:text-gray-700  font-medium">
-                    <span>View All</span>
-                    <ArrowRight className="h-3.5 w-3.5 ml-1 group-hover:translate-x-1 transition-transform" />
-                  </div>
-                </div>
-              </div>
-            </Link>
-          );
-        })}
-      </div>
-
-      {/* Semester Filter */}
-      <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-sm border border-gray-100 p-6">
-        <div className="flex items-center gap-4">
-          <div className="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
-            <Calendar className="h-5 w-5 text-green-700" />
-          </div>
-          <label htmlFor="semester" className="font-semibold text-gray-700">
-            View content for semester:
-          </label>
-          <div className="relative flex-1 max-w-xs">
-            <select
-              id="semester"
-              value={selectedSemester}
-              onChange={(e) =>
-                setSelectedSemester(
-                  e.target.value ? Number(e.target.value) : "",
-                )
-              }
-              className="w-full px-4 py-2.5 pr-10 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-green-600 bg-white appearance-none cursor-pointer font-medium text-gray-700"
-            >
-              <option value="">Select a semester</option>
-              {semesters.map((semester) => (
-                <option key={semester.id} value={semester.id}>
-                  {semester.name}
-                </option>
-              ))}
-            </select>
-            <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-              <ChevronDown className="h-5 w-5 text-gray-400" />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {selectedSemester ? (
-        <>
-          {/* Recent Content Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* Recent Subjects */}
-            <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-              <div className="px-6 py-4 border-b border-gray-200 bg-green-50">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center">
-                    <div className="w-10 h-10 bg-green-700 rounded-xl flex items-center justify-center">
-                      <BookOpen className="h-5 w-5 text-white" />
-                    </div>
-                    <h2 className="text-xl font-bold text-gray-900 ml-3">
-                      Recent Subjects
-                    </h2>
-                  </div>
-                  <Link
-                    to="/admin/subjects"
-                    className="text-sm text-green-700 hover:text-green-900 flex items-center font-semibold"
-                  >
-                    View All
-                    <ArrowRight className="ml-1 h-4 w-4" />
-                  </Link>
-                </div>
-              </div>
-
-              <div className="p-6">
-                {recentSubjects.length === 0 ? (
-                  <div className="text-center py-12">
-                    <div className="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                      <BookOpen className="h-8 w-8 text-gray-400" />
-                    </div>
-                    <p className="text-gray-600 mb-3 font-medium">
-                      No subjects in this semester yet.
-                    </p>
-                    <Link
-                      to="/admin/subjects/new"
-                      className="inline-flex items-center text-green-700 hover:text-green-900 font-semibold"
-                    >
-                      <Plus className="mr-1 h-4 w-4" />
-                      Add your first subject
-                    </Link>
-                  </div>
-                ) : (
-                  <div className="space-y-3">
-                    {recentSubjects.map((subject) => (
-                      <Link
-                        key={subject.id}
-                        to={`/admin/subjects/${subject.id}`}
-                        className="block p-4 rounded-xl border border-gray-200 hover:border-green-300 hover:shadow-md transition-all duration-200 bg-white"
-                      >
-                        <div className="flex justify-between items-start gap-4">
-                          <div className="flex-1 min-w-0">
-                            <h3 className="font-semibold text-gray-900 mb-1 truncate">
-                              {subject.title}
-                            </h3>
-                            <p className="text-sm text-green-700 font-semibold mb-2">
-                              {subject.code}
-                            </p>
-                            <p className="text-sm text-gray-600 line-clamp-2">
-                              {subject.description}
-                            </p>
-                          </div>
-                          <div className=" text-gray-500 whitespace-nowrap">
-                            {formatDate(subject.created_at)}
-                          </div>
-                        </div>
-                      </Link>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Recent Notes */}
-            <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-              <div className="px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-emerald-50 to-teal-50">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center">
-                    <div className="w-10 h-10 bg-emerald-500 rounded-xl flex items-center justify-center">
-                      <FileText className="h-5 w-5 text-white" />
-                    </div>
-                    <h2 className="text-xl font-bold text-gray-900 ml-3">
-                      Recent Notes
-                    </h2>
-                  </div>
-                  <Link
-                    to="/admin/notes"
-                    className="text-sm text-emerald-600 hover:text-emerald-800 flex items-center font-semibold"
-                  >
-                    View All
-                    <ArrowRight className="ml-1 h-4 w-4" />
-                  </Link>
-                </div>
-              </div>
-
-              <div className="p-6">
-                {recentNotes.length === 0 ? (
-                  <div className="text-center py-12">
-                    <div className="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                      <FileText className="h-8 w-8 text-gray-400" />
-                    </div>
-                    <p className="text-gray-600 mb-3 font-medium">
-                      No notes in this semester yet.
-                    </p>
-                    <Link
-                      to="/admin/notes/new"
-                      className="inline-flex items-center text-emerald-600 hover:text-emerald-800 font-semibold"
-                    >
-                      <Plus className="mr-1 h-4 w-4" />
-                      Add your first note
-                    </Link>
-                  </div>
-                ) : (
-                  <div className="space-y-3">
-                    {recentNotes.map((note) => (
-                      <Link
-                        key={note.id}
-                        to={`/admin/notes/${note.id}`}
-                        className="block p-4 rounded-xl border border-gray-200 hover:border-emerald-300 hover:shadow-md transition-all duration-200 bg-white"
-                      >
-                        <div className="flex justify-between items-start gap-4">
-                          <div className="flex-1 min-w-0">
-                            <h3 className="font-semibold text-gray-900 mb-2 truncate">
-                              {note.title}
-                            </h3>
-                            <p className="text-sm text-gray-600 line-clamp-2">
-                              <span
-                                dangerouslySetInnerHTML={{
-                                  __html: stripHtmlAndTruncate(
-                                    note.content,
-                                    100,
-                                  ),
-                                }}
-                              ></span>
-                            </p>
-                          </div>
-                          <div className=" text-gray-500 whitespace-nowrap">
-                            {formatDate(note.created_at)}
-                          </div>
-                        </div>
-                      </Link>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-
-          {/* Upcoming Events */}
-          <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-            <div className="px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-amber-50 to-orange-50">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center">
-                  <div className="w-10 h-10 bg-amber-500 rounded-xl flex items-center justify-center">
-                    <Calendar className="h-5 w-5 text-white" />
-                  </div>
-                  <h2 className="text-xl font-bold text-gray-900 ml-3">
-                    Upcoming Events
-                  </h2>
-                </div>
-                <Link
-                  to="/admin/calendar"
-                  className="text-sm text-amber-600 hover:text-amber-800 flex items-center font-semibold"
-                >
-                  View Calendar
-                  <ArrowRight className="ml-1 h-4 w-4" />
-                </Link>
-              </div>
-            </div>
-
-            <div className="p-6">
-              {upcomingEvents.length === 0 ? (
-                <div className="text-center py-12">
-                  <div className="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                    <Calendar className="h-8 w-8 text-gray-400" />
-                  </div>
-                  <p className="text-gray-600 mb-3 font-medium">
-                    No upcoming events in this semester.
-                  </p>
-                  <Link
-                    to="/admin/events/new"
-                    className="inline-flex items-center text-amber-600 hover:text-amber-800 font-semibold"
-                  >
-                    <Plus className="mr-1 h-4 w-4" />
-                    Schedule an event
-                  </Link>
-                </div>
-              ) : (
-                <div className="space-y-3">
-                  {upcomingEvents.map((event) => (
-                    <Link
-                      key={event.id}
-                      to={`/admin/events/${event.id}`}
-                      className="block p-4 rounded-xl border border-gray-200 hover:border-amber-300 hover:shadow-md transition-all duration-200 bg-white"
-                    >
-                      <div className="flex items-center gap-4">
-                        <div className="bg-gradient-to-br from-amber-500 to-amber-600 text-white rounded-xl px-4 py-3 text-center min-w-[120px] shadow-sm">
-                          <div className=" font-medium opacity-90">
-                            {new Date(event.date).toLocaleDateString(
-                              undefined,
-                              {
-                                weekday: "long",
-                              },
-                            )}
-                          </div>
-                          <div className="text-2xl font-bold my-1">
-                            {new Date(event.date).getDate()}
-                          </div>
-                          <div className=" font-medium opacity-90">
-                            {new Date(event.date).toLocaleDateString(
-                              undefined,
-                              {
-                                month: "long",
-                              },
-                            )}
-                          </div>
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <h3 className="font-semibold text-gray-900 mb-1 truncate">
-                            {event.title}
-                          </h3>
-                          {event.subjects && (
-                            <p className="text-sm text-green-700 font-semibold mb-2">
-                              {event.subjects.title} ({event.subjects.code})
-                            </p>
-                          )}
-                          <p className="text-sm text-gray-600 line-clamp-2">
-                            <span
-                              dangerouslySetInnerHTML={{
-                                __html: event.description,
-                              }}
-                            ></span>
-                          </p>
-                        </div>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-        </>
-      ) : (
-        <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-sm border border-gray-100 p-16 text-center">
-          <div className="w-20 h-20 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
-            <Calendar className="h-10 w-10 text-gray-400" />
-          </div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">
-            Select a Semester
-          </h2>
-          <p className="text-gray-600">
-            Choose a semester from the dropdown above to view recent content and
-            activities.
+    <div className="min-h-screen bg-[#f9fafb]">
+      {/* Header */}
+      <div className="bg-white border-b border-[#e5e7eb] px-6 py-7">
+        <div className="max-w-6xl mx-auto">
+          <h1 className="text-2xl sm:text-3xl font-bold text-[#0a0a0a] tracking-tight">
+            Dashboard
+          </h1>
+          <p className="text-sm text-[#6b7280] mt-1">
+            ICTHub Admin — IICT, KUET
           </p>
         </div>
-      )}
+      </div>
+
+      <div className="max-w-6xl mx-auto px-6 py-8 space-y-8">
+        {loading ? (
+          <div className="flex items-center justify-center py-24">
+            <div className="animate-spin rounded-full h-8 w-8 border-2 border-[#0a0a0a] border-t-transparent" />
+          </div>
+        ) : (
+          <>
+            {/* Stats */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+              {statCards.map(({ title, count, icon: Icon, link, addLink }) => (
+                <div
+                  key={title}
+                  className="bg-white rounded-xl border border-[#e5e7eb] p-5"
+                >
+                  <div className="flex items-center justify-between mb-3">
+                    <p className="text-xs font-semibold text-[#6b7280] uppercase tracking-wide">
+                      {title}
+                    </p>
+                    <div className="bg-[#f3f4f6] p-1.5 rounded-lg">
+                      <Icon className="h-4 w-4 text-[#374151]" />
+                    </div>
+                  </div>
+                  <p className="text-2xl font-bold text-[#0a0a0a]">{count}</p>
+                  <div className="flex items-center gap-3 mt-3 pt-3 border-t border-[#f3f4f6]">
+                    <Link
+                      to={addLink}
+                      className="text-xs font-semibold text-[#374151] hover:text-[#0a0a0a] flex items-center gap-0.5"
+                    >
+                      <Plus className="h-3 w-3" />
+                      Add
+                    </Link>
+                    <span className="text-[#d1d5db]">·</span>
+                    <Link
+                      to={link}
+                      className="text-xs font-semibold text-[#374151] hover:text-[#0a0a0a] flex items-center gap-0.5"
+                    >
+                      View
+                      <ArrowRight className="h-3 w-3" />
+                    </Link>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Semester Filter */}
+            <div className="bg-white rounded-xl border border-[#e5e7eb] px-6 py-4">
+              <div className="flex flex-wrap items-center gap-4">
+                <div className="bg-[#f3f4f6] p-1.5 rounded-lg">
+                  <Calendar className="h-4 w-4 text-[#374151]" />
+                </div>
+                <label
+                  htmlFor="semester"
+                  className="text-sm font-semibold text-[#374151]"
+                >
+                  View content for semester:
+                </label>
+                <div className="relative">
+                  <select
+                    id="semester"
+                    value={selectedSemester}
+                    onChange={(e) =>
+                      setSelectedSemester(
+                        e.target.value ? Number(e.target.value) : "",
+                      )
+                    }
+                    className="pl-3 pr-8 py-2 border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0a0a0a] focus:border-[#0a0a0a] bg-white appearance-none cursor-pointer text-[#374151]"
+                  >
+                    <option value="">Select a semester</option>
+                    {semesters.map((s) => (
+                      <option key={s.id} value={s.id}>
+                        {s.name}
+                      </option>
+                    ))}
+                  </select>
+                  <div className="absolute inset-y-0 right-0 pr-2 flex items-center pointer-events-none">
+                    <ChevronDown className="h-4 w-4 text-[#9ca3af]" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {selectedSemester ? (
+              <>
+                {/* Recent Subjects + Notes */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  {/* Recent Subjects */}
+                  <div className="bg-white rounded-xl border border-[#e5e7eb]">
+                    <div className="bg-[#f9fafb] border-b border-[#e5e7eb] px-6 py-4 flex items-center gap-2">
+                      <BookOpen className="h-4 w-4 text-[#374151]" />
+                      <span className="text-sm font-bold text-[#0a0a0a]">
+                        Recent Subjects
+                      </span>
+                      <Link
+                        to="/admin/subjects"
+                        className="ml-auto text-xs text-[#6b7280] hover:text-[#0a0a0a] font-medium flex items-center gap-1"
+                      >
+                        View all <ArrowRight className="h-3 w-3" />
+                      </Link>
+                    </div>
+                    <div className="divide-y divide-[#e5e7eb]">
+                      {recentSubjects.length === 0 ? (
+                        <div className="text-center py-10 text-sm text-[#9ca3af]">
+                          No subjects in this semester yet.{" "}
+                          <Link
+                            to="/admin/subjects/new"
+                            className="text-[#374151] hover:text-[#0a0a0a] font-medium"
+                          >
+                            Add one
+                          </Link>
+                        </div>
+                      ) : (
+                        recentSubjects.map((subject) => (
+                          <Link
+                            key={subject.id}
+                            to={`/admin/subjects/${subject.id}`}
+                            className="flex items-center justify-between px-6 py-3 hover:bg-[#f9fafb]"
+                          >
+                            <div className="min-w-0">
+                              <p className="text-sm font-medium text-[#374151] truncate">
+                                {subject.title}
+                              </p>
+                              <p className="text-xs text-[#9ca3af] mt-0.5">
+                                {subject.code}
+                              </p>
+                            </div>
+                            <span className="text-xs text-[#9ca3af] ml-4 shrink-0">
+                              {formatDate(subject.created_at)}
+                            </span>
+                          </Link>
+                        ))
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Recent Notes */}
+                  <div className="bg-white rounded-xl border border-[#e5e7eb]">
+                    <div className="bg-[#f9fafb] border-b border-[#e5e7eb] px-6 py-4 flex items-center gap-2">
+                      <FileText className="h-4 w-4 text-[#374151]" />
+                      <span className="text-sm font-bold text-[#0a0a0a]">
+                        Recent Notes
+                      </span>
+                      <Link
+                        to="/admin/notes"
+                        className="ml-auto text-xs text-[#6b7280] hover:text-[#0a0a0a] font-medium flex items-center gap-1"
+                      >
+                        View all <ArrowRight className="h-3 w-3" />
+                      </Link>
+                    </div>
+                    <div className="divide-y divide-[#e5e7eb]">
+                      {recentNotes.length === 0 ? (
+                        <div className="text-center py-10 text-sm text-[#9ca3af]">
+                          No notes in this semester yet.{" "}
+                          <Link
+                            to="/admin/notes/new"
+                            className="text-[#374151] hover:text-[#0a0a0a] font-medium"
+                          >
+                            Add one
+                          </Link>
+                        </div>
+                      ) : (
+                        recentNotes.map((note) => (
+                          <Link
+                            key={note.id}
+                            to={`/admin/notes/${note.id}`}
+                            className="flex items-center justify-between px-6 py-3 hover:bg-[#f9fafb]"
+                          >
+                            <div className="min-w-0">
+                              <p className="text-sm font-medium text-[#374151] truncate">
+                                {note.title}
+                              </p>
+                              {note.subjects && (
+                                <p className="text-xs text-[#9ca3af] mt-0.5">
+                                  {note.subjects.code}
+                                </p>
+                              )}
+                            </div>
+                            <span className="text-xs text-[#9ca3af] ml-4 shrink-0">
+                              {formatDate(note.created_at)}
+                            </span>
+                          </Link>
+                        ))
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Upcoming Events */}
+                <div className="bg-white rounded-xl border border-[#e5e7eb]">
+                  <div className="bg-[#f9fafb] border-b border-[#e5e7eb] px-6 py-4 flex items-center gap-2">
+                    <Calendar className="h-4 w-4 text-[#374151]" />
+                    <span className="text-sm font-bold text-[#0a0a0a]">
+                      Upcoming Events
+                    </span>
+                    <Link
+                      to="/admin/calendar"
+                      className="ml-auto text-xs text-[#6b7280] hover:text-[#0a0a0a] font-medium flex items-center gap-1"
+                    >
+                      View calendar <ArrowRight className="h-3 w-3" />
+                    </Link>
+                  </div>
+                  <div className="divide-y divide-[#e5e7eb]">
+                    {upcomingEvents.length === 0 ? (
+                      <div className="text-center py-10 text-sm text-[#9ca3af]">
+                        No upcoming events.{" "}
+                        <Link
+                          to="/admin/events/new"
+                          className="text-[#374151] hover:text-[#0a0a0a] font-medium"
+                        >
+                          Schedule one
+                        </Link>
+                      </div>
+                    ) : (
+                      upcomingEvents.map((event) => (
+                        <Link
+                          key={event.id}
+                          to={`/admin/events/${event.id}`}
+                          className="flex items-center gap-4 px-6 py-3 hover:bg-[#f9fafb]"
+                        >
+                          <div className="bg-[#0a0a0a] text-white rounded-lg px-3 py-2 text-center min-w-[56px] shrink-0">
+                            <div className="text-xs font-medium opacity-70">
+                              {new Date(event.date).toLocaleDateString(
+                                undefined,
+                                { month: "short" },
+                              )}
+                            </div>
+                            <div className="text-lg font-bold leading-none">
+                              {new Date(event.date).getDate()}
+                            </div>
+                          </div>
+                          <div className="min-w-0">
+                            <p className="text-sm font-medium text-[#374151] truncate">
+                              {event.title}
+                            </p>
+                            {event.subjects && (
+                              <p className="text-xs text-[#9ca3af] mt-0.5">
+                                {event.subjects.title} ({event.subjects.code})
+                              </p>
+                            )}
+                          </div>
+                          <span className="text-xs text-[#9ca3af] ml-auto shrink-0">
+                            {new Date(event.date).toLocaleDateString(
+                              undefined,
+                              { weekday: "short" },
+                            )}
+                          </span>
+                        </Link>
+                      ))
+                    )}
+                  </div>
+                </div>
+              </>
+            ) : (
+              <div className="bg-white rounded-xl border border-[#e5e7eb] p-12 text-center">
+                <div className="bg-[#f3f4f6] p-3 rounded-xl w-fit mx-auto mb-4">
+                  <Calendar className="h-8 w-8 text-[#9ca3af]" />
+                </div>
+                <p className="text-sm font-semibold text-[#374151]">
+                  Select a semester
+                </p>
+                <p className="text-xs text-[#9ca3af] mt-1">
+                  Choose a semester above to view recent content and activities.
+                </p>
+              </div>
+            )}
+          </>
+        )}
+      </div>
     </div>
   );
 };
-
 export default AdminDashboard;

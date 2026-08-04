@@ -44,7 +44,9 @@ const getPageLabel = (path: string) => {
 };
 
 const isMobile = (ua: string | null) =>
-  ua ? /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua) : false;
+  ua
+    ? /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua)
+    : false;
 
 const startOfDay = (d = new Date()) => {
   const t = new Date(d);
@@ -55,7 +57,9 @@ const startOfDay = (d = new Date()) => {
 const AdminAnalytics: React.FC = () => {
   const [visits, setVisits] = useState<Visit[]>([]);
   const [loading, setLoading] = useState(true);
-  const [range, setRange] = useState<"today" | "week" | "month" | "all">("week");
+  const [range, setRange] = useState<"today" | "week" | "month" | "all">(
+    "today",
+  );
 
   useEffect(() => {
     document.title = "Analytics — ICTHub Admin";
@@ -99,8 +103,11 @@ const AdminAnalytics: React.FC = () => {
     (v) => new Date(v.created_at) >= startOfDay(),
   ).length;
 
-  const uniqueSessions = new Set(visits.map((v) => v.session_id).filter(Boolean)).size;
-  const uniqueIPs = new Set(visits.map((v) => v.ip_address).filter(Boolean)).size;
+  const uniqueSessions = new Set(
+    visits.map((v) => v.session_id).filter(Boolean),
+  ).size;
+  const uniqueIPs = new Set(visits.map((v) => v.ip_address).filter(Boolean))
+    .size;
 
   const mobileCount = visits.filter((v) => isMobile(v.user_agent)).length;
   const desktopCount = visits.length - mobileCount;
@@ -132,16 +139,18 @@ const AdminAnalytics: React.FC = () => {
       const key = v.session_id ?? `_${v.id}`;
       (acc[key] = acc[key] || []).push(v);
       return acc;
-    }, {})
+    }, {}),
   )
     .map(([sid, svs]) => ({
       sid,
-      pages: [...svs].sort((a, b) => +new Date(a.created_at) - +new Date(b.created_at)),
+      pages: [...svs].sort(
+        (a, b) => +new Date(a.created_at) - +new Date(b.created_at),
+      ),
     }))
     .sort(
       (a, b) =>
         +new Date(b.pages[b.pages.length - 1].created_at) -
-        +new Date(a.pages[a.pages.length - 1].created_at)
+        +new Date(a.pages[a.pages.length - 1].created_at),
     )
     .slice(0, 25);
 
@@ -165,7 +174,7 @@ const AdminAnalytics: React.FC = () => {
             <h1 className="text-2xl sm:text-3xl font-bold text-[#0a0a0a] tracking-tight">
               Analytics
             </h1>
-            <p className="text-sm text-[#6b7280] mt-1">Visitor tracking — no third parties</p>
+            <p className="text-sm text-[#6b7280] mt-1">Visitor tracking</p>
           </div>
           <div className="flex gap-2">
             {(["today", "week", "month", "all"] as const).map((r) => (
@@ -178,7 +187,13 @@ const AdminAnalytics: React.FC = () => {
                     : "bg-white border border-[#e5e7eb] text-[#374151] hover:bg-[#f9fafb]"
                 }`}
               >
-                {r === "all" ? "All time" : r === "today" ? "Today" : r === "week" ? "7 days" : "30 days"}
+                {r === "all"
+                  ? "All time"
+                  : r === "today"
+                    ? "Today"
+                    : r === "week"
+                      ? "7 days"
+                      : "30 days"}
               </button>
             ))}
           </div>
@@ -220,9 +235,14 @@ const AdminAnalytics: React.FC = () => {
                   sub: "device split",
                 },
               ].map(({ label, value, icon: Icon, sub }) => (
-                <div key={label} className="bg-white rounded-xl border border-[#e5e7eb] p-5">
+                <div
+                  key={label}
+                  className="bg-white rounded-xl border border-[#e5e7eb] p-5"
+                >
                   <div className="flex items-center justify-between mb-3">
-                    <p className="text-xs font-semibold text-[#6b7280] uppercase tracking-wide">{label}</p>
+                    <p className="text-xs font-semibold text-[#6b7280] uppercase tracking-wide">
+                      {label}
+                    </p>
                     <div className="bg-[#f3f4f6] p-1.5 rounded-lg">
                       <Icon className="h-4 w-4 text-[#374151]" />
                     </div>
@@ -239,22 +259,32 @@ const AdminAnalytics: React.FC = () => {
               <div className="bg-white rounded-xl border border-[#e5e7eb]">
                 <div className="bg-[#f9fafb] border-b border-[#e5e7eb] px-6 py-4 flex items-center gap-2">
                   <TrendingUp className="h-4 w-4 text-[#374151]" />
-                  <span className="text-sm font-bold text-[#0a0a0a]">Top Pages</span>
+                  <span className="text-sm font-bold text-[#0a0a0a]">
+                    Top Pages
+                  </span>
                 </div>
                 <div className="p-4 space-y-3">
                   {topPages.length === 0 ? (
-                    <p className="text-sm text-[#9ca3af] text-center py-4">No data</p>
+                    <p className="text-sm text-[#9ca3af] text-center py-4">
+                      No data
+                    </p>
                   ) : (
                     topPages.map(([page, count]) => (
                       <div key={page}>
                         <div className="flex items-center justify-between mb-1">
-                          <span className="text-sm font-medium text-[#374151] truncate">{page}</span>
-                          <span className="text-sm font-bold text-[#0a0a0a] ml-2 shrink-0">{count}</span>
+                          <span className="text-sm font-medium text-[#374151] truncate">
+                            {page}
+                          </span>
+                          <span className="text-sm font-bold text-[#0a0a0a] ml-2 shrink-0">
+                            {count}
+                          </span>
                         </div>
                         <div className="h-1.5 bg-[#f3f4f6] rounded-full overflow-hidden">
                           <div
                             className="h-full bg-[#0a0a0a] rounded-full"
-                            style={{ width: `${(count / maxPageCount) * 100}%` }}
+                            style={{
+                              width: `${(count / maxPageCount) * 100}%`,
+                            }}
                           />
                         </div>
                       </div>
@@ -267,22 +297,32 @@ const AdminAnalytics: React.FC = () => {
               <div className="bg-white rounded-xl border border-[#e5e7eb]">
                 <div className="bg-[#f9fafb] border-b border-[#e5e7eb] px-6 py-4 flex items-center gap-2">
                   <MapPin className="h-4 w-4 text-[#374151]" />
-                  <span className="text-sm font-bold text-[#0a0a0a]">Top Countries</span>
+                  <span className="text-sm font-bold text-[#0a0a0a]">
+                    Top Countries
+                  </span>
                 </div>
                 <div className="p-4 space-y-3">
                   {topCountries.length === 0 ? (
-                    <p className="text-sm text-[#9ca3af] text-center py-4">No data</p>
+                    <p className="text-sm text-[#9ca3af] text-center py-4">
+                      No data
+                    </p>
                   ) : (
                     topCountries.map(([country, count]) => (
                       <div key={country}>
                         <div className="flex items-center justify-between mb-1">
-                          <span className="text-sm font-medium text-[#374151] truncate">{country}</span>
-                          <span className="text-sm font-bold text-[#0a0a0a] ml-2 shrink-0">{count}</span>
+                          <span className="text-sm font-medium text-[#374151] truncate">
+                            {country}
+                          </span>
+                          <span className="text-sm font-bold text-[#0a0a0a] ml-2 shrink-0">
+                            {count}
+                          </span>
                         </div>
                         <div className="h-1.5 bg-[#f3f4f6] rounded-full overflow-hidden">
                           <div
                             className="h-full bg-[#0a0a0a] rounded-full"
-                            style={{ width: `${(count / maxCountryCount) * 100}%` }}
+                            style={{
+                              width: `${(count / maxCountryCount) * 100}%`,
+                            }}
                           />
                         </div>
                       </div>
@@ -296,7 +336,9 @@ const AdminAnalytics: React.FC = () => {
             <div className="bg-white rounded-xl border border-[#e5e7eb]">
               <div className="bg-[#f9fafb] border-b border-[#e5e7eb] px-6 py-4 flex items-center gap-2">
                 <Navigation className="h-4 w-4 text-[#374151]" />
-                <span className="text-sm font-bold text-[#0a0a0a]">User Journeys</span>
+                <span className="text-sm font-bold text-[#0a0a0a]">
+                  User Journeys
+                </span>
                 <span className="ml-auto text-xs bg-[#f3f4f6] text-[#6b7280] font-semibold px-2 py-0.5 rounded-full">
                   {sessionJourneys.length} sessions
                 </span>
@@ -305,7 +347,13 @@ const AdminAnalytics: React.FC = () => {
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="border-b border-[#e5e7eb]">
-                      {["Session", "Started", "Location", "Device", "Page Flow"].map((h) => (
+                      {[
+                        "Session",
+                        "Started",
+                        "Location",
+                        "Device",
+                        "Page Flow",
+                      ].map((h) => (
                         <th
                           key={h}
                           className="text-left px-5 py-3 text-xs font-semibold text-[#6b7280] uppercase tracking-wide"
@@ -319,7 +367,9 @@ const AdminAnalytics: React.FC = () => {
                     {sessionJourneys.map(({ sid, pages }) => {
                       const first = pages[0];
                       const ip = first.ip_address;
-                      const location = [first.city, first.country].filter(Boolean).join(", ");
+                      const location = [first.city, first.country]
+                        .filter(Boolean)
+                        .join(", ");
                       const mobile = isMobile(first.user_agent);
                       const isAnon = sid.startsWith("_");
                       return (
@@ -336,8 +386,12 @@ const AdminAnalytics: React.FC = () => {
                             {formatTime(first.created_at)}
                           </td>
                           <td className="px-5 py-3 text-xs">
-                            <div className="font-mono text-[#6b7280]">{ip || "—"}</div>
-                            <div className="text-[#9ca3af]">{location || "—"}</div>
+                            <div className="font-mono text-[#6b7280]">
+                              {ip || "—"}
+                            </div>
+                            <div className="text-[#9ca3af]">
+                              {location || "—"}
+                            </div>
                           </td>
                           <td className="px-5 py-3">
                             <div className="flex items-center gap-1 text-[#6b7280]">
@@ -346,7 +400,9 @@ const AdminAnalytics: React.FC = () => {
                               ) : (
                                 <Monitor className="h-3.5 w-3.5" />
                               )}
-                              <span className="text-xs">{mobile ? "Mobile" : "Desktop"}</span>
+                              <span className="text-xs">
+                                {mobile ? "Mobile" : "Desktop"}
+                              </span>
                             </div>
                           </td>
                           <td className="px-5 py-3">
@@ -354,7 +410,9 @@ const AdminAnalytics: React.FC = () => {
                               {pages.slice(0, 6).map((p, i) => (
                                 <React.Fragment key={p.id}>
                                   {i > 0 && (
-                                    <span className="text-[#d1d5db] text-xs select-none">→</span>
+                                    <span className="text-[#d1d5db] text-xs select-none">
+                                      →
+                                    </span>
                                   )}
                                   <span className="text-xs bg-[#f3f4f6] text-[#374151] px-2 py-0.5 rounded-full font-medium whitespace-nowrap">
                                     {getPageLabel(p.page)}
@@ -362,7 +420,9 @@ const AdminAnalytics: React.FC = () => {
                                 </React.Fragment>
                               ))}
                               {pages.length > 6 && (
-                                <span className="text-xs text-[#9ca3af]">+{pages.length - 6} more</span>
+                                <span className="text-xs text-[#9ca3af]">
+                                  +{pages.length - 6} more
+                                </span>
                               )}
                             </div>
                           </td>
@@ -372,7 +432,9 @@ const AdminAnalytics: React.FC = () => {
                   </tbody>
                 </table>
                 {sessionJourneys.length === 0 && (
-                  <div className="text-center py-12 text-[#9ca3af] text-sm">No sessions recorded yet</div>
+                  <div className="text-center py-12 text-[#9ca3af] text-sm">
+                    No sessions recorded yet
+                  </div>
                 )}
               </div>
             </div>
@@ -381,7 +443,9 @@ const AdminAnalytics: React.FC = () => {
             <div className="bg-white rounded-xl border border-[#e5e7eb]">
               <div className="bg-[#f9fafb] border-b border-[#e5e7eb] px-6 py-4 flex items-center gap-2">
                 <Activity className="h-4 w-4 text-[#374151]" />
-                <span className="text-sm font-bold text-[#0a0a0a]">Recent Visits</span>
+                <span className="text-sm font-bold text-[#0a0a0a]">
+                  Recent Visits
+                </span>
                 <span className="ml-auto text-xs bg-[#f3f4f6] text-[#6b7280] font-semibold px-2 py-0.5 rounded-full">
                   {visits.length} total
                 </span>
@@ -412,15 +476,20 @@ const AdminAnalytics: React.FC = () => {
                         <td className="px-5 py-3">
                           <div className="flex items-center gap-1.5">
                             <FileText className="h-3 w-3 text-[#9ca3af] shrink-0" />
-                            <span className="font-medium text-[#374151]">{getPageLabel(v.page)}</span>
-                            <span className="text-[#9ca3af] text-xs">{v.page}</span>
+                            <span className="font-medium text-[#374151]">
+                              {getPageLabel(v.page)}
+                            </span>
+                            <span className="text-[#9ca3af] text-xs">
+                              {v.page}
+                            </span>
                           </div>
                         </td>
                         <td className="px-5 py-3 font-mono text-xs text-[#6b7280]">
                           {v.ip_address || "—"}
                         </td>
                         <td className="px-5 py-3 text-[#374151]">
-                          {[v.city, v.country].filter(Boolean).join(", ") || "—"}
+                          {[v.city, v.country].filter(Boolean).join(", ") ||
+                            "—"}
                         </td>
                         <td className="px-5 py-3">
                           <div className="flex items-center gap-1 text-[#6b7280]">
