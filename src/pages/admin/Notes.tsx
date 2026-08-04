@@ -258,7 +258,7 @@ const AdminNotes: React.FC = () => {
                           {note.subjects ? (
                             <span className="inline-flex items-center gap-1 text-xs bg-[#f3f4f6] text-[#374151] font-semibold px-2 py-0.5 rounded-full">
                               <BookOpen className="h-3 w-3" />
-                              {note.subjects.code}
+                              {note.subjects.title} ({note.subjects.code})
                             </span>
                           ) : (
                             <span className="text-[#9ca3af]">—</span>

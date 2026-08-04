@@ -328,7 +328,7 @@ const ArchivePage: React.FC = () => {
                           </p>
                           {event.subjects && (
                             <p className="text-xs text-[#9ca3af]">
-                              {event.subjects.code}
+                              {event.subjects.title} ({event.subjects.code})
                             </p>
                           )}
                         </div>

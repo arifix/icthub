@@ -206,7 +206,7 @@ const FilesPage: React.FC = () => {
                 {file.subjects && (
                   <div className="mt-2 pt-2 border-t border-[#e5e7eb] flex items-center gap-1 text-xs text-[#6b7280]">
                     <BookOpen className="h-3 w-3 text-[#9ca3af] shrink-0" />
-                    <span className="truncate">{file.subjects.code}</span>
+                    <span className="truncate">{file.subjects.title} ({file.subjects.code})</span>
                   </div>
                 )}
               </a>

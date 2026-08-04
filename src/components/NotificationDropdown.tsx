@@ -203,7 +203,7 @@ const NotificationDropdown: React.FC = () => {
                               {notification.subjects ? (
                                 <div className="flex items-center  font-semibold text-green-700 bg-green-100 px-2 py-1 rounded-lg">
                                   <BookOpen className="h-3 w-3 mr-1" />
-                                  <span>{notification.subjects.code}</span>
+                                  <span>{notification.subjects.title} ({notification.subjects.code})</span>
                                 </div>
                               ) : (
                                 <div className="flex items-center  font-medium text-gray-600 bg-gray-100 px-2 py-1 rounded-lg">

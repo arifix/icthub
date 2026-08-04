@@ -307,7 +307,7 @@ const AdminFiles: React.FC = () => {
                           {file.subjects ? (
                             <span className="flex items-center gap-1">
                               <BookOpen className="h-3 w-3 shrink-0" />
-                              {file.subjects.code}
+                              {file.subjects.title} ({file.subjects.code})
                             </span>
                           ) : (
                             <span className="flex items-center gap-1 text-[#9ca3af]">
