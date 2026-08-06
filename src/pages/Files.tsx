@@ -108,7 +108,7 @@ const FilesPage: React.FC = () => {
         <div className="mb-8">
           <div className="flex flex-col sm:flex-row gap-3">
             <div className="relative flex-1 max-w-md">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-[#9ca3af]" />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500]" />
               <input
                 type="text"
                 placeholder="Search files..."
@@ -134,7 +134,7 @@ const FilesPage: React.FC = () => {
                   </option>
                 ))}
               </select>
-              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#9ca3af] pointer-events-none" />
+              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500] pointer-events-none" />
             </div>
             <div className="relative w-full sm:w-40">
               <select
@@ -149,7 +149,7 @@ const FilesPage: React.FC = () => {
                   </option>
                 ))}
               </select>
-              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#9ca3af] pointer-events-none" />
+              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500] pointer-events-none" />
             </div>
           </div>
         </div>
@@ -160,7 +160,7 @@ const FilesPage: React.FC = () => {
           </div>
         ) : filteredFiles.length === 0 ? (
           <div className="bg-white rounded-xl border border-[#e5e7eb] p-16 text-center">
-            <File className="h-12 w-12 text-[#d1d5db] mx-auto mb-4" />
+            <File className="h-12 w-12 text-gray-500 mx-auto mb-4" />
             <h2 className="text-base font-semibold text-[#374151] mb-1">
               {files.length === 0 ? "No files yet" : "No results found"}
             </h2>
@@ -185,7 +185,7 @@ const FilesPage: React.FC = () => {
                     <File className="h-5 w-5 text-[#374151]" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-semibold text-[#0a0a0a] group-hover:text-[#374151] transition-colors line-clamp-2 leading-tight">
+                    <p className="text-[14px] font-semibold text-[#0a0a0a] group-hover:text-[#374151] transition-colors line-clamp-2 leading-tight">
                       {file.name}
                     </p>
                   </div>
@@ -197,15 +197,15 @@ const FilesPage: React.FC = () => {
                     >
                       {file.file_type}
                     </span>
-                    <span className="text-xs text-[#9ca3af]">
+                    <span className="text-xs text-gray-500]">
                       {formatFileSize(file.size)}
                     </span>
                   </div>
-                  <Download className="h-4 w-4 text-[#d1d5db] group-hover:text-[#6b7280] transition-colors" />
+                  <Download className="h-4 w-4 text-gray-500 group-hover:text-[#6b7280] transition-colors" />
                 </div>
                 {file.subjects && (
-                  <div className="mt-2 pt-2 border-t border-[#e5e7eb] flex items-center gap-1 text-xs text-[#6b7280]">
-                    <BookOpen className="h-3 w-3 text-[#9ca3af] shrink-0" />
+                  <div className="mt-2 pt-2 border-t border-[#e5e7eb] flex items-center gap-1 text-sm text-[#6b7280]">
+                    <BookOpen className="h-3 w-3 text-gray-500 shrink-0" />
                     <span className="truncate">{file.subjects.title} ({file.subjects.code})</span>
                   </div>
                 )}

@@ -249,7 +249,7 @@ const AdminNoteForm: React.FC = () => {
                 {loadingSubjects ? (
                   <div className="flex items-center gap-2 px-3 py-2.5 border border-[#e5e7eb] rounded-xl bg-[#f9fafb]">
                     <div className="animate-spin rounded-full h-4 w-4 border-2 border-[#0a0a0a] border-t-transparent" />
-                    <span className="text-sm text-[#9ca3af]">
+                    <span className="text-sm text-gray-500]">
                       Loading subjects…
                     </span>
                   </div>

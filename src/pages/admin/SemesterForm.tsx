@@ -229,7 +229,7 @@ const AdminSemesterForm: React.FC = () => {
                 >
                   Set as Current Semester
                 </label>
-                <p className="text-xs text-[#9ca3af] mt-0.5">
+                <p className="text-xs text-gray-500] mt-0.5">
                   Only one semester can be current. Other semesters will become
                   inactive.
                 </p>

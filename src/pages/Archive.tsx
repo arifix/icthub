@@ -226,7 +226,7 @@ const ArchivePage: React.FC = () => {
                     <div className="text-xl font-bold text-[#0a0a0a]">
                       {count}
                     </div>
-                    <div className="text-xs text-[#9ca3af]">{label}</div>
+                    <div className="text-xs text-gray-500]">{label}</div>
                   </div>
                 </div>
               ))}
@@ -282,7 +282,7 @@ const ArchivePage: React.FC = () => {
                       <p className="text-sm font-semibold text-[#0a0a0a] line-clamp-1 mb-1">
                         {note.title}
                       </p>
-                      <p className="text-xs text-[#9ca3af] line-clamp-2">
+                      <p className="text-xs text-gray-500] line-clamp-2">
                         <span
                           dangerouslySetInnerHTML={{
                             __html: stripHtmlAndTruncate(note.content, 80),
@@ -327,7 +327,7 @@ const ArchivePage: React.FC = () => {
                             {event.title}
                           </p>
                           {event.subjects && (
-                            <p className="text-xs text-[#9ca3af]">
+                            <p className="text-xs text-gray-500]">
                               {event.subjects.title} ({event.subjects.code})
                             </p>
                           )}
@@ -358,17 +358,17 @@ const ArchivePage: React.FC = () => {
                       className="group border border-[#e5e7eb] hover:border-[#d1d5db] rounded-lg p-4 hover:shadow-sm transition-all flex items-center gap-3"
                     >
                       <div className="w-8 h-8 bg-[#f3f4f6] group-hover:bg-[#e5e7eb] rounded flex items-center justify-center shrink-0 transition-colors">
-                        <File className="h-4 w-4 text-[#9ca3af]" />
+                        <File className="h-4 w-4 text-gray-500]" />
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-medium text-[#0a0a0a] truncate">
                           {file.name}
                         </p>
-                        <p className="text-xs text-[#9ca3af] uppercase">
+                        <p className="text-xs text-gray-500] uppercase">
                           {file.file_type} &middot; {formatFileSize(file.size)}
                         </p>
                       </div>
-                      <Download className="h-4 w-4 text-[#d1d5db] group-hover:text-[#374151] shrink-0 transition-colors" />
+                      <Download className="h-4 w-4 text-gray-500 group-hover:text-[#374151] shrink-0 transition-colors" />
                     </a>
                   ))}
                 </div>

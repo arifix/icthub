@@ -154,7 +154,7 @@ const AdminNotes: React.FC = () => {
         <div className="bg-white rounded-xl border border-[#e5e7eb] px-6 py-4">
           <div className="flex flex-wrap gap-3">
             <div className="relative flex-1 min-w-[200px]">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#9ca3af]" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500]" />
               <input
                 type="text"
                 placeholder="Search notes..."
@@ -180,7 +180,7 @@ const AdminNotes: React.FC = () => {
                   </option>
                 ))}
               </select>
-              <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 h-4 w-4 text-[#9ca3af] pointer-events-none" />
+              <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500] pointer-events-none" />
             </div>
             {(searchTerm || selectedSemester !== "") && (
               <button
@@ -214,7 +214,7 @@ const AdminNotes: React.FC = () => {
             {filteredNotes.length === 0 ? (
               <div className="text-center py-16">
                 <div className="bg-[#f3f4f6] p-3 rounded-xl w-fit mx-auto mb-4">
-                  <FileText className="h-8 w-8 text-[#9ca3af]" />
+                  <FileText className="h-8 w-8 text-gray-500]" />
                 </div>
                 <p className="text-sm font-semibold text-[#374151]">
                   {notes.length === 0
@@ -256,18 +256,18 @@ const AdminNotes: React.FC = () => {
                         </td>
                         <td className="px-5 py-3">
                           {note.subjects ? (
-                            <span className="inline-flex items-center gap-1 text-xs bg-[#f3f4f6] text-[#374151] font-semibold px-2 py-0.5 rounded-full">
-                              <BookOpen className="h-3 w-3" />
+                            <span className="inline-flex items-center gap-1 text-xs text-[#374151] font-semibold px-2 py-0.5 truncate">
+                              <BookOpen className="h-3 w-3 mr-1" />
                               {note.subjects.title} ({note.subjects.code})
                             </span>
                           ) : (
-                            <span className="text-[#9ca3af]">—</span>
+                            <span className="text-gray-500]">—</span>
                           )}
                         </td>
                         <td className="px-5 py-3 text-xs text-[#6b7280]">
                           {note.semesters?.name || "—"}
                         </td>
-                        <td className="px-5 py-3 text-xs text-[#9ca3af] whitespace-nowrap">
+                        <td className="px-5 py-3 text-xs text-gray-500] whitespace-nowrap">
                           {formatDate(note.created_at)}
                         </td>
                         <td className="px-5 py-3">

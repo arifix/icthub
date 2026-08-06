@@ -128,7 +128,7 @@ const AdminSubjects: React.FC = () => {
         <div className="bg-white rounded-xl border border-[#e5e7eb] px-6 py-4">
           <div className="flex flex-wrap gap-3">
             <div className="relative flex-1 min-w-[200px]">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#9ca3af]" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500]" />
               <input
                 type="text"
                 placeholder="Search subjects..."
@@ -154,7 +154,7 @@ const AdminSubjects: React.FC = () => {
                   </option>
                 ))}
               </select>
-              <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 h-4 w-4 text-[#9ca3af] pointer-events-none" />
+              <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500] pointer-events-none" />
             </div>
             {(searchTerm || selectedSemester !== "") && (
               <button
@@ -189,7 +189,7 @@ const AdminSubjects: React.FC = () => {
             {filteredSubjects.length === 0 ? (
               <div className="text-center py-16">
                 <div className="bg-[#f3f4f6] p-3 rounded-xl w-fit mx-auto mb-4">
-                  <BookOpen className="h-8 w-8 text-[#9ca3af]" />
+                  <BookOpen className="h-8 w-8 text-gray-500]" />
                 </div>
                 <p className="text-sm font-semibold text-[#374151]">
                   {subjects.length === 0
@@ -232,7 +232,7 @@ const AdminSubjects: React.FC = () => {
                           </p>
                         </td>
                         <td className="px-5 py-3">
-                          <span className="text-xs font-semibold text-[#374151] bg-[#f3f4f6] px-2.5 py-1 rounded-full font-mono">
+                          <span className="text-xs font-semibold text-[#374151] px-2.5 py-1 rounded-full font-mono">
                             {subject.code}
                           </span>
                         </td>
@@ -250,7 +250,7 @@ const AdminSubjects: React.FC = () => {
                             {subject.is_active ? "Active" : "Inactive"}
                           </span>
                         </td>
-                        <td className="px-5 py-3 text-xs text-[#9ca3af] whitespace-nowrap">
+                        <td className="px-5 py-3 text-xs text-gray-500] whitespace-nowrap">
                           {new Date(subject.created_at).toLocaleDateString(
                             undefined,
                             { year: "numeric", month: "short", day: "numeric" },

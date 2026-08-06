@@ -245,7 +245,7 @@ const AdminDashboard: React.FC = () => {
                       <Plus className="h-3 w-3" />
                       Add
                     </Link>
-                    <span className="text-[#d1d5db]">·</span>
+                    <span className="text-gray-500">·</span>
                     <Link
                       to={link}
                       className="text-xs font-semibold text-[#374151] hover:text-[#0a0a0a] flex items-center gap-0.5"
@@ -289,7 +289,7 @@ const AdminDashboard: React.FC = () => {
                     ))}
                   </select>
                   <div className="absolute inset-y-0 right-0 pr-2 flex items-center pointer-events-none">
-                    <ChevronDown className="h-4 w-4 text-[#9ca3af]" />
+                    <ChevronDown className="h-4 w-4 text-gray-500]" />
                   </div>
                 </div>
               </div>
@@ -315,7 +315,7 @@ const AdminDashboard: React.FC = () => {
                     </div>
                     <div className="divide-y divide-[#e5e7eb]">
                       {recentSubjects.length === 0 ? (
-                        <div className="text-center py-10 text-sm text-[#9ca3af]">
+                        <div className="text-center py-10 text-sm text-gray-500]">
                           No subjects in this semester yet.{" "}
                           <Link
                             to="/admin/subjects/new"
@@ -335,11 +335,11 @@ const AdminDashboard: React.FC = () => {
                               <p className="text-sm font-medium text-[#374151] truncate">
                                 {subject.title}
                               </p>
-                              <p className="text-xs text-[#9ca3af] mt-0.5">
+                              <p className="text-xs text-gray-500] mt-0.5">
                                 {subject.code}
                               </p>
                             </div>
-                            <span className="text-xs text-[#9ca3af] ml-4 shrink-0">
+                            <span className="text-xs text-gray-500] ml-4 shrink-0">
                               {formatDate(subject.created_at)}
                             </span>
                           </Link>
@@ -364,7 +364,7 @@ const AdminDashboard: React.FC = () => {
                     </div>
                     <div className="divide-y divide-[#e5e7eb]">
                       {recentNotes.length === 0 ? (
-                        <div className="text-center py-10 text-sm text-[#9ca3af]">
+                        <div className="text-center py-10 text-sm text-gray-500]">
                           No notes in this semester yet.{" "}
                           <Link
                             to="/admin/notes/new"
@@ -385,12 +385,12 @@ const AdminDashboard: React.FC = () => {
                                 {note.title}
                               </p>
                               {note.subjects && (
-                                <p className="text-xs text-[#9ca3af] mt-0.5">
+                                <p className="text-xs text-gray-500] mt-0.5">
                                   {note.subjects.code}
                                 </p>
                               )}
                             </div>
-                            <span className="text-xs text-[#9ca3af] ml-4 shrink-0">
+                            <span className="text-xs text-gray-500] ml-4 shrink-0">
                               {formatDate(note.created_at)}
                             </span>
                           </Link>
@@ -416,7 +416,7 @@ const AdminDashboard: React.FC = () => {
                   </div>
                   <div className="divide-y divide-[#e5e7eb]">
                     {upcomingEvents.length === 0 ? (
-                      <div className="text-center py-10 text-sm text-[#9ca3af]">
+                      <div className="text-center py-10 text-sm text-gray-500]">
                         No upcoming events.{" "}
                         <Link
                           to="/admin/events/new"
@@ -448,12 +448,12 @@ const AdminDashboard: React.FC = () => {
                               {event.title}
                             </p>
                             {event.subjects && (
-                              <p className="text-xs text-[#9ca3af] mt-0.5">
+                              <p className="text-xs text-gray-500] mt-0.5">
                                 {event.subjects.title} ({event.subjects.code})
                               </p>
                             )}
                           </div>
-                          <span className="text-xs text-[#9ca3af] ml-auto shrink-0">
+                          <span className="text-xs text-gray-500] ml-auto shrink-0">
                             {new Date(event.date).toLocaleDateString(
                               undefined,
                               { weekday: "short" },
@@ -468,12 +468,12 @@ const AdminDashboard: React.FC = () => {
             ) : (
               <div className="bg-white rounded-xl border border-[#e5e7eb] p-12 text-center">
                 <div className="bg-[#f3f4f6] p-3 rounded-xl w-fit mx-auto mb-4">
-                  <Calendar className="h-8 w-8 text-[#9ca3af]" />
+                  <Calendar className="h-8 w-8 text-gray-500]" />
                 </div>
                 <p className="text-sm font-semibold text-[#374151]">
                   Select a semester
                 </p>
-                <p className="text-xs text-[#9ca3af] mt-1">
+                <p className="text-xs text-gray-500] mt-1">
                   Choose a semester above to view recent content and activities.
                 </p>
               </div>

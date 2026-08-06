@@ -114,7 +114,7 @@ const AdminSettings: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setShowCurrent(!showCurrent)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#9ca3af] hover:text-[#6b7280]"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500] hover:text-[#6b7280]"
                 >
                   {showCurrent ? (
                     <EyeOff className="h-4 w-4" />
@@ -145,7 +145,7 @@ const AdminSettings: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setShowNew(!showNew)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-[#9ca3af] hover:text-[#6b7280]"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500] hover:text-[#6b7280]"
                   >
                     {showNew ? (
                       <EyeOff className="h-4 w-4" />

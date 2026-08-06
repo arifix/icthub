@@ -103,7 +103,7 @@ const NotesPage: React.FC = () => {
         <div className="max-w-3xl mb-8">
           <div className="flex flex-col sm:flex-row gap-3">
             <div className="relative flex-1">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-[#9ca3af]" />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500]" />
               <input
                 type="text"
                 placeholder="Search by title, content or subject..."
@@ -129,7 +129,7 @@ const NotesPage: React.FC = () => {
                   </option>
                 ))}
               </select>
-              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#9ca3af] pointer-events-none" />
+              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500] pointer-events-none" />
             </div>
           </div>
         </div>
@@ -140,7 +140,7 @@ const NotesPage: React.FC = () => {
           </div>
         ) : filteredNotes.length === 0 ? (
           <div className="bg-white rounded-xl border border-[#e5e7eb] p-16 text-center">
-            <FileText className="h-12 w-12 text-[#d1d5db] mx-auto mb-4" />
+            <FileText className="h-12 w-12 text-gray-500 mx-auto mb-4" />
             <h2 className="text-base font-semibold text-[#374151] mb-1">
               {notes.length === 0 ? "No notes yet" : "No results found"}
             </h2>
@@ -168,7 +168,7 @@ const NotesPage: React.FC = () => {
                         {note.subjects?.code}
                       </span>
                     </div>
-                    <span className="text-xs text-[#9ca3af] flex items-center gap-1">
+                    <span className="text-xs text-gray-500] flex items-center gap-1">
                       <Clock className="h-3 w-3" />
                       {new Date(note.created_at).toLocaleDateString()}
                     </span>
@@ -188,10 +188,10 @@ const NotesPage: React.FC = () => {
 
                   <div className="border-t border-[#e5e7eb] pt-3 flex items-center justify-between">
                     <span className="text-xs text-[#6b7280] flex items-center gap-1 truncate">
-                      <BookOpen className="h-3 w-3 text-[#9ca3af] shrink-0" />
+                      <BookOpen className="h-3 w-3 text-gray-500] shrink-0" />
                       <span className="truncate">{note.subjects?.title}</span>
                     </span>
-                    <span className="text-xs text-[#9ca3af] flex items-center gap-1 shrink-0">
+                    <span className="text-xs text-gray-500] flex items-center gap-1 shrink-0">
                       <MessageCircle className="h-3 w-3" />
                       {note.comment_count}
                     </span>

@@ -67,7 +67,7 @@ const SubjectsPage: React.FC = () => {
         <div className="max-w-2xl mb-8">
           <div className="relative flex items-center gap-3">
             <div className="relative flex-1">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-[#9ca3af]" />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500]" />
               <input
                 type="text"
                 placeholder="Search by name or code..."
@@ -91,7 +91,7 @@ const SubjectsPage: React.FC = () => {
           </div>
         ) : filteredSubjects.length === 0 ? (
           <div className="bg-white rounded-xl border border-[#e5e7eb] p-16 text-center">
-            <BookOpen className="h-12 w-12 text-[#d1d5db] mx-auto mb-4" />
+            <BookOpen className="h-12 w-12 text-gray-500 mx-auto mb-4" />
             <h2 className="text-base font-semibold text-[#374151] mb-1">
               {subjects.length === 0 ? "No subjects yet" : "No results found"}
             </h2>

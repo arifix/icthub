@@ -247,7 +247,7 @@ const AdminCalendar: React.FC = () => {
                   </option>
                 ))}
               </select>
-              <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 h-4 w-4 text-[#9ca3af] pointer-events-none" />
+              <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500] pointer-events-none" />
             </div>
           </div>
         </div>
@@ -343,7 +343,7 @@ const AdminCalendar: React.FC = () => {
                           ) : (
                             <Link
                               to={`/admin/events/new?date=${day.dateString}`}
-                              className="flex items-center justify-center p-1 text-[#d1d5db] hover:text-[#9ca3af] rounded"
+                              className="flex items-center justify-center p-1 text-gray-500 hover:text-gray-500] rounded"
                             >
                               <Plus className="h-3 w-3" />
                             </Link>
@@ -376,7 +376,7 @@ const AdminCalendar: React.FC = () => {
           ) : upcomingEvents.length === 0 ? (
             <div className="text-center py-12">
               <div className="bg-[#f3f4f6] p-3 rounded-xl w-fit mx-auto mb-4">
-                <CalendarIcon className="h-8 w-8 text-[#9ca3af]" />
+                <CalendarIcon className="h-8 w-8 text-gray-500]" />
               </div>
               <p className="text-sm font-semibold text-[#374151]">
                 No upcoming events
@@ -410,7 +410,7 @@ const AdminCalendar: React.FC = () => {
                     <p className="text-sm font-medium text-[#374151] truncate">
                       {event.title}
                     </p>
-                    <div className="flex items-center gap-1 text-xs text-[#9ca3af] mt-0.5">
+                    <div className="flex items-center gap-1 text-xs text-gray-500] mt-0.5">
                       {event.subjects ? (
                         <>
                           <BookOpen className="h-3 w-3 shrink-0" />

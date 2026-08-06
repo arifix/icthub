@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { supabase } from "../lib/supabase";
+import { useAuth } from "../context/AuthContext";
 
 const GEO_CACHE_KEY = "ict_geo";
 const SESSION_ID_KEY = "ict_sid";
@@ -40,6 +41,7 @@ const getGeoData = async (): Promise<{
 };
 
 export const usePageTracking = () => {
+  const { isAdmin } = useAuth();
   const location = useLocation();
 
   useEffect(() => {
@@ -58,6 +60,6 @@ export const usePageTracking = () => {
       });
     };
 
-    track();
+    if (!isAdmin) track();
   }, [location.pathname]);
 };

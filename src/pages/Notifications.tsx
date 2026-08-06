@@ -33,7 +33,7 @@ const NotificationsPage: React.FC = () => {
       case "event":
         return <Calendar className="h-4 w-4 text-[#6b7280]" />;
       default:
-        return <Bell className="h-4 w-4 text-[#9ca3af]" />;
+        return <Bell className="h-4 w-4 text-gray-500]" />;
     }
   };
 
@@ -169,11 +169,11 @@ const NotificationsPage: React.FC = () => {
                   <p className="font-semibold text-[#0a0a0a] truncate">
                     {notification.title}
                   </p>
-                  <p className="text-sm text-[#9ca3af] mt-0.5 line-clamp-1">
+                  <p className="text-sm text-gray-500] mt-0.5 line-clamp-1">
                     {notification.message}
                   </p>
                 </div>
-                <div className="text-sm text-[#9ca3af] shrink-0 text-right">
+                <div className="text-sm text-gray-500] shrink-0 text-right">
                   <div>{formatDate(notification.created_at)}</div>
                 </div>
               </Link>

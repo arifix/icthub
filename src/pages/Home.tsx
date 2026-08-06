@@ -434,7 +434,7 @@ const Home: React.FC = () => {
                         <p className="text-sm font-semibold text-gray-900 group-hover:text-teal-600 transition-colors line-clamp-1">
                           {note.title}
                         </p>
-                        <p className="text-xs text-gray-400 line-clamp-1 mt-0.5">
+                        <p className="text-xs text-gray-500 line-clamp-1 mt-0.5">
                           <span
                             dangerouslySetInnerHTML={{
                               __html: stripHtmlAndTruncate(note.content, 80),
