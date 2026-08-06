@@ -139,12 +139,7 @@ const AdminEventForm: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (
-      !event.title ||
-      !event.description ||
-      !event.date ||
-      !event.semester_id
-    ) {
+    if (!event.title || !event.date || !event.semester_id) {
       toast.error("Please fill all required fields");
       return;
     }
