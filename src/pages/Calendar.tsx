@@ -88,7 +88,7 @@ const CalendarPage: React.FC = () => {
       {/* Page header */}
       <div className="bg-white border-b border-[#e5e7eb]">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-7">
-          <h1 className="text-2xl sm:text-3xl font-bold text-[#0a0a0a] tracking-tight mb-1">
+          <h1 className="text-2xl sm:text-3xl font-bold text-black tracking-tight mb-1">
             Academic Calendar
           </h1>
           <p className="text-sm text-[#6b7280]">
@@ -103,7 +103,7 @@ const CalendarPage: React.FC = () => {
           <div className="lg:col-span-2">
             <div className="bg-white rounded-xl border border-[#e5e7eb] overflow-hidden">
               <div className="flex items-center justify-between px-6 py-4 border-b border-[#e5e7eb] bg-[#f9fafb]">
-                <h2 className="text-sm font-bold text-[#0a0a0a]">
+                <h2 className="text-sm font-bold text-black">
                   {currentMonth.toLocaleDateString("en-US", {
                     month: "long",
                     year: "numeric",
@@ -112,7 +112,7 @@ const CalendarPage: React.FC = () => {
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => setCurrentMonth(new Date())}
-                    className="px-3 py-1.5 text-xs font-semibold bg-[#0a0a0a] text-white rounded-xl hover:bg-[#374151] transition-all"
+                    className="px-3 py-1.5 text-xs font-semibold bg-black text-white rounded-xl hover:bg-[#374151] transition-all"
                   >
                     Today
                   </button>
@@ -149,7 +149,7 @@ const CalendarPage: React.FC = () => {
 
               {loading ? (
                 <div className="flex justify-center py-16">
-                  <div className="animate-spin rounded-full h-8 w-8 border-2 border-[#0a0a0a] border-t-transparent" />
+                  <div className="animate-spin rounded-full h-8 w-8 border-2 border-black border-t-transparent" />
                 </div>
               ) : (
                 <div className="p-4">
@@ -225,7 +225,7 @@ const CalendarPage: React.FC = () => {
             <div className="bg-white rounded-xl border border-[#e5e7eb] overflow-hidden">
               <div className="px-5 py-4 border-b border-[#e5e7eb] bg-[#f9fafb] flex items-center gap-2">
                 <Calendar className="h-4 w-4 text-[#374151]" />
-                <h2 className="text-sm font-bold text-[#0a0a0a]">
+                <h2 className="text-sm font-bold text-black">
                   Upcoming Events
                 </h2>
                 <span className="ml-auto text-xs bg-[#f3f4f6] text-[#6b7280] font-semibold px-2 py-0.5 rounded-full">
@@ -235,7 +235,7 @@ const CalendarPage: React.FC = () => {
 
               {loading ? (
                 <div className="flex justify-center py-8">
-                  <div className="animate-spin rounded-full h-6 w-6 border-2 border-[#0a0a0a] border-t-transparent" />
+                  <div className="animate-spin rounded-full h-6 w-6 border-2 border-black border-t-transparent" />
                 </div>
               ) : upcomingEvents.length === 0 ? (
                 <div className="text-center py-10 text-gray-500] text-sm">
@@ -255,7 +255,7 @@ const CalendarPage: React.FC = () => {
                           className={`text-center text-white rounded-xl px-2 py-1.5 min-w-[42px] shrink-0 ${
                             isWeekend
                               ? "bg-gradient-to-br from-red-500 to-red-600"
-                              : "bg-[#0a0a0a]"
+                              : "bg-black"
                           }`}
                         >
                           <div className="text-[9px] font-bold uppercase">
@@ -268,7 +268,7 @@ const CalendarPage: React.FC = () => {
                           </div>
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm font-semibold text-[#0a0a0a] line-clamp-2">
+                          <p className="text-sm font-semibold text-black line-clamp-2">
                             {event.title}
                           </p>
                           <span className="text-xs text-[#6b7280] flex items-center gap-1 mt-0.5">

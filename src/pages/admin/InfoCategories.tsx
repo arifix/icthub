@@ -82,7 +82,7 @@ const AdminInfoCategories: React.FC = () => {
       <div className="bg-white border-b border-[#e5e7eb] px-6 py-7">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-[#0a0a0a] tracking-tight">
+            <h1 className="text-2xl sm:text-3xl font-bold text-black tracking-tight">
               Information Categories
             </h1>
             <p className="text-sm text-[#6b7280] mt-1">
@@ -92,7 +92,7 @@ const AdminInfoCategories: React.FC = () => {
           </div>
           <Link
             to="/admin/info-categories/new"
-            className="inline-flex items-center gap-2 px-4 py-2 bg-[#0a0a0a] text-white rounded-lg text-sm font-medium hover:bg-[#374151] transition-colors"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-black text-white rounded-lg text-sm font-medium hover:bg-[#374151] transition-colors"
           >
             <Plus className="h-4 w-4" />
             New Category
@@ -109,20 +109,20 @@ const AdminInfoCategories: React.FC = () => {
               placeholder="Search categories..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-9 pr-3 py-2 border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0a0a0a] focus:border-[#0a0a0a] text-[#374151]"
+              className="w-full pl-9 pr-3 py-2 border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-black focus:border-black text-[#374151]"
             />
           </div>
         </div>
 
         {loading ? (
           <div className="flex items-center justify-center py-24">
-            <div className="animate-spin rounded-full h-8 w-8 border-2 border-[#0a0a0a] border-t-transparent" />
+            <div className="animate-spin rounded-full h-8 w-8 border-2 border-black border-t-transparent" />
           </div>
         ) : (
           <div className="bg-white rounded-xl border border-[#e5e7eb] overflow-hidden">
             <div className="bg-[#f9fafb] border-b border-[#e5e7eb] px-6 py-4 flex items-center gap-2">
               <Info className="h-4 w-4 text-[#374151]" />
-              <span className="text-sm font-bold text-[#0a0a0a]">
+              <span className="text-sm font-bold text-black">
                 Categories
               </span>
               <span className="ml-auto text-xs bg-[#f3f4f6] text-[#6b7280] font-semibold px-2 py-0.5 rounded-full">
@@ -150,7 +150,7 @@ const AdminInfoCategories: React.FC = () => {
                   >
                     <div>
                       <div className="flex items-center gap-2 mb-1">
-                        <h3 className="text-sm font-bold text-[#0a0a0a]">
+                        <h3 className="text-sm font-bold text-black">
                           {category.name}
                         </h3>
                         <span className="text-xs bg-[#f3f4f6] text-[#6b7280] font-semibold px-2 py-0.5 rounded-full">

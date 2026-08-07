@@ -94,7 +94,7 @@ const FilesPage: React.FC = () => {
       {/* Page header */}
       <div className="bg-white border-b border-[#e5e7eb]">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-7">
-          <h1 className="text-2xl sm:text-3xl font-bold text-[#0a0a0a] tracking-tight mb-1">
+          <h1 className="text-2xl sm:text-3xl font-bold text-black tracking-tight mb-1">
             Files &amp; Resources
           </h1>
           <p className="text-sm text-[#6b7280]">
@@ -114,7 +114,7 @@ const FilesPage: React.FC = () => {
                 placeholder="Search files..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full px-5 py-3 pl-11 border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0a0a0a] focus:border-[#0a0a0a] transition-all bg-white text-sm"
+                className="w-full px-5 py-3 pl-11 border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-black focus:border-black transition-all bg-white text-sm"
               />
             </div>
             <div className="relative w-full sm:w-52">
@@ -125,7 +125,7 @@ const FilesPage: React.FC = () => {
                     e.target.value ? Number(e.target.value) : "",
                   )
                 }
-                className="w-full pl-4 pr-8 py-3 border border-[#e5e7eb] rounded-xl text-sm bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-[#0a0a0a] cursor-pointer"
+                className="w-full pl-4 pr-8 py-3 border border-[#e5e7eb] rounded-xl text-sm bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-black cursor-pointer"
               >
                 <option value="">All Subjects</option>
                 {subjects.map((s) => (
@@ -140,7 +140,7 @@ const FilesPage: React.FC = () => {
               <select
                 value={selectedType}
                 onChange={(e) => setSelectedType(e.target.value)}
-                className="w-full pl-4 pr-8 py-3 border border-[#e5e7eb] rounded-xl text-sm bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-[#0a0a0a] cursor-pointer"
+                className="w-full pl-4 pr-8 py-3 border border-[#e5e7eb] rounded-xl text-sm bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-black cursor-pointer"
               >
                 <option value="">All Types</option>
                 {fileTypes.map((t) => (
@@ -156,7 +156,7 @@ const FilesPage: React.FC = () => {
 
         {loading ? (
           <div className="flex justify-center py-16">
-            <div className="animate-spin rounded-full h-8 w-8 border-2 border-[#0a0a0a] border-t-transparent" />
+            <div className="animate-spin rounded-full h-8 w-8 border-2 border-black border-t-transparent" />
           </div>
         ) : filteredFiles.length === 0 ? (
           <div className="bg-white rounded-xl border border-[#e5e7eb] p-16 text-center">
@@ -185,7 +185,7 @@ const FilesPage: React.FC = () => {
                     <File className="h-5 w-5 text-[#374151]" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-[14px] font-semibold text-[#0a0a0a] group-hover:text-[#374151] transition-colors line-clamp-2 leading-tight">
+                    <p className="text-[14px] font-semibold text-black group-hover:text-[#374151] transition-colors line-clamp-2 leading-tight">
                       {file.name}
                     </p>
                   </div>

@@ -65,7 +65,7 @@ const AdminSettings: React.FC = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-8 w-8 border-2 border-[#0a0a0a] border-t-transparent" />
+        <div className="animate-spin rounded-full h-8 w-8 border-2 border-black border-t-transparent" />
       </div>
     );
   }
@@ -75,7 +75,7 @@ const AdminSettings: React.FC = () => {
       {/* Header */}
       <div className="bg-white border-b border-[#e5e7eb] px-6 py-7">
         <div className="max-w-6xl mx-auto">
-          <h1 className="text-2xl sm:text-3xl font-bold text-[#0a0a0a] tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-bold text-black tracking-tight">
             Settings
           </h1>
           <p className="text-sm text-[#6b7280] mt-1">
@@ -89,7 +89,7 @@ const AdminSettings: React.FC = () => {
         <div className="bg-white rounded-xl border border-[#e5e7eb] max-w-xl">
           <div className="bg-[#f9fafb] border-b border-[#e5e7eb] px-6 py-4 flex items-center gap-2">
             <KeyRound className="h-4 w-4 text-[#374151]" />
-            <span className="text-sm font-bold text-[#0a0a0a]">
+            <span className="text-sm font-bold text-black">
               Portal Access Password
             </span>
           </div>
@@ -140,7 +140,7 @@ const AdminSettings: React.FC = () => {
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
                     placeholder="Enter new password"
-                    className="w-full px-3 py-2.5 border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0a0a0a] focus:border-[#0a0a0a] pr-10 text-[#374151]"
+                    className="w-full px-3 py-2.5 border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-black focus:border-black pr-10 text-[#374151]"
                   />
                   <button
                     type="button"
@@ -169,14 +169,14 @@ const AdminSettings: React.FC = () => {
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   placeholder="Re-enter new password"
-                  className="w-full px-3 py-2.5 border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0a0a0a] focus:border-[#0a0a0a] text-[#374151]"
+                  className="w-full px-3 py-2.5 border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-black focus:border-black text-[#374151]"
                 />
               </div>
 
               <button
                 type="submit"
                 disabled={saving}
-                className="flex items-center gap-2 px-5 py-2.5 bg-[#0a0a0a] text-white text-sm font-semibold rounded-lg hover:bg-[#374151] transition-colors disabled:opacity-60"
+                className="flex items-center gap-2 px-5 py-2.5 bg-black text-white text-sm font-semibold rounded-lg hover:bg-[#374151] transition-colors disabled:opacity-60"
               >
                 <Save className="h-4 w-4" />
                 {saving ? "Saving…" : "Update Password"}

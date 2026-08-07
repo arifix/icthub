@@ -66,7 +66,7 @@ const InformationPage: React.FC = () => {
     <div className="min-h-screen bg-[#f9fafb]">
       <div className="bg-white border-b border-[#e5e7eb]">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-7">
-          <h1 className="text-2xl sm:text-3xl font-bold text-[#0a0a0a] tracking-tight mb-1">
+          <h1 className="text-2xl sm:text-3xl font-bold text-black tracking-tight mb-1">
             Information Center
           </h1>
           <p className="text-sm text-[#6b7280]">
@@ -78,7 +78,7 @@ const InformationPage: React.FC = () => {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
         {loading ? (
           <div className="flex justify-center py-16">
-            <div className="animate-spin rounded-full h-8 w-8 border-2 border-[#0a0a0a] border-t-transparent" />
+            <div className="animate-spin rounded-full h-8 w-8 border-2 border-black border-t-transparent" />
           </div>
         ) : categories.length === 0 ? (
           <div className="bg-white rounded-xl border border-[#e5e7eb] p-12 text-center">
@@ -99,8 +99,8 @@ const InformationPage: React.FC = () => {
                   onClick={() => setSelectedCategoryId(category.id)}
                   className={`px-4 py-2 rounded-lg text-sm font-semibold transition-colors ${
                     selectedCategoryId === category.id
-                      ? "bg-[#0a0a0a] text-white"
-                      : "bg-[#f9fafb] text-[#374151] hover:bg-[#f3f4f6]"
+                      ? "bg-black text-white"
+                      : "bg-gray-200 text-[#374151] hover:bg-[#f3f4f6]"
                   }`}
                 >
                   {category.name}
@@ -115,7 +115,7 @@ const InformationPage: React.FC = () => {
                     <BookOpen className="h-4 w-4 text-[#374151]" />
                   </div>
                   <div>
-                    <h2 className="text-sm font-bold text-[#0a0a0a]">
+                    <h2 className="text-sm font-bold text-black">
                       {selectedCategory?.name}
                     </h2>
                     <p className="text-xs text-[#6b7280]">
@@ -136,7 +136,7 @@ const InformationPage: React.FC = () => {
                       >
                         <div className="flex items-center gap-2 mb-2">
                           <FileText className="h-4 w-4 text-[#374151]" />
-                          <h3 className="text-sm font-bold text-[#0a0a0a]">
+                          <h3 className="text-sm font-bold text-black">
                             {note.title}
                           </h3>
                         </div>

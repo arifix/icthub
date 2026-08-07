@@ -171,7 +171,7 @@ const AdminAnalytics: React.FC = () => {
       <div className="bg-white border-b border-[#e5e7eb] px-6 py-7">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-[#0a0a0a] tracking-tight">
+            <h1 className="text-2xl sm:text-3xl font-bold text-black tracking-tight">
               Analytics
             </h1>
             <p className="text-sm text-[#6b7280] mt-1">Visitor tracking</p>
@@ -183,7 +183,7 @@ const AdminAnalytics: React.FC = () => {
                 onClick={() => setRange(r)}
                 className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
                   range === r
-                    ? "bg-[#0a0a0a] text-white"
+                    ? "bg-black text-white"
                     : "bg-white border border-[#e5e7eb] text-[#374151] hover:bg-[#f9fafb]"
                 }`}
               >
@@ -203,7 +203,7 @@ const AdminAnalytics: React.FC = () => {
       <div className="max-w-6xl mx-auto px-6 py-8 space-y-8">
         {loading ? (
           <div className="flex items-center justify-center py-24">
-            <div className="animate-spin rounded-full h-8 w-8 border-2 border-[#0a0a0a] border-t-transparent" />
+            <div className="animate-spin rounded-full h-8 w-8 border-2 border-black border-t-transparent" />
           </div>
         ) : (
           <>
@@ -247,7 +247,7 @@ const AdminAnalytics: React.FC = () => {
                       <Icon className="h-4 w-4 text-[#374151]" />
                     </div>
                   </div>
-                  <p className="text-2xl font-bold text-[#0a0a0a]">{value}</p>
+                  <p className="text-2xl font-bold text-black">{value}</p>
                   <p className="text-xs text-gray-500] mt-1">{sub}</p>
                 </div>
               ))}
@@ -259,7 +259,7 @@ const AdminAnalytics: React.FC = () => {
               <div className="bg-white rounded-xl border border-[#e5e7eb]">
                 <div className="bg-[#f9fafb] border-b border-[#e5e7eb] px-6 py-4 flex items-center gap-2">
                   <TrendingUp className="h-4 w-4 text-[#374151]" />
-                  <span className="text-sm font-bold text-[#0a0a0a]">
+                  <span className="text-sm font-bold text-black">
                     Top Pages
                   </span>
                 </div>
@@ -275,13 +275,13 @@ const AdminAnalytics: React.FC = () => {
                           <span className="text-sm font-medium text-[#374151] truncate">
                             {page}
                           </span>
-                          <span className="text-sm font-bold text-[#0a0a0a] ml-2 shrink-0">
+                          <span className="text-sm font-bold text-black ml-2 shrink-0">
                             {count}
                           </span>
                         </div>
                         <div className="h-1.5 bg-[#f3f4f6] rounded-full overflow-hidden">
                           <div
-                            className="h-full bg-[#0a0a0a] rounded-full"
+                            className="h-full bg-black rounded-full"
                             style={{
                               width: `${(count / maxPageCount) * 100}%`,
                             }}
@@ -297,7 +297,7 @@ const AdminAnalytics: React.FC = () => {
               <div className="bg-white rounded-xl border border-[#e5e7eb]">
                 <div className="bg-[#f9fafb] border-b border-[#e5e7eb] px-6 py-4 flex items-center gap-2">
                   <MapPin className="h-4 w-4 text-[#374151]" />
-                  <span className="text-sm font-bold text-[#0a0a0a]">
+                  <span className="text-sm font-bold text-black">
                     Top Countries
                   </span>
                 </div>
@@ -313,13 +313,13 @@ const AdminAnalytics: React.FC = () => {
                           <span className="text-sm font-medium text-[#374151] truncate">
                             {country}
                           </span>
-                          <span className="text-sm font-bold text-[#0a0a0a] ml-2 shrink-0">
+                          <span className="text-sm font-bold text-black ml-2 shrink-0">
                             {count}
                           </span>
                         </div>
                         <div className="h-1.5 bg-[#f3f4f6] rounded-full overflow-hidden">
                           <div
-                            className="h-full bg-[#0a0a0a] rounded-full"
+                            className="h-full bg-black rounded-full"
                             style={{
                               width: `${(count / maxCountryCount) * 100}%`,
                             }}
@@ -336,7 +336,7 @@ const AdminAnalytics: React.FC = () => {
             <div className="bg-white rounded-xl border border-[#e5e7eb]">
               <div className="bg-[#f9fafb] border-b border-[#e5e7eb] px-6 py-4 flex items-center gap-2">
                 <Navigation className="h-4 w-4 text-[#374151]" />
-                <span className="text-sm font-bold text-[#0a0a0a]">
+                <span className="text-sm font-bold text-black">
                   User Journeys
                 </span>
                 <span className="ml-auto text-xs bg-[#f3f4f6] text-[#6b7280] font-semibold px-2 py-0.5 rounded-full">
@@ -443,7 +443,7 @@ const AdminAnalytics: React.FC = () => {
             <div className="bg-white rounded-xl border border-[#e5e7eb]">
               <div className="bg-[#f9fafb] border-b border-[#e5e7eb] px-6 py-4 flex items-center gap-2">
                 <Activity className="h-4 w-4 text-[#374151]" />
-                <span className="text-sm font-bold text-[#0a0a0a]">
+                <span className="text-sm font-bold text-black">
                   Recent Visits
                 </span>
                 <span className="ml-auto text-xs bg-[#f3f4f6] text-[#6b7280] font-semibold px-2 py-0.5 rounded-full">

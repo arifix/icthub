@@ -205,7 +205,7 @@ const AdminDashboard: React.FC = () => {
       {/* Header */}
       <div className="bg-white border-b border-[#e5e7eb] px-6 py-7">
         <div className="max-w-6xl mx-auto">
-          <h1 className="text-2xl sm:text-3xl font-bold text-[#0a0a0a] tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-bold text-black tracking-tight">
             Dashboard
           </h1>
           <p className="text-sm text-[#6b7280] mt-1">
@@ -217,7 +217,7 @@ const AdminDashboard: React.FC = () => {
       <div className="max-w-6xl mx-auto px-6 py-8 space-y-8">
         {loading ? (
           <div className="flex items-center justify-center py-24">
-            <div className="animate-spin rounded-full h-8 w-8 border-2 border-[#0a0a0a] border-t-transparent" />
+            <div className="animate-spin rounded-full h-8 w-8 border-2 border-black border-t-transparent" />
           </div>
         ) : (
           <>
@@ -236,11 +236,11 @@ const AdminDashboard: React.FC = () => {
                       <Icon className="h-4 w-4 text-[#374151]" />
                     </div>
                   </div>
-                  <p className="text-2xl font-bold text-[#0a0a0a]">{count}</p>
+                  <p className="text-2xl font-bold text-black">{count}</p>
                   <div className="flex items-center gap-3 mt-3 pt-3 border-t border-[#f3f4f6]">
                     <Link
                       to={addLink}
-                      className="text-xs font-semibold text-[#374151] hover:text-[#0a0a0a] flex items-center gap-0.5"
+                      className="text-xs font-semibold text-[#374151] hover:text-black flex items-center gap-0.5"
                     >
                       <Plus className="h-3 w-3" />
                       Add
@@ -248,7 +248,7 @@ const AdminDashboard: React.FC = () => {
                     <span className="text-gray-500">·</span>
                     <Link
                       to={link}
-                      className="text-xs font-semibold text-[#374151] hover:text-[#0a0a0a] flex items-center gap-0.5"
+                      className="text-xs font-semibold text-[#374151] hover:text-black flex items-center gap-0.5"
                     >
                       View
                       <ArrowRight className="h-3 w-3" />
@@ -279,7 +279,7 @@ const AdminDashboard: React.FC = () => {
                         e.target.value ? Number(e.target.value) : "",
                       )
                     }
-                    className="pl-3 pr-8 py-2 border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0a0a0a] focus:border-[#0a0a0a] bg-white appearance-none cursor-pointer text-[#374151]"
+                    className="pl-3 pr-8 py-2 border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-black focus:border-black bg-white appearance-none cursor-pointer text-[#374151]"
                   >
                     <option value="">Select a semester</option>
                     {semesters.map((s) => (
@@ -303,12 +303,12 @@ const AdminDashboard: React.FC = () => {
                   <div className="bg-white rounded-xl border border-[#e5e7eb]">
                     <div className="bg-[#f9fafb] border-b border-[#e5e7eb] px-6 py-4 flex items-center gap-2">
                       <BookOpen className="h-4 w-4 text-[#374151]" />
-                      <span className="text-sm font-bold text-[#0a0a0a]">
+                      <span className="text-sm font-bold text-black">
                         Recent Subjects
                       </span>
                       <Link
                         to="/admin/subjects"
-                        className="ml-auto text-xs text-[#6b7280] hover:text-[#0a0a0a] font-medium flex items-center gap-1"
+                        className="ml-auto text-xs text-[#6b7280] hover:text-black font-medium flex items-center gap-1"
                       >
                         View all <ArrowRight className="h-3 w-3" />
                       </Link>
@@ -319,7 +319,7 @@ const AdminDashboard: React.FC = () => {
                           No subjects in this semester yet.{" "}
                           <Link
                             to="/admin/subjects/new"
-                            className="text-[#374151] hover:text-[#0a0a0a] font-medium"
+                            className="text-[#374151] hover:text-black font-medium"
                           >
                             Add one
                           </Link>
@@ -352,12 +352,12 @@ const AdminDashboard: React.FC = () => {
                   <div className="bg-white rounded-xl border border-[#e5e7eb]">
                     <div className="bg-[#f9fafb] border-b border-[#e5e7eb] px-6 py-4 flex items-center gap-2">
                       <FileText className="h-4 w-4 text-[#374151]" />
-                      <span className="text-sm font-bold text-[#0a0a0a]">
+                      <span className="text-sm font-bold text-black">
                         Recent Notes
                       </span>
                       <Link
                         to="/admin/notes"
-                        className="ml-auto text-xs text-[#6b7280] hover:text-[#0a0a0a] font-medium flex items-center gap-1"
+                        className="ml-auto text-xs text-[#6b7280] hover:text-black font-medium flex items-center gap-1"
                       >
                         View all <ArrowRight className="h-3 w-3" />
                       </Link>
@@ -368,7 +368,7 @@ const AdminDashboard: React.FC = () => {
                           No notes in this semester yet.{" "}
                           <Link
                             to="/admin/notes/new"
-                            className="text-[#374151] hover:text-[#0a0a0a] font-medium"
+                            className="text-[#374151] hover:text-black font-medium"
                           >
                             Add one
                           </Link>
@@ -404,12 +404,12 @@ const AdminDashboard: React.FC = () => {
                 <div className="bg-white rounded-xl border border-[#e5e7eb]">
                   <div className="bg-[#f9fafb] border-b border-[#e5e7eb] px-6 py-4 flex items-center gap-2">
                     <Calendar className="h-4 w-4 text-[#374151]" />
-                    <span className="text-sm font-bold text-[#0a0a0a]">
+                    <span className="text-sm font-bold text-black">
                       Upcoming Events
                     </span>
                     <Link
                       to="/admin/calendar"
-                      className="ml-auto text-xs text-[#6b7280] hover:text-[#0a0a0a] font-medium flex items-center gap-1"
+                      className="ml-auto text-xs text-[#6b7280] hover:text-black font-medium flex items-center gap-1"
                     >
                       View calendar <ArrowRight className="h-3 w-3" />
                     </Link>
@@ -420,7 +420,7 @@ const AdminDashboard: React.FC = () => {
                         No upcoming events.{" "}
                         <Link
                           to="/admin/events/new"
-                          className="text-[#374151] hover:text-[#0a0a0a] font-medium"
+                          className="text-[#374151] hover:text-black font-medium"
                         >
                           Schedule one
                         </Link>
@@ -432,7 +432,7 @@ const AdminDashboard: React.FC = () => {
                           to={`/admin/events/${event.id}`}
                           className="flex items-center gap-4 px-6 py-3 hover:bg-[#f9fafb]"
                         >
-                          <div className="bg-[#0a0a0a] text-white rounded-lg px-3 py-2 text-center min-w-[56px] shrink-0">
+                          <div className="bg-black text-white rounded-lg px-3 py-2 text-center min-w-[56px] shrink-0">
                             <div className="text-xs font-medium opacity-70">
                               {new Date(event.date).toLocaleDateString(
                                 undefined,

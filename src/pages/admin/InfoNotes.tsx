@@ -91,20 +91,29 @@ const AdminInfoNotes: React.FC = () => {
       <div className="bg-white border-b border-[#e5e7eb] px-6 py-7">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-[#0a0a0a] tracking-tight">
+            <h1 className="text-2xl sm:text-3xl font-bold text-black tracking-tight">
               Information Notes
             </h1>
             <p className="text-sm text-[#6b7280] mt-1">
               Create the short notes that appear inside each info category
             </p>
           </div>
-          <Link
-            to="/admin/info-notes/new"
-            className="inline-flex items-center gap-2 px-4 py-2 bg-[#0a0a0a] text-white rounded-lg text-sm font-medium hover:bg-[#374151] transition-colors"
-          >
-            <Plus className="h-4 w-4" />
-            New Note
-          </Link>
+          <div className="flex gap-2">
+            <Link
+              to="/admin/info-categories/"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-white border-black border rounded-lg text-sm font-medium hover:bg-black hover:text-white hover:border-black transition-colors"
+            >
+              <Info className="h-4 w-4" />
+              Note Categories
+            </Link>
+            <Link
+              to="/admin/info-notes/new"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-black text-white rounded-lg text-sm font-medium hover:bg-[#374151] transition-colors"
+            >
+              <Plus className="h-4 w-4" />
+              New Note
+            </Link>
+          </div>
         </div>
       </div>
 
@@ -117,7 +126,7 @@ const AdminInfoNotes: React.FC = () => {
               placeholder="Search notes..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-9 pr-3 py-2 border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0a0a0a] focus:border-[#0a0a0a] text-[#374151]"
+              className="w-full pl-9 pr-3 py-2 border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-black focus:border-black text-[#374151]"
             />
           </div>
           <select
@@ -125,7 +134,7 @@ const AdminInfoNotes: React.FC = () => {
             onChange={(e) =>
               setSelectedCategory(e.target.value ? Number(e.target.value) : "")
             }
-            className="px-3 py-2 border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0a0a0a] focus:border-[#0a0a0a] bg-white appearance-none cursor-pointer text-[#374151]"
+            className="px-3 py-2 border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-black focus:border-black bg-white appearance-none cursor-pointer text-[#374151]"
           >
             <option value="">All Categories</option>
             {categories.map((category) => (
@@ -138,13 +147,13 @@ const AdminInfoNotes: React.FC = () => {
 
         {loading ? (
           <div className="flex items-center justify-center py-24">
-            <div className="animate-spin rounded-full h-8 w-8 border-2 border-[#0a0a0a] border-t-transparent" />
+            <div className="animate-spin rounded-full h-8 w-8 border-2 border-black border-t-transparent" />
           </div>
         ) : (
           <div className="bg-white rounded-xl border border-[#e5e7eb] overflow-hidden">
             <div className="bg-[#f9fafb] border-b border-[#e5e7eb] px-6 py-4 flex items-center gap-2">
               <Info className="h-4 w-4 text-[#374151]" />
-              <span className="text-sm font-bold text-[#0a0a0a]">Notes</span>
+              <span className="text-sm font-bold text-black">Notes</span>
               <span className="ml-auto text-xs bg-[#f3f4f6] text-[#6b7280] font-semibold px-2 py-0.5 rounded-full">
                 {filteredNotes.length}
               </span>
@@ -173,7 +182,7 @@ const AdminInfoNotes: React.FC = () => {
                       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                         <div>
                           <div className="flex items-center gap-2 mb-1">
-                            <h3 className="text-sm font-bold text-[#0a0a0a]">
+                            <h3 className="text-sm font-bold text-black">
                               {note.title}
                             </h3>
                             <span className="text-xs bg-[#f3f4f6] text-[#6b7280] font-semibold px-2 py-0.5 rounded-full">

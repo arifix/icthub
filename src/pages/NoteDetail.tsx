@@ -122,7 +122,7 @@ const NoteDetailPage: React.FC = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-[#f9fafb] flex justify-center items-center">
-        <div className="animate-spin rounded-full h-10 w-10 border-2 border-[#0a0a0a] border-t-transparent" />
+        <div className="animate-spin rounded-full h-10 w-10 border-2 border-black border-t-transparent" />
       </div>
     );
   }
@@ -151,13 +151,13 @@ const NoteDetailPage: React.FC = () => {
       <div className="bg-white border-b border-[#e5e7eb]">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-7">
           <div className="flex items-center gap-2 text-gray-500] text-xs mb-4">
-            <Link to="/" className="hover:text-[#0a0a0a] transition-colors">
+            <Link to="/" className="hover:text-black transition-colors">
               Home
             </Link>
             <ChevronRight className="h-3 w-3" />
             <Link
               to="/notes"
-              className="hover:text-[#0a0a0a] transition-colors"
+              className="hover:text-black transition-colors"
             >
               Notes
             </Link>
@@ -166,7 +166,7 @@ const NoteDetailPage: React.FC = () => {
               {note.title}
             </span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-[#0a0a0a] tracking-tight mb-4">
+          <h1 className="text-2xl sm:text-3xl font-bold text-black tracking-tight mb-4">
             {note.title}
           </h1>
           <div className="flex flex-wrap items-center gap-3">
@@ -206,11 +206,11 @@ const NoteDetailPage: React.FC = () => {
         {/* AI Summary */}
         {note.summary && (
           <div className="bg-white border border-[#e5e7eb] rounded-xl p-5 mb-6 flex items-start gap-4">
-            <div className="w-9 h-9 bg-[#0a0a0a] rounded-xl flex items-center justify-center shrink-0">
+            <div className="w-9 h-9 bg-black rounded-xl flex items-center justify-center shrink-0">
               <Sparkles className="h-4.5 w-4.5 text-white" />
             </div>
             <div>
-              <p className="text-xs font-bold text-[#0a0a0a] uppercase tracking-widest mb-2">
+              <p className="text-xs font-bold text-black uppercase tracking-widest mb-2">
                 AI Summary
               </p>
               <p className="text-sm text-[#374151] leading-relaxed">
@@ -222,7 +222,7 @@ const NoteDetailPage: React.FC = () => {
 
         {/* Note content */}
         <div className="bg-white rounded-xl border border-[#e5e7eb] p-6 sm:p-10 mb-8">
-          <div className="prose prose-gray max-w-none prose-headings:font-bold prose-headings:text-[#0a0a0a] prose-p:text-[#374151] prose-p:leading-7 prose-a:text-[#0a0a0a] prose-a:underline prose-code:bg-[#f3f4f6] prose-code:px-1 prose-code:rounded">
+          <div className="prose prose-gray max-w-none prose-headings:font-bold prose-headings:text-black prose-p:text-[#374151] prose-p:leading-7 prose-a:text-black prose-a:underline prose-code:bg-[#f3f4f6] prose-code:px-1 prose-code:rounded">
             <div dangerouslySetInnerHTML={{ __html: note.content }} />
           </div>
         </div>
@@ -231,7 +231,7 @@ const NoteDetailPage: React.FC = () => {
         <div className="bg-white rounded-xl border border-[#e5e7eb] mb-8">
           <div className="bg-[#f9fafb] border-b border-[#e5e7eb] px-6 py-4 flex items-center gap-2">
             <MessageSquare className="h-4 w-4 text-[#374151]" />
-            <span className="text-sm font-bold text-[#0a0a0a]">Comments</span>
+            <span className="text-sm font-bold text-black">Comments</span>
             <span className="ml-auto text-xs bg-[#f3f4f6] text-[#6b7280] font-semibold px-2 py-0.5 rounded-full">
               {comments.length}
             </span>
@@ -252,14 +252,14 @@ const NoteDetailPage: React.FC = () => {
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-1">
-                          <span className="text-sm font-semibold text-[#0a0a0a]">{comment.author_name}</span>
+                          <span className="text-sm font-semibold text-black">{comment.author_name}</span>
                           <span className="text-xs text-gray-500]">{formatCommentTime(comment.created_at)}</span>
                         </div>
                         <p className="text-sm text-[#374151] leading-relaxed whitespace-pre-wrap">{comment.content}</p>
                         {!isReplying && replies.length === 0 && (
                           <button
                             onClick={() => setReplyingTo(comment.id)}
-                            className="inline-flex items-center gap-1 mt-2 text-xs text-[#6b7280] hover:text-[#0a0a0a] transition-colors"
+                            className="inline-flex items-center gap-1 mt-2 text-xs text-[#6b7280] hover:text-black transition-colors"
                           >
                             <Reply className="h-3 w-3" />
                             Reply
@@ -268,7 +268,7 @@ const NoteDetailPage: React.FC = () => {
                         {!isReplying && replies.length > 0 && (
                           <button
                             onClick={() => setReplyingTo(comment.id)}
-                            className="inline-flex items-center gap-1 mt-2 text-xs text-[#6b7280] hover:text-[#0a0a0a] transition-colors"
+                            className="inline-flex items-center gap-1 mt-2 text-xs text-[#6b7280] hover:text-black transition-colors"
                           >
                             <Reply className="h-3 w-3" />
                             Reply
@@ -288,7 +288,7 @@ const NoteDetailPage: React.FC = () => {
                             </div>
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center gap-2 mb-1">
-                                <span className="text-sm font-semibold text-[#0a0a0a]">{reply.author_name}</span>
+                                <span className="text-sm font-semibold text-black">{reply.author_name}</span>
                                 <span className="text-xs text-gray-500]">{formatCommentTime(reply.created_at)}</span>
                               </div>
                               <p className="text-sm text-[#374151] leading-relaxed whitespace-pre-wrap">{reply.content}</p>
@@ -307,7 +307,7 @@ const NoteDetailPage: React.FC = () => {
                             placeholder="Your name"
                             value={authorName}
                             onChange={(e) => setAuthorName(e.target.value)}
-                            className="w-full pl-8 pr-3 py-2 text-sm border border-[#e5e7eb] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0a0a0a] focus:border-[#0a0a0a]"
+                            className="w-full pl-8 pr-3 py-2 text-sm border border-[#e5e7eb] rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-black"
                           />
                         </div>
                         <textarea
@@ -317,20 +317,20 @@ const NoteDetailPage: React.FC = () => {
                           onChange={(e) =>
                             setReplyTexts((prev) => ({ ...prev, [comment.id]: e.target.value }))
                           }
-                          className="w-full px-3 py-2 text-sm border border-[#e5e7eb] rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-[#0a0a0a] focus:border-[#0a0a0a]"
+                          className="w-full px-3 py-2 text-sm border border-[#e5e7eb] rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-black focus:border-black"
                         />
                         <div className="flex items-center gap-2">
                           <button
                             disabled={submitting || !authorName.trim() || !(replyTexts[comment.id] ?? "").trim()}
                             onClick={() => submitComment(comment.id, replyTexts[comment.id] ?? "", authorName)}
-                            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#0a0a0a] text-white text-xs font-semibold rounded-lg disabled:opacity-40 transition-opacity"
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-black text-white text-xs font-semibold rounded-lg disabled:opacity-40 transition-opacity"
                           >
                             <Send className="h-3 w-3" />
                             Post reply
                           </button>
                           <button
                             onClick={() => setReplyingTo(null)}
-                            className="text-xs text-[#6b7280] hover:text-[#0a0a0a] transition-colors"
+                            className="text-xs text-[#6b7280] hover:text-black transition-colors"
                           >
                             Cancel
                           </button>
@@ -353,7 +353,7 @@ const NoteDetailPage: React.FC = () => {
                   placeholder="Your name"
                   value={authorName}
                   onChange={(e) => setAuthorName(e.target.value)}
-                  className="w-full pl-8 pr-3 py-2 text-sm border border-[#e5e7eb] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0a0a0a] focus:border-[#0a0a0a]"
+                  className="w-full pl-8 pr-3 py-2 text-sm border border-[#e5e7eb] rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-black"
                 />
               </div>
               <textarea
@@ -361,12 +361,12 @@ const NoteDetailPage: React.FC = () => {
                 placeholder="Share your thoughts…"
                 value={newComment}
                 onChange={(e) => setNewComment(e.target.value)}
-                className="w-full px-3 py-2 text-sm border border-[#e5e7eb] rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-[#0a0a0a] focus:border-[#0a0a0a]"
+                className="w-full px-3 py-2 text-sm border border-[#e5e7eb] rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-black focus:border-black"
               />
               <button
                 disabled={submitting || !authorName.trim() || !newComment.trim()}
                 onClick={() => submitComment(null, newComment, authorName)}
-                className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#0a0a0a] text-white text-sm font-semibold rounded-lg disabled:opacity-40 transition-opacity"
+                className="inline-flex items-center gap-1.5 px-4 py-2 bg-black text-white text-sm font-semibold rounded-lg disabled:opacity-40 transition-opacity"
               >
                 <Send className="h-3.5 w-3.5" />
                 Post comment
@@ -378,7 +378,7 @@ const NoteDetailPage: React.FC = () => {
         {/* Footer nav */}
         <Link
           to="/notes"
-          className="inline-flex items-center gap-2 text-sm text-[#6b7280] hover:text-[#0a0a0a] transition-colors font-medium"
+          className="inline-flex items-center gap-2 text-sm text-[#6b7280] hover:text-black transition-colors font-medium"
         >
           <ArrowLeft className="h-4 w-4" />
           Back to Notes

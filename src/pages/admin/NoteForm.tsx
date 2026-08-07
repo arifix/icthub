@@ -179,7 +179,7 @@ const AdminNoteForm: React.FC = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="animate-spin rounded-full h-8 w-8 border-2 border-[#0a0a0a] border-t-transparent" />
+        <div className="animate-spin rounded-full h-8 w-8 border-2 border-black border-t-transparent" />
       </div>
     );
   }
@@ -190,7 +190,7 @@ const AdminNoteForm: React.FC = () => {
       <div className="bg-white border-b border-[#e5e7eb] px-6 py-7">
         <div className="max-w-3xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-[#0a0a0a] tracking-tight">
+            <h1 className="text-2xl sm:text-3xl font-bold text-black tracking-tight">
               {isEditing ? "Edit Note" : "New Note"}
             </h1>
             <p className="text-sm text-[#6b7280] mt-1">
@@ -213,7 +213,7 @@ const AdminNoteForm: React.FC = () => {
         <div className="bg-white rounded-xl border border-[#e5e7eb]">
           <div className="bg-[#f9fafb] border-b border-[#e5e7eb] px-6 py-4 flex items-center gap-2">
             <FileText className="h-4 w-4 text-[#374151]" />
-            <span className="text-sm font-bold text-[#0a0a0a]">
+            <span className="text-sm font-bold text-black">
               Note Details
             </span>
           </div>
@@ -235,7 +235,7 @@ const AdminNoteForm: React.FC = () => {
                   onChange={handleChange}
                   placeholder="e.g., Introduction to Variables"
                   required
-                  className="w-full px-3 py-2.5 border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0a0a0a] focus:border-[#0a0a0a] text-[#374151]"
+                  className="w-full px-3 py-2.5 border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-black focus:border-black text-[#374151]"
                 />
               </div>
 
@@ -248,7 +248,7 @@ const AdminNoteForm: React.FC = () => {
                 </label>
                 {loadingSubjects ? (
                   <div className="flex items-center gap-2 px-3 py-2.5 border border-[#e5e7eb] rounded-xl bg-[#f9fafb]">
-                    <div className="animate-spin rounded-full h-4 w-4 border-2 border-[#0a0a0a] border-t-transparent" />
+                    <div className="animate-spin rounded-full h-4 w-4 border-2 border-black border-t-transparent" />
                     <span className="text-sm text-gray-500]">
                       Loading subjects…
                     </span>
@@ -260,7 +260,7 @@ const AdminNoteForm: React.FC = () => {
                     value={note.subject_id || ""}
                     onChange={handleChange}
                     required
-                    className="w-full px-3 py-2.5 border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0a0a0a] focus:border-[#0a0a0a] bg-white text-[#374151]"
+                    className="w-full px-3 py-2.5 border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-black focus:border-black bg-white text-[#374151]"
                   >
                     <option value="">Select a subject</option>
                     {subjects.map((s) => (
@@ -292,7 +292,7 @@ const AdminNoteForm: React.FC = () => {
                 onChange={handleChange}
                 rows={3}
                 placeholder="Brief summary displayed to students (optional)"
-                className="w-full px-3 py-2.5 border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0a0a0a] focus:border-[#0a0a0a] text-[#374151] resize-none"
+                className="w-full px-3 py-2.5 border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-black focus:border-black text-[#374151] resize-none"
               />
             </div>
 
@@ -337,7 +337,7 @@ const AdminNoteForm: React.FC = () => {
               <button
                 type="submit"
                 disabled={saving || subjects.length === 0}
-                className="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium bg-[#0a0a0a] text-white rounded-lg hover:bg-[#374151] transition-colors disabled:opacity-60"
+                className="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium bg-black text-white rounded-lg hover:bg-[#374151] transition-colors disabled:opacity-60"
               >
                 {saving ? (
                   <>

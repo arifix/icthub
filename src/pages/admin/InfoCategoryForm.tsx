@@ -100,7 +100,7 @@ const AdminInfoCategoryForm: React.FC = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="animate-spin rounded-full h-8 w-8 border-2 border-[#0a0a0a] border-t-transparent" />
+        <div className="animate-spin rounded-full h-8 w-8 border-2 border-black border-t-transparent" />
       </div>
     );
   }
@@ -110,7 +110,7 @@ const AdminInfoCategoryForm: React.FC = () => {
       <div className="bg-white border-b border-[#e5e7eb] px-6 py-7">
         <div className="max-w-3xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-[#0a0a0a] tracking-tight">
+            <h1 className="text-2xl sm:text-3xl font-bold text-black tracking-tight">
               {isEditing ? "Edit Category" : "New Category"}
             </h1>
             <p className="text-sm text-[#6b7280] mt-1">
@@ -131,7 +131,7 @@ const AdminInfoCategoryForm: React.FC = () => {
         <div className="bg-white rounded-xl border border-[#e5e7eb]">
           <div className="bg-[#f9fafb] border-b border-[#e5e7eb] px-6 py-4 flex items-center gap-2">
             <Info className="h-4 w-4 text-[#374151]" />
-            <span className="text-sm font-bold text-[#0a0a0a]">
+            <span className="text-sm font-bold text-black">
               Category Details
             </span>
           </div>
@@ -151,7 +151,7 @@ const AdminInfoCategoryForm: React.FC = () => {
                 onChange={handleChange}
                 placeholder="e.g., Academic"
                 required
-                className="w-full px-3 py-2.5 border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0a0a0a] focus:border-[#0a0a0a] text-[#374151]"
+                className="w-full px-3 py-2.5 border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-black focus:border-black text-[#374151]"
               />
             </div>
 
@@ -169,7 +169,7 @@ const AdminInfoCategoryForm: React.FC = () => {
                 onChange={handleChange}
                 rows={4}
                 placeholder="Short description for the section"
-                className="w-full px-3 py-2.5 border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0a0a0a] focus:border-[#0a0a0a] text-[#374151] resize-none"
+                className="w-full px-3 py-2.5 border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-black focus:border-black text-[#374151] resize-none"
               />
             </div>
 
@@ -187,7 +187,7 @@ const AdminInfoCategoryForm: React.FC = () => {
                   type="number"
                   value={category.sort_order ?? 0}
                   onChange={handleChange}
-                  className="w-full px-3 py-2.5 border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0a0a0a] focus:border-[#0a0a0a] text-[#374151]"
+                  className="w-full px-3 py-2.5 border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-black focus:border-black text-[#374151]"
                 />
               </div>
               <div className="flex items-center gap-3 pt-6">
@@ -201,7 +201,7 @@ const AdminInfoCategoryForm: React.FC = () => {
                       is_active: e.target.checked,
                     }))
                   }
-                  className="h-4 w-4 rounded border-[#d1d5db] text-[#0a0a0a] focus:ring-[#0a0a0a]"
+                  className="h-4 w-4 rounded border-[#d1d5db] text-black focus:ring-black"
                 />
                 <label htmlFor="is_active" className="text-sm text-[#374151]">
                   Visible on public info page
@@ -220,7 +220,7 @@ const AdminInfoCategoryForm: React.FC = () => {
               <button
                 type="submit"
                 disabled={saving}
-                className="inline-flex items-center gap-2 px-4 py-2 bg-[#0a0a0a] text-white rounded-lg text-sm font-medium hover:bg-[#374151] transition-colors disabled:opacity-50"
+                className="inline-flex items-center gap-2 px-4 py-2 bg-black text-white rounded-lg text-sm font-medium hover:bg-[#374151] transition-colors disabled:opacity-50"
               >
                 <Save className="h-4 w-4" />
                 {saving

@@ -118,7 +118,7 @@ const NotificationsPage: React.FC = () => {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8">
         {loading ? (
           <div className="flex justify-center py-16">
-            <div className="animate-spin rounded-full h-8 w-8 border-2 border-[#0a0a0a] border-t-transparent" />
+            <div className="animate-spin rounded-full h-8 w-8 border-2 border-black border-t-transparent" />
           </div>
         ) : notifications.length === 0 ? (
           <div className="bg-white border border-gray-200 rounded-lg p-16 text-center">
@@ -163,10 +163,10 @@ const NotificationsPage: React.FC = () => {
                       {typeLabel[notification.type] || notification.type}
                     </span>
                     {!notification.is_read && (
-                      <span className="w-2 h-2 rounded-full bg-[#0a0a0a] shrink-0" />
+                      <span className="w-2 h-2 rounded-full bg-black shrink-0" />
                     )}
                   </div>
-                  <p className="font-semibold text-[#0a0a0a] truncate">
+                  <p className="font-semibold text-black truncate">
                     {notification.title}
                   </p>
                   <p className="text-sm text-gray-500] mt-0.5 line-clamp-1">

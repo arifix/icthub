@@ -61,15 +61,8 @@ const AdminSidebar: React.FC = () => {
       matchPaths: ["/admin/notes/"],
     },
     {
-      to: "/admin/info-categories",
-      label: "Information Categories",
-      icon: Info,
-      description: "Content Groups",
-      matchPaths: ["/admin/info-categories/"],
-    },
-    {
       to: "/admin/info-notes",
-      label: "Information Notes",
+      label: "Information",
       icon: FileText,
       description: "Tips & Guidance",
       matchPaths: ["/admin/info-notes/"],

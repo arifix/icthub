@@ -199,7 +199,7 @@ const AdminCalendar: React.FC = () => {
       <div className="bg-white border-b border-[#e5e7eb] px-6 py-7">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-[#0a0a0a] tracking-tight">
+            <h1 className="text-2xl sm:text-3xl font-bold text-black tracking-tight">
               Calendar
             </h1>
             <p className="text-sm text-[#6b7280] mt-1">
@@ -208,7 +208,7 @@ const AdminCalendar: React.FC = () => {
           </div>
           <Link
             to="/admin/events/new"
-            className="inline-flex items-center gap-2 px-4 py-2 bg-[#0a0a0a] text-white rounded-lg text-sm font-medium hover:bg-[#374151] transition-colors"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-black text-white rounded-lg text-sm font-medium hover:bg-[#374151] transition-colors"
           >
             <Plus className="h-4 w-4" />
             New Event
@@ -238,7 +238,7 @@ const AdminCalendar: React.FC = () => {
                     e.target.value ? Number(e.target.value) : "",
                   )
                 }
-                className="pl-3 pr-8 py-2 border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0a0a0a] focus:border-[#0a0a0a] bg-white appearance-none cursor-pointer text-[#374151]"
+                className="pl-3 pr-8 py-2 border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-black focus:border-black bg-white appearance-none cursor-pointer text-[#374151]"
               >
                 <option value="">All Semesters</option>
                 {semesters.map((s) => (
@@ -256,7 +256,7 @@ const AdminCalendar: React.FC = () => {
         <div className="bg-white rounded-xl border border-[#e5e7eb]">
           <div className="bg-[#f9fafb] border-b border-[#e5e7eb] px-6 py-4 flex items-center gap-2">
             <CalendarIcon className="h-4 w-4 text-[#374151]" />
-            <span className="text-sm font-bold text-[#0a0a0a]">
+            <span className="text-sm font-bold text-black">
               {currentMonth.toLocaleDateString("en-US", {
                 month: "long",
                 year: "numeric",
@@ -271,13 +271,13 @@ const AdminCalendar: React.FC = () => {
               </button>
               <button
                 onClick={goToPreviousMonth}
-                className="p-1.5 text-[#374151] hover:text-[#0a0a0a] hover:bg-[#f3f4f6] rounded-lg"
+                className="p-1.5 text-[#374151] hover:text-black hover:bg-[#f3f4f6] rounded-lg"
               >
                 <ChevronLeft className="h-4 w-4" />
               </button>
               <button
                 onClick={goToNextMonth}
-                className="p-1.5 text-[#374151] hover:text-[#0a0a0a] hover:bg-[#f3f4f6] rounded-lg"
+                className="p-1.5 text-[#374151] hover:text-black hover:bg-[#f3f4f6] rounded-lg"
               >
                 <ChevronRight className="h-4 w-4" />
               </button>
@@ -286,7 +286,7 @@ const AdminCalendar: React.FC = () => {
 
           {loading ? (
             <div className="flex items-center justify-center py-16">
-              <div className="animate-spin rounded-full h-8 w-8 border-2 border-[#0a0a0a] border-t-transparent" />
+              <div className="animate-spin rounded-full h-8 w-8 border-2 border-black border-t-transparent" />
             </div>
           ) : (
             <div className="p-4">
@@ -308,7 +308,7 @@ const AdminCalendar: React.FC = () => {
                       day.day === 0
                         ? "border-transparent"
                         : day.date && isToday(day.date)
-                          ? "border-[#0a0a0a] bg-white"
+                          ? "border-black bg-white"
                           : "border-[#f3f4f6] bg-white hover:border-[#e5e7eb]"
                     }`}
                   >
@@ -318,7 +318,7 @@ const AdminCalendar: React.FC = () => {
                           <span
                             className={`inline-flex items-center justify-center w-6 h-6 rounded-full text-xs font-semibold ${
                               day.date && isToday(day.date)
-                                ? "bg-[#0a0a0a] text-white"
+                                ? "bg-black text-white"
                                 : day.date.getDay() === 5 ||
                                     day.date.getDay() === 6
                                   ? "text-red-500"
@@ -362,7 +362,7 @@ const AdminCalendar: React.FC = () => {
         <div className="bg-white rounded-xl border border-[#e5e7eb]">
           <div className="bg-[#f9fafb] border-b border-[#e5e7eb] px-6 py-4 flex items-center gap-2">
             <CalendarIcon className="h-4 w-4 text-[#374151]" />
-            <span className="text-sm font-bold text-[#0a0a0a]">
+            <span className="text-sm font-bold text-black">
               Upcoming Events
             </span>
             <span className="ml-auto text-xs bg-[#f3f4f6] text-[#6b7280] font-semibold px-2 py-0.5 rounded-full">
@@ -371,7 +371,7 @@ const AdminCalendar: React.FC = () => {
           </div>
           {loading ? (
             <div className="flex items-center justify-center py-12">
-              <div className="animate-spin rounded-full h-8 w-8 border-2 border-[#0a0a0a] border-t-transparent" />
+              <div className="animate-spin rounded-full h-8 w-8 border-2 border-black border-t-transparent" />
             </div>
           ) : upcomingEvents.length === 0 ? (
             <div className="text-center py-12">
@@ -383,7 +383,7 @@ const AdminCalendar: React.FC = () => {
               </p>
               <Link
                 to="/admin/events/new"
-                className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-[#0a0a0a] text-white rounded-lg text-sm font-medium"
+                className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-black text-white rounded-lg text-sm font-medium"
               >
                 <Plus className="h-4 w-4" />
                 Add Event
@@ -396,7 +396,7 @@ const AdminCalendar: React.FC = () => {
                   key={event.id}
                   className="flex items-center gap-4 px-6 py-4 hover:bg-[#f9fafb]"
                 >
-                  <div className="bg-[#0a0a0a] text-white rounded-lg px-3 py-2 text-center min-w-[56px] shrink-0">
+                  <div className="bg-black text-white rounded-lg px-3 py-2 text-center min-w-[56px] shrink-0">
                     <div className="text-xs font-medium opacity-70">
                       {new Date(event.date).toLocaleDateString(undefined, {
                         month: "short",
@@ -429,7 +429,7 @@ const AdminCalendar: React.FC = () => {
                   <div className="flex items-center gap-1 shrink-0">
                     <Link
                       to={`/admin/events/${event.id}`}
-                      className="p-1.5 text-[#374151] hover:text-[#0a0a0a] hover:bg-[#f3f4f6] rounded-lg"
+                      className="p-1.5 text-[#374151] hover:text-black hover:bg-[#f3f4f6] rounded-lg"
                     >
                       <Edit className="h-4 w-4" />
                     </Link>

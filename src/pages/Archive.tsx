@@ -142,7 +142,7 @@ const ArchivePage: React.FC = () => {
   if (semesterLoading) {
     return (
       <div className="min-h-screen bg-[#f9fafb] flex justify-center items-center">
-        <div className="animate-spin rounded-full h-10 w-10 border-2 border-[#0a0a0a] border-t-transparent" />
+        <div className="animate-spin rounded-full h-10 w-10 border-2 border-black border-t-transparent" />
       </div>
     );
   }
@@ -151,7 +151,7 @@ const ArchivePage: React.FC = () => {
     <div className="min-h-screen bg-[#f9fafb]">
       <div className="bg-white border-b border-[#e5e7eb]">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-7">
-          <h1 className="text-2xl sm:text-3xl font-bold text-[#0a0a0a] tracking-tight mb-1">
+          <h1 className="text-2xl sm:text-3xl font-bold text-black tracking-tight mb-1">
             Semester Archive
           </h1>
           <p className="text-sm text-[#6b7280]">
@@ -172,7 +172,7 @@ const ArchivePage: React.FC = () => {
                     e.target.value ? Number(e.target.value) : "",
                   )
                 }
-                className="w-full px-5 py-3 pl-11 border border-[#e5e7eb] rounded-xl bg-white text-sm focus:outline-none focus:ring-2 focus:ring-[#0a0a0a] focus:border-[#0a0a0a] appearance-none cursor-pointer"
+                className="w-full px-5 py-3 pl-11 border border-[#e5e7eb] rounded-xl bg-white text-sm focus:outline-none focus:ring-2 focus:ring-black focus:border-black appearance-none cursor-pointer"
               >
                 <option value="">Select an archived semester</option>
                 {archivedSemesters.map((s) => (
@@ -209,7 +209,7 @@ const ArchivePage: React.FC = () => {
           </div>
         ) : loading ? (
           <div className="flex justify-center py-16">
-            <div className="animate-spin rounded-full h-8 w-8 border-2 border-[#0a0a0a] border-t-transparent" />
+            <div className="animate-spin rounded-full h-8 w-8 border-2 border-black border-t-transparent" />
           </div>
         ) : (
           <div className="space-y-6">
@@ -223,7 +223,7 @@ const ArchivePage: React.FC = () => {
                     <Icon className="h-4 w-4 text-[#374151]" />
                   </div>
                   <div>
-                    <div className="text-xl font-bold text-[#0a0a0a]">
+                    <div className="text-xl font-bold text-black">
                       {count}
                     </div>
                     <div className="text-xs text-[#6b7280]">{label}</div>
@@ -236,7 +236,7 @@ const ArchivePage: React.FC = () => {
               <div className="bg-white rounded-xl border border-[#e5e7eb] overflow-hidden">
                 <div className="flex items-center gap-2 px-6 py-4 border-b border-[#e5e7eb] bg-[#f9fafb]">
                   <BookOpen className="h-4 w-4 text-[#374151]" />
-                  <h2 className="text-sm font-bold text-[#0a0a0a]">
+                  <h2 className="text-sm font-bold text-black">
                     Subjects ({subjects.length})
                   </h2>
                 </div>
@@ -248,14 +248,14 @@ const ArchivePage: React.FC = () => {
                       className="group bg-white rounded-xl border border-[#e5e7eb] hover:border-[#d1d5db] hover:shadow-md transition-all duration-200 p-4"
                     >
                       <div className="flex items-start justify-between gap-3 mb-4">
-                        <div className="inline-flex items-center justify-center w-12 h-12 bg-[#0a0a0a] rounded-xl">
+                        <div className="inline-flex items-center justify-center w-12 h-12 bg-black rounded-xl">
                           <BookOpen className="h-6 w-6 text-white" />
                         </div>
                         <span className="px-2.5 py-1 bg-[#f3f4f6] text-[#374151] text-xs font-semibold rounded-full font-mono">
                           {s.code}
                         </span>
                       </div>
-                      <h3 className="text-base font-bold text-[#0a0a0a] group-hover:text-[#374151] transition-colors line-clamp-2">
+                      <h3 className="text-base font-bold text-black group-hover:text-[#374151] transition-colors line-clamp-2">
                         {s.title}
                       </h3>
                     </Link>
@@ -268,7 +268,7 @@ const ArchivePage: React.FC = () => {
               <div className="bg-white rounded-xl border border-[#e5e7eb] overflow-hidden">
                 <div className="flex items-center gap-2 px-6 py-4 border-b border-[#e5e7eb] bg-[#f9fafb]">
                   <FileText className="h-4 w-4 text-[#374151]" />
-                  <h2 className="text-sm font-bold text-[#0a0a0a]">
+                  <h2 className="text-sm font-bold text-black">
                     Notes ({notes.length})
                   </h2>
                 </div>
@@ -287,7 +287,7 @@ const ArchivePage: React.FC = () => {
                           {note.subjects?.code}
                         </span>
                       </div>
-                      <h3 className="text-sm font-bold text-[#0a0a0a] group-hover:text-[#374151] transition-colors line-clamp-2 mb-2">
+                      <h3 className="text-sm font-bold text-black group-hover:text-[#374151] transition-colors line-clamp-2 mb-2">
                         {note.title}
                       </h3>
                       <p className="text-sm text-[#6b7280] line-clamp-3 flex-1">
@@ -307,7 +307,7 @@ const ArchivePage: React.FC = () => {
               <div className="bg-white rounded-xl border border-[#e5e7eb] overflow-hidden">
                 <div className="flex items-center gap-2 px-6 py-4 border-b border-[#e5e7eb] bg-[#f9fafb]">
                   <Calendar className="h-4 w-4 text-[#374151]" />
-                  <h2 className="text-sm font-bold text-[#0a0a0a]">
+                  <h2 className="text-sm font-bold text-black">
                     Events ({events.length})
                   </h2>
                 </div>
@@ -319,7 +319,7 @@ const ArchivePage: React.FC = () => {
                         key={event.id}
                         className="px-6 py-4 flex items-start gap-4"
                       >
-                        <div className="text-center bg-[#0a0a0a] text-white rounded-xl px-3 py-2 min-w-[54px] shrink-0">
+                        <div className="text-center bg-black text-white rounded-xl px-3 py-2 min-w-[54px] shrink-0">
                           <div className="text-[10px] font-bold uppercase tracking-wide">
                             {d.toLocaleDateString(undefined, {
                               month: "short",
@@ -330,7 +330,7 @@ const ArchivePage: React.FC = () => {
                           </div>
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm font-semibold text-[#0a0a0a] line-clamp-1">
+                          <p className="text-sm font-semibold text-black line-clamp-1">
                             {event.title}
                           </p>
                           {event.subjects && (
@@ -350,7 +350,7 @@ const ArchivePage: React.FC = () => {
               <div className="bg-white rounded-xl border border-[#e5e7eb] overflow-hidden">
                 <div className="flex items-center gap-2 px-6 py-4 border-b border-[#e5e7eb] bg-[#f9fafb]">
                   <File className="h-4 w-4 text-[#374151]" />
-                  <h2 className="text-sm font-bold text-[#0a0a0a]">
+                  <h2 className="text-sm font-bold text-black">
                     Files ({files.length})
                   </h2>
                 </div>
@@ -368,7 +368,7 @@ const ArchivePage: React.FC = () => {
                           <File className="h-5 w-5 text-[#374151]" />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm font-semibold text-[#0a0a0a] group-hover:text-[#374151] transition-colors line-clamp-2 leading-tight">
+                          <p className="text-sm font-semibold text-black group-hover:text-[#374151] transition-colors line-clamp-2 leading-tight">
                             {file.name}
                           </p>
                         </div>

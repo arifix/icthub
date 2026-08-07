@@ -53,7 +53,7 @@ const SubjectsPage: React.FC = () => {
       {/* Page header */}
       <div className="bg-white border-b border-[#e5e7eb]">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-7">
-          <h1 className="text-2xl sm:text-3xl font-bold text-[#0a0a0a] tracking-tight mb-1">
+          <h1 className="text-2xl sm:text-3xl font-bold text-black tracking-tight mb-1">
             Current Semester Subjects
           </h1>
           <p className="text-sm text-[#6b7280]">
@@ -73,7 +73,7 @@ const SubjectsPage: React.FC = () => {
                 placeholder="Search by name or code..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full px-5 py-3 pl-11 border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0a0a0a] focus:border-[#0a0a0a] transition-all bg-white text-sm"
+                className="w-full px-5 py-3 pl-11 border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-black focus:border-black transition-all bg-white text-sm"
               />
             </div>
             {!loading && (
@@ -87,7 +87,7 @@ const SubjectsPage: React.FC = () => {
 
         {loading ? (
           <div className="flex justify-center py-16">
-            <div className="animate-spin rounded-full h-10 w-10 border-2 border-[#0a0a0a] border-t-transparent" />
+            <div className="animate-spin rounded-full h-10 w-10 border-2 border-black border-t-transparent" />
           </div>
         ) : filteredSubjects.length === 0 ? (
           <div className="bg-white rounded-xl border border-[#e5e7eb] p-16 text-center">
@@ -111,7 +111,7 @@ const SubjectsPage: React.FC = () => {
               >
                 <div className="p-6">
                   <div className="flex items-start justify-between gap-3 mb-4">
-                    <div className="inline-flex items-center justify-center w-12 h-12 bg-[#0a0a0a] rounded-xl">
+                    <div className="inline-flex items-center justify-center w-12 h-12 bg-black rounded-xl">
                       <BookOpen className="h-6 w-6 text-white" />
                     </div>
                     <span className="px-2.5 py-1 bg-[#f3f4f6] text-[#374151] text-xs font-semibold rounded-full font-mono">
@@ -119,7 +119,7 @@ const SubjectsPage: React.FC = () => {
                     </span>
                   </div>
 
-                  <h2 className="text-base font-bold text-[#0a0a0a] group-hover:text-[#374151] transition-colors line-clamp-2 mb-2">
+                  <h2 className="text-base font-bold text-black group-hover:text-[#374151] transition-colors line-clamp-2 mb-2">
                     {subject.title}
                   </h2>
 
@@ -136,7 +136,7 @@ const SubjectsPage: React.FC = () => {
                         {subject.semester.name}
                       </div>
                     )}
-                    <div className="flex items-center text-[#6b7280] text-xs font-medium ml-auto group-hover:text-[#0a0a0a] transition-colors">
+                    <div className="flex items-center text-[#6b7280] text-xs font-medium ml-auto group-hover:text-black transition-colors">
                       View <ChevronRight className="h-3.5 w-3.5 ml-1" />
                     </div>
                   </div>

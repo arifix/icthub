@@ -89,7 +89,7 @@ const NotesPage: React.FC = () => {
       {/* Page header */}
       <div className="bg-white border-b border-[#e5e7eb]">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-7">
-          <h1 className="text-2xl sm:text-3xl font-bold text-[#0a0a0a] tracking-tight mb-1">
+          <h1 className="text-2xl sm:text-3xl font-bold text-black tracking-tight mb-1">
             Study Notes
           </h1>
           <p className="text-sm text-[#6b7280]">
@@ -109,7 +109,7 @@ const NotesPage: React.FC = () => {
                 placeholder="Search by title, content or subject..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full px-5 py-3 pl-11 border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0a0a0a] focus:border-[#0a0a0a] transition-all bg-white text-sm"
+                className="w-full px-5 py-3 pl-11 border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-black focus:border-black transition-all bg-white text-sm"
               />
             </div>
             <div className="relative w-full sm:w-56">
@@ -120,7 +120,7 @@ const NotesPage: React.FC = () => {
                     e.target.value ? Number(e.target.value) : "",
                   )
                 }
-                className="w-full pl-4 pr-10 py-3 border border-[#e5e7eb] rounded-xl text-sm bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-[#0a0a0a] cursor-pointer"
+                className="w-full pl-4 pr-10 py-3 border border-[#e5e7eb] rounded-xl text-sm bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-black cursor-pointer"
               >
                 <option value="">All Subjects</option>
                 {subjects.map((s) => (
@@ -136,7 +136,7 @@ const NotesPage: React.FC = () => {
 
         {loading ? (
           <div className="flex justify-center py-16">
-            <div className="animate-spin rounded-full h-10 w-10 border-2 border-[#0a0a0a] border-t-transparent" />
+            <div className="animate-spin rounded-full h-10 w-10 border-2 border-black border-t-transparent" />
           </div>
         ) : filteredNotes.length === 0 ? (
           <div className="bg-white rounded-xl border border-[#e5e7eb] p-16 text-center">
@@ -174,7 +174,7 @@ const NotesPage: React.FC = () => {
                     </span>
                   </div>
 
-                  <h2 className="text-sm font-bold text-[#0a0a0a] group-hover:text-[#374151] transition-colors line-clamp-2 mb-2">
+                  <h2 className="text-sm font-bold text-black group-hover:text-[#374151] transition-colors line-clamp-2 mb-2">
                     {note.title}
                   </h2>
 
