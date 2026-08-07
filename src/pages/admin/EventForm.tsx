@@ -329,7 +329,7 @@ const AdminEventForm: React.FC = () => {
                 htmlFor="description"
                 className="block text-xs font-semibold text-[#6b7280] uppercase tracking-wide mb-1.5"
               >
-                Description <span className="text-red-400">*</span>
+                Description
               </label>
               <div className="border border-[#e5e7eb] rounded-xl overflow-hidden">
                 <ReactQuill

@@ -64,6 +64,61 @@ export interface Database {
           semester_id?: number | null;
         };
       };
+      info_categories: {
+        Row: {
+          id: number;
+          created_at: string;
+          name: string;
+          description: string;
+          sort_order: number;
+          is_active?: boolean;
+        };
+        Insert: {
+          id?: number;
+          created_at?: string;
+          name: string;
+          description?: string;
+          sort_order?: number;
+          is_active?: boolean;
+        };
+        Update: {
+          id?: number;
+          created_at?: string;
+          name?: string;
+          description?: string;
+          sort_order?: number;
+          is_active?: boolean;
+        };
+      };
+      info_notes: {
+        Row: {
+          id: number;
+          created_at: string;
+          category_id: number;
+          title: string;
+          content: string;
+          sort_order: number;
+          is_active?: boolean;
+        };
+        Insert: {
+          id?: number;
+          created_at?: string;
+          category_id: number;
+          title: string;
+          content: string;
+          sort_order?: number;
+          is_active?: boolean;
+        };
+        Update: {
+          id?: number;
+          created_at?: string;
+          category_id?: number;
+          title?: string;
+          content?: string;
+          sort_order?: number;
+          is_active?: boolean;
+        };
+      };
       note_comments: {
         Row: {
           id: number;
@@ -229,7 +284,6 @@ export interface Database {
           created_by?: string;
           is_read?: boolean;
         };
-      };
       };
     };
     Views: {

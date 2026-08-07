@@ -7,6 +7,7 @@ import {
   ChevronLeft,
   ChevronRight,
   FileText,
+  Info,
   LogOut,
   File,
   BarChart3,
@@ -58,6 +59,20 @@ const AdminSidebar: React.FC = () => {
       icon: FileText,
       description: "Study Materials",
       matchPaths: ["/admin/notes/"],
+    },
+    {
+      to: "/admin/info-categories",
+      label: "Information Categories",
+      icon: Info,
+      description: "Content Groups",
+      matchPaths: ["/admin/info-categories/"],
+    },
+    {
+      to: "/admin/info-notes",
+      label: "Information Notes",
+      icon: FileText,
+      description: "Tips & Guidance",
+      matchPaths: ["/admin/info-notes/"],
     },
     {
       to: "/admin/calendar",

@@ -7,7 +7,6 @@ import {
   Calendar,
   File,
   ChevronDown,
-  ChevronRight,
   Download,
 } from "lucide-react";
 import { supabase } from "../lib/supabase";
@@ -117,66 +116,95 @@ const ArchivePage: React.FC = () => {
     return (bytes / (1024 * 1024)).toFixed(1) + " MB";
   };
 
+  const stats = [
+    {
+      icon: BookOpen,
+      label: "Subjects",
+      count: subjects.length,
+    },
+    {
+      icon: FileText,
+      label: "Notes",
+      count: notes.length,
+    },
+    {
+      icon: Calendar,
+      label: "Events",
+      count: events.length,
+    },
+    {
+      icon: File,
+      label: "Files",
+      count: files.length,
+    },
+  ];
+
   if (semesterLoading) {
     return (
-      <div className="min-h-screen bg-white flex justify-center items-center">
-        <div className="animate-spin rounded-full h-10 w-10 border-2 border-blue-600 border-t-transparent" />
+      <div className="min-h-screen bg-[#f9fafb] flex justify-center items-center">
+        <div className="animate-spin rounded-full h-10 w-10 border-2 border-[#0a0a0a] border-t-transparent" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
-      {/* Page header */}
-      <div className="border-b border-gray-200/80 bg-white/80 backdrop-blur-sm">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 text-center">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+    <div className="min-h-screen bg-[#f9fafb]">
+      <div className="bg-white border-b border-[#e5e7eb]">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-7">
+          <h1 className="text-2xl sm:text-3xl font-bold text-[#0a0a0a] tracking-tight mb-1">
             Semester Archive
           </h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          <p className="text-sm text-[#6b7280]">
             Access materials from previous semesters
           </p>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
-        {/* Semester selector */}
-        <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-md p-5 border border-gray-100 mb-8 flex items-center gap-4">
-          <ArchiveIcon className="h-5 w-5 text-blue-600 shrink-0" />
-          <div className="flex-1 max-w-xs relative">
-            <select
-              value={selectedSemester}
-              onChange={(e) =>
-                setSelectedSemester(
-                  e.target.value ? Number(e.target.value) : "",
-                )
-              }
-              className="w-full pl-4 pr-8 py-3 border border-gray-200 rounded-xl text-sm bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer font-medium"
-            >
-              <option value="">Select a semester</option>
-              {archivedSemesters.map((s) => (
-                <option key={s.id} value={s.id}>
-                  {s.name}
-                </option>
-              ))}
-            </select>
-            <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 pointer-events-none" />
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="max-w-2xl mb-8">
+          <div className="flex flex-col sm:flex-row gap-3">
+            <div className="relative flex-1">
+              <ArchiveIcon className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
+              <select
+                value={selectedSemester}
+                onChange={(e) =>
+                  setSelectedSemester(
+                    e.target.value ? Number(e.target.value) : "",
+                  )
+                }
+                className="w-full px-5 py-3 pl-11 border border-[#e5e7eb] rounded-xl bg-white text-sm focus:outline-none focus:ring-2 focus:ring-[#0a0a0a] focus:border-[#0a0a0a] appearance-none cursor-pointer"
+              >
+                <option value="">Select an archived semester</option>
+                {archivedSemesters.map((s) => (
+                  <option key={s.id} value={s.id}>
+                    {s.name}
+                  </option>
+                ))}
+              </select>
+              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500 pointer-events-none" />
+            </div>
+            {!loading && (
+              <span className="text-sm text-[#6b7280] whitespace-nowrap sm:self-center">
+                {archivedSemesters.length} archived semester
+                {archivedSemesters.length !== 1 ? "s" : ""}
+              </span>
+            )}
           </div>
           {archivedSemesters.length === 0 && (
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-[#6b7280] mt-3">
               No archived semesters available yet.
             </p>
           )}
         </div>
 
         {!selectedSemester ? (
-          <div className="bg-white border border-gray-200 rounded-lg p-16 text-center">
-            <ArchiveIcon className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-            <h2 className="text-lg font-semibold text-gray-700 mb-1">
+          <div className="bg-white rounded-xl border border-[#e5e7eb] p-16 text-center">
+            <ArchiveIcon className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+            <h2 className="text-base font-semibold text-[#374151] mb-1">
               Select a Semester
             </h2>
-            <p className="text-sm text-gray-500">
-              Choose a semester above to view its archived materials.
+            <p className="text-sm text-[#6b7280]">
+              Choose an archived semester above to view its materials.
             </p>
           </div>
         ) : loading ? (
@@ -185,107 +213,87 @@ const ArchivePage: React.FC = () => {
           </div>
         ) : (
           <div className="space-y-6">
-            {/* Stats */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-              {[
-                {
-                  icon: BookOpen,
-                  label: "Subjects",
-                  count: subjects.length,
-                  color: "text-[#374151] bg-[#f3f4f6]",
-                },
-                {
-                  icon: FileText,
-                  label: "Notes",
-                  count: notes.length,
-                  color: "text-[#374151] bg-[#f3f4f6]",
-                },
-                {
-                  icon: Calendar,
-                  label: "Events",
-                  count: events.length,
-                  color: "text-[#374151] bg-[#f3f4f6]",
-                },
-                {
-                  icon: File,
-                  label: "Files",
-                  count: files.length,
-                  color: "text-[#374151] bg-[#f3f4f6]",
-                },
-              ].map(({ icon: Icon, label, count, color }) => (
+              {stats.map(({ icon: Icon, label, count }) => (
                 <div
                   key={label}
-                  className="bg-white border border-[#e5e7eb] rounded-lg p-4 flex items-center gap-3"
+                  className="bg-white rounded-xl border border-[#e5e7eb] p-4 flex items-center gap-3"
                 >
-                  <div
-                    className={`w-9 h-9 rounded flex items-center justify-center ${color}`}
-                  >
-                    <Icon className="h-4 w-4" />
+                  <div className="w-10 h-10 bg-[#f3f4f6] rounded-xl flex items-center justify-center shrink-0">
+                    <Icon className="h-4 w-4 text-[#374151]" />
                   </div>
                   <div>
                     <div className="text-xl font-bold text-[#0a0a0a]">
                       {count}
                     </div>
-                    <div className="text-xs text-gray-500]">{label}</div>
+                    <div className="text-xs text-[#6b7280]">{label}</div>
                   </div>
                 </div>
               ))}
             </div>
 
-            {/* Subjects */}
             {subjects.length > 0 && (
-              <div className="bg-white border border-[#e5e7eb] rounded-lg overflow-hidden">
-                <div className="flex items-center gap-2 px-5 py-4 border-b border-[#e5e7eb] bg-[#f9fafb]">
-                  <BookOpen className="h-4 w-4 text-[#6b7280]" />
+              <div className="bg-white rounded-xl border border-[#e5e7eb] overflow-hidden">
+                <div className="flex items-center gap-2 px-6 py-4 border-b border-[#e5e7eb] bg-[#f9fafb]">
+                  <BookOpen className="h-4 w-4 text-[#374151]" />
                   <h2 className="text-sm font-bold text-[#0a0a0a]">
                     Subjects ({subjects.length})
                   </h2>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 p-6">
                   {subjects.map((s) => (
                     <Link
                       key={s.id}
                       to={`/subjects/${s.id}`}
-                      className="group border border-[#e5e7eb] hover:border-[#d1d5db] rounded-lg p-4 hover:shadow-sm transition-all"
+                      className="group bg-white rounded-xl border border-[#e5e7eb] hover:border-[#d1d5db] hover:shadow-md transition-all duration-200 p-4"
                     >
-                      <span className="text-xs font-semibold text-[#6b7280] bg-[#f3f4f6] px-1.5 py-0.5 rounded mb-2 inline-block font-mono">
-                        {s.code}
-                      </span>
-                      <p className="text-sm font-semibold text-[#0a0a0a]">
+                      <div className="flex items-start justify-between gap-3 mb-4">
+                        <div className="inline-flex items-center justify-center w-12 h-12 bg-[#0a0a0a] rounded-xl">
+                          <BookOpen className="h-6 w-6 text-white" />
+                        </div>
+                        <span className="px-2.5 py-1 bg-[#f3f4f6] text-[#374151] text-xs font-semibold rounded-full font-mono">
+                          {s.code}
+                        </span>
+                      </div>
+                      <h3 className="text-base font-bold text-[#0a0a0a] group-hover:text-[#374151] transition-colors line-clamp-2">
                         {s.title}
-                      </p>
+                      </h3>
                     </Link>
                   ))}
                 </div>
               </div>
             )}
 
-            {/* Notes */}
             {notes.length > 0 && (
-              <div className="bg-white border border-[#e5e7eb] rounded-lg overflow-hidden">
-                <div className="flex items-center gap-2 px-5 py-4 border-b border-[#e5e7eb] bg-[#f9fafb]">
-                  <FileText className="h-4 w-4 text-[#6b7280]" />
+              <div className="bg-white rounded-xl border border-[#e5e7eb] overflow-hidden">
+                <div className="flex items-center gap-2 px-6 py-4 border-b border-[#e5e7eb] bg-[#f9fafb]">
+                  <FileText className="h-4 w-4 text-[#374151]" />
                   <h2 className="text-sm font-bold text-[#0a0a0a]">
                     Notes ({notes.length})
                   </h2>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-5">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5 p-6">
                   {notes.map((note) => (
                     <Link
                       key={note.id}
                       to={`/notes/${note.id}`}
-                      className="group border border-[#e5e7eb] hover:border-[#d1d5db] rounded-lg p-4 hover:shadow-sm transition-all"
+                      className="group bg-white rounded-xl border border-[#e5e7eb] hover:border-[#d1d5db] hover:shadow-md transition-all duration-200 p-4 flex flex-col"
                     >
-                      <span className="text-xs font-semibold text-[#6b7280] bg-[#f3f4f6] px-1.5 py-0.5 rounded mb-2 inline-block font-mono">
-                        {note.subjects?.code}
-                      </span>
-                      <p className="text-sm font-semibold text-[#0a0a0a] line-clamp-1 mb-1">
+                      <div className="flex items-center justify-between gap-2 mb-4">
+                        <div className="inline-flex items-center justify-center w-9 h-9 bg-[#f3f4f6] rounded-xl">
+                          <FileText className="h-4 w-4 text-teal-600" />
+                        </div>
+                        <span className="text-xs font-semibold text-[#6b7280] bg-[#f3f4f6] px-2.5 py-1 rounded-full font-mono">
+                          {note.subjects?.code}
+                        </span>
+                      </div>
+                      <h3 className="text-sm font-bold text-[#0a0a0a] group-hover:text-[#374151] transition-colors line-clamp-2 mb-2">
                         {note.title}
-                      </p>
-                      <p className="text-xs text-gray-500] line-clamp-2">
+                      </h3>
+                      <p className="text-sm text-[#6b7280] line-clamp-3 flex-1">
                         <span
                           dangerouslySetInnerHTML={{
-                            __html: stripHtmlAndTruncate(note.content, 80),
+                            __html: stripHtmlAndTruncate(note.content, 110),
                           }}
                         />
                       </p>
@@ -295,11 +303,10 @@ const ArchivePage: React.FC = () => {
               </div>
             )}
 
-            {/* Events */}
             {events.length > 0 && (
-              <div className="bg-white border border-[#e5e7eb] rounded-lg overflow-hidden">
-                <div className="flex items-center gap-2 px-5 py-4 border-b border-[#e5e7eb] bg-[#f9fafb]">
-                  <Calendar className="h-4 w-4 text-[#6b7280]" />
+              <div className="bg-white rounded-xl border border-[#e5e7eb] overflow-hidden">
+                <div className="flex items-center gap-2 px-6 py-4 border-b border-[#e5e7eb] bg-[#f9fafb]">
+                  <Calendar className="h-4 w-4 text-[#374151]" />
                   <h2 className="text-sm font-bold text-[#0a0a0a]">
                     Events ({events.length})
                   </h2>
@@ -310,15 +317,15 @@ const ArchivePage: React.FC = () => {
                     return (
                       <div
                         key={event.id}
-                        className="flex items-start gap-4 px-5 py-4"
+                        className="px-6 py-4 flex items-start gap-4"
                       >
-                        <div className="text-center bg-[#0a0a0a] text-white rounded px-2.5 py-1.5 min-w-[46px] shrink-0">
-                          <div className="text-[9px] font-bold uppercase">
+                        <div className="text-center bg-[#0a0a0a] text-white rounded-xl px-3 py-2 min-w-[54px] shrink-0">
+                          <div className="text-[10px] font-bold uppercase tracking-wide">
                             {d.toLocaleDateString(undefined, {
                               month: "short",
                             })}
                           </div>
-                          <div className="text-base font-bold leading-none">
+                          <div className="text-base font-bold leading-none mt-0.5">
                             {d.getDate()}
                           </div>
                         </div>
@@ -327,7 +334,7 @@ const ArchivePage: React.FC = () => {
                             {event.title}
                           </p>
                           {event.subjects && (
-                            <p className="text-xs text-gray-500]">
+                            <p className="text-xs text-[#6b7280] mt-1">
                               {event.subjects.title} ({event.subjects.code})
                             </p>
                           )}
@@ -339,36 +346,44 @@ const ArchivePage: React.FC = () => {
               </div>
             )}
 
-            {/* Files */}
             {files.length > 0 && (
-              <div className="bg-white border border-[#e5e7eb] rounded-lg overflow-hidden">
-                <div className="flex items-center gap-2 px-5 py-4 border-b border-[#e5e7eb] bg-[#f9fafb]">
-                  <File className="h-4 w-4 text-[#6b7280]" />
+              <div className="bg-white rounded-xl border border-[#e5e7eb] overflow-hidden">
+                <div className="flex items-center gap-2 px-6 py-4 border-b border-[#e5e7eb] bg-[#f9fafb]">
+                  <File className="h-4 w-4 text-[#374151]" />
                   <h2 className="text-sm font-bold text-[#0a0a0a]">
                     Files ({files.length})
                   </h2>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 p-6">
                   {files.map((file) => (
                     <a
                       key={file.id}
                       href={file.file_path}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="group border border-[#e5e7eb] hover:border-[#d1d5db] rounded-lg p-4 hover:shadow-sm transition-all flex items-center gap-3"
+                      className="group bg-white rounded-xl border border-[#e5e7eb] hover:border-[#d1d5db] hover:shadow-md transition-all duration-200 p-4"
                     >
-                      <div className="w-8 h-8 bg-[#f3f4f6] group-hover:bg-[#e5e7eb] rounded flex items-center justify-center shrink-0 transition-colors">
-                        <File className="h-4 w-4 text-gray-500]" />
+                      <div className="flex items-start gap-3 mb-4">
+                        <div className="w-10 h-10 bg-[#f3f4f6] group-hover:bg-[#e5e7eb] rounded-xl flex items-center justify-center shrink-0 transition-colors">
+                          <File className="h-5 w-5 text-[#374151]" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-semibold text-[#0a0a0a] group-hover:text-[#374151] transition-colors line-clamp-2 leading-tight">
+                            {file.name}
+                          </p>
+                        </div>
                       </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-[#0a0a0a] truncate">
-                          {file.name}
-                        </p>
-                        <p className="text-xs text-gray-500] uppercase">
-                          {file.file_type} &middot; {formatFileSize(file.size)}
-                        </p>
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs font-bold px-1.5 py-0.5 rounded uppercase bg-[#f3f4f6] text-[#374151]">
+                            {file.file_type}
+                          </span>
+                          <span className="text-xs text-[#6b7280]">
+                            {formatFileSize(file.size)}
+                          </span>
+                        </div>
+                        <Download className="h-4 w-4 text-[#6b7280] group-hover:text-[#374151] transition-colors" />
                       </div>
-                      <Download className="h-4 w-4 text-gray-500 group-hover:text-[#374151] shrink-0 transition-colors" />
                     </a>
                   ))}
                 </div>
@@ -379,9 +394,9 @@ const ArchivePage: React.FC = () => {
               notes.length === 0 &&
               events.length === 0 &&
               files.length === 0 && (
-                <div className="bg-white border border-gray-200 rounded-lg p-12 text-center">
+                <div className="bg-white rounded-xl border border-[#e5e7eb] p-12 text-center">
                   <ArchiveIcon className="h-10 w-10 text-gray-300 mx-auto mb-3" />
-                  <p className="text-sm text-gray-500">
+                  <p className="text-sm text-[#6b7280]">
                     No archived content found for this semester.
                   </p>
                 </div>

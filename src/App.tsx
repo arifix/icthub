@@ -17,6 +17,7 @@ import SubjectsPage from "./pages/Subjects";
 import SubjectDetailPage from "./pages/SubjectDetail";
 import NotesPage from "./pages/Notes";
 import NoteDetailPage from "./pages/NoteDetail";
+import InformationPage from "./pages/Information";
 import CalendarPage from "./pages/Calendar";
 import FilesPage from "./pages/Files";
 import ArchivePage from "./pages/Archive";
@@ -30,6 +31,10 @@ import AdminSubjects from "./pages/admin/Subjects";
 import AdminSubjectForm from "./pages/admin/SubjectForm";
 import AdminNotes from "./pages/admin/Notes";
 import AdminNoteForm from "./pages/admin/NoteForm";
+import AdminInfoCategories from "./pages/admin/InfoCategories";
+import AdminInfoCategoryForm from "./pages/admin/InfoCategoryForm";
+import AdminInfoNotes from "./pages/admin/InfoNotes";
+import AdminInfoNoteForm from "./pages/admin/InfoNoteForm";
 import AdminCalendar from "./pages/admin/Calendar";
 import AdminEventForm from "./pages/admin/EventForm";
 import AdminFiles from "./pages/admin/Files";
@@ -76,6 +81,7 @@ function App() {
         <Route path="subjects/:id" element={<SubjectDetailPage />} />
         <Route path="notes" element={<NotesPage />} />
         <Route path="notes/:id" element={<NoteDetailPage />} />
+        <Route path="information" element={<InformationPage />} />
         <Route path="calendar" element={<CalendarPage />} />
         <Route path="files" element={<FilesPage />} />
         <Route path="archive" element={<ArchivePage />} />
@@ -101,6 +107,12 @@ function App() {
         <Route path="notes" element={<AdminNotes />} />
         <Route path="notes/new" element={<AdminNoteForm />} />
         <Route path="notes/:id" element={<AdminNoteForm />} />
+        <Route path="info-categories" element={<AdminInfoCategories />} />
+        <Route path="info-categories/new" element={<AdminInfoCategoryForm />} />
+        <Route path="info-categories/:id" element={<AdminInfoCategoryForm />} />
+        <Route path="info-notes" element={<AdminInfoNotes />} />
+        <Route path="info-notes/new" element={<AdminInfoNoteForm />} />
+        <Route path="info-notes/:id" element={<AdminInfoNoteForm />} />
         <Route path="calendar" element={<AdminCalendar />} />
         <Route path="events/new" element={<AdminEventForm />} />
         <Route path="events/:id" element={<AdminEventForm />} />

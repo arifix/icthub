@@ -9,6 +9,7 @@ import {
   Home,
   Menu,
   X,
+  Info,
   Settings,
   LogOut,
   FolderOpen,
@@ -25,6 +26,7 @@ const NAV_ITEMS = [
   { to: "/calendar", label: "Calendar", icon: Calendar },
   { to: "/files", label: "Files", icon: FolderOpen },
   { to: "/archive", label: "Archive", icon: Archive },
+  { to: "/information", label: "Information", icon: Info },
 ];
 
 const Navbar: React.FC = () => {
