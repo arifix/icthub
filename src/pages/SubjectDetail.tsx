@@ -139,7 +139,7 @@ const SubjectDetailPage: React.FC = () => {
       {/* Page header */}
       <div className="bg-white border-b border-[#e5e7eb]">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-7">
-          <div className="flex items-center gap-2 text-gray-500] text-xs mb-4">
+          <div className="flex items-center gap-2 text-gray-500 text-xs mb-4">
             <Link to="/" className="hover:text-black transition-colors">
               Home
             </Link>
@@ -204,7 +204,7 @@ const SubjectDetailPage: React.FC = () => {
           </div>
           <div className="divide-y divide-[#e5e7eb]">
             {notes.length === 0 ? (
-              <div className="text-center py-10 text-gray-500] text-sm">
+              <div className="text-center py-10 text-gray-500 text-sm">
                 No notes for this subject yet.
               </div>
             ) : (
@@ -221,7 +221,7 @@ const SubjectDetailPage: React.FC = () => {
                     <p className="text-sm font-semibold text-black group-hover:text-[#374151] transition-colors truncate">
                       {note.title}
                     </p>
-                    <p className="text-xs text-gray-500]">
+                    <p className="text-xs text-gray-500">
                       {formatDate(note.created_at)}
                     </p>
                   </div>
@@ -255,7 +255,7 @@ const SubjectDetailPage: React.FC = () => {
           </div>
           <div className="divide-y divide-[#e5e7eb]">
             {events.length === 0 ? (
-              <div className="text-center py-10 text-gray-500] text-sm">
+              <div className="text-center py-10 text-gray-500 text-sm">
                 No events for this subject yet.
               </div>
             ) : (
@@ -279,7 +279,7 @@ const SubjectDetailPage: React.FC = () => {
                         {event.title}
                       </p>
                       <div
-                        className="text-xs text-gray-500] mt-1 line-clamp-2"
+                        className="text-xs text-gray-500 mt-1 line-clamp-2"
                         dangerouslySetInnerHTML={{ __html: event.description }}
                       />
                     </div>
@@ -312,7 +312,7 @@ const SubjectDetailPage: React.FC = () => {
             </Link>
           </div>
           {files.length === 0 ? (
-            <div className="text-center py-10 text-gray-500] text-sm">
+            <div className="text-center py-10 text-gray-500 text-sm">
               No files for this subject yet.
             </div>
           ) : (
@@ -332,7 +332,7 @@ const SubjectDetailPage: React.FC = () => {
                     <p className="text-sm font-medium text-black truncate group-hover:text-[#374151] transition-colors">
                       {file.name}
                     </p>
-                    <p className="text-xs text-gray-500]">
+                    <p className="text-xs text-gray-500">
                       <span className="uppercase font-semibold">
                         {file.file_type}
                       </span>{" "}

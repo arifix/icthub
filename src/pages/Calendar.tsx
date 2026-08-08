@@ -238,7 +238,7 @@ const CalendarPage: React.FC = () => {
                   <div className="animate-spin rounded-full h-6 w-6 border-2 border-black border-t-transparent" />
                 </div>
               ) : upcomingEvents.length === 0 ? (
-                <div className="text-center py-10 text-gray-500] text-sm">
+                <div className="text-center py-10 text-gray-500 text-sm">
                   No upcoming events.
                 </div>
               ) : (
@@ -274,12 +274,12 @@ const CalendarPage: React.FC = () => {
                           <span className="text-xs text-[#6b7280] flex items-center gap-1 mt-0.5">
                             {event.subjects ? (
                               <>
-                                <BookOpen className="h-3 w-3 text-gray-500]" />
+                                <BookOpen className="h-3 w-3 text-gray-500" />
                                 {event.subjects.title} ({event.subjects.code})
                               </>
                             ) : (
                               <>
-                                <Globe className="h-3 w-3 text-gray-500]" />
+                                <Globe className="h-3 w-3 text-gray-500" />
                                 General
                               </>
                             )}

@@ -116,7 +116,9 @@ const EventCard: React.FC<{ event: Event }> = ({ event }) => {
             {event.subjects ? (
               <div className="flex items-center text-xs text-amber-600 bg-amber-50 px-2.5 py-1 rounded-full w-fit">
                 <BookOpen className="h-3 w-3 mr-1.5" />
-                <span className="font-medium">{event.subjects.title} ({event.subjects.code})</span>
+                <span className="font-medium">
+                  {event.subjects.title} ({event.subjects.code})
+                </span>
               </div>
             ) : (
               <div className="flex items-center text-xs text-gray-500 bg-gray-100 px-2.5 py-1 rounded-full w-fit">
@@ -228,7 +230,7 @@ const Home: React.FC = () => {
           <p className="text-lg text-gray-600 mb-10 max-w-2xl mx-auto">
             Your academic resource portal for the M.Sc. Eng. in ICT programme at
             the Institute of Information and Communication Technology (IICT),
-            KUET.
+            KUET
           </p>
 
           {/* Stats */}
@@ -289,7 +291,7 @@ const Home: React.FC = () => {
               to="/subjects"
               className="group relative bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-blue-200"
             >
-              <div className="absolute top-0 right-0 w-28 h-28 bg-blue-50 rounded-bl-full transform translate-x-4 -translate-y-4 opacity-60" />
+              <div className="absolute top-0 right-0 w-28 h-28 bg-blue-100 rounded-bl-full transform translate-x-4 -translate-y-4 opacity-60" />
               <div className="relative p-6 sm:p-7">
                 <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-600 rounded-2xl mb-4 shadow-md group-hover:scale-110 transition-transform duration-300">
                   <BookOpen className="h-8 w-8 text-white" />
@@ -304,7 +306,7 @@ const Home: React.FC = () => {
               to="/notes"
               className="group relative bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-teal-200"
             >
-              <div className="absolute top-0 right-0 w-28 h-28 bg-teal-50 rounded-bl-full transform translate-x-4 -translate-y-4 opacity-60" />
+              <div className="absolute top-0 right-0 w-28 h-28 bg-teal-100 rounded-bl-full transform translate-x-4 -translate-y-4 opacity-60" />
               <div className="relative p-6 sm:p-7">
                 <div className="inline-flex items-center justify-center w-16 h-16 bg-teal-600 rounded-2xl mb-4 shadow-md group-hover:scale-110 transition-transform duration-300">
                   <FileText className="h-8 w-8 text-white" />
@@ -319,7 +321,7 @@ const Home: React.FC = () => {
               to="/calendar"
               className="group relative bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-amber-200"
             >
-              <div className="absolute top-0 right-0 w-28 h-28 bg-amber-50 rounded-bl-full transform translate-x-4 -translate-y-4 opacity-60" />
+              <div className="absolute top-0 right-0 w-28 h-28 bg-amber-100 rounded-bl-full transform translate-x-4 -translate-y-4 opacity-60" />
               <div className="relative p-6 sm:p-7">
                 <div className="inline-flex items-center justify-center w-16 h-16 bg-amber-500 rounded-2xl mb-4 shadow-md group-hover:scale-110 transition-transform duration-300">
                   <Calendar className="h-8 w-8 text-white" />
@@ -334,7 +336,7 @@ const Home: React.FC = () => {
               to="/files"
               className="group relative bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-indigo-200"
             >
-              <div className="absolute top-0 right-0 w-28 h-28 bg-indigo-50 rounded-bl-full transform translate-x-4 -translate-y-4 opacity-60" />
+              <div className="absolute top-0 right-0 w-28 h-28 bg-indigo-100 rounded-bl-full transform translate-x-4 -translate-y-4 opacity-60" />
               <div className="relative p-6 sm:p-7">
                 <div className="inline-flex items-center justify-center w-16 h-16 bg-indigo-600 rounded-2xl mb-4 shadow-md group-hover:scale-110 transition-transform duration-300">
                   <File className="h-8 w-8 text-white" />

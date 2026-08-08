@@ -33,7 +33,7 @@ const NotificationsPage: React.FC = () => {
       case "event":
         return <Calendar className="h-4 w-4 text-[#6b7280]" />;
       default:
-        return <Bell className="h-4 w-4 text-gray-500]" />;
+        return <Bell className="h-4 w-4 text-gray-500" />;
     }
   };
 
@@ -141,7 +141,7 @@ const NotificationsPage: React.FC = () => {
                 }}
                 className={`flex items-start gap-4 p-4 rounded-2xl border transition-all duration-200 hover:shadow-sm ${
                   !notification.is_read
-                    ? "bg-blue-50 border-blue-100 hover:border-blue-200"
+                    ? "bg-blue-100 border-blue-100 hover:border-blue-200"
                     : "bg-white border-gray-100 hover:border-gray-200"
                 }`}
               >
@@ -169,11 +169,12 @@ const NotificationsPage: React.FC = () => {
                   <p className="font-semibold text-black truncate">
                     {notification.title}
                   </p>
-                  <p className="text-sm text-gray-500] mt-0.5 line-clamp-1">
-                    {notification.message}
+                  <p className="text-sm text-gray-500 mt-0.5 line-clamp-1">
+                    {notification.message} @ {notification.semesters.name}{" "}
+                    Semester
                   </p>
                 </div>
-                <div className="text-sm text-gray-500] shrink-0 text-right">
+                <div className="text-sm text-gray-500 shrink-0 text-right">
                   <div>{formatDate(notification.created_at)}</div>
                 </div>
               </Link>

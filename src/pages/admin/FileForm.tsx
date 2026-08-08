@@ -347,7 +347,7 @@ const AdminFileForm: React.FC = () => {
                   </option>
                 ))}
               </select>
-              <p className="text-xs text-gray-500] mt-1.5">
+              <p className="text-xs text-gray-500 mt-1.5">
                 Leave blank for notices, routines, or other general documents
               </p>
             </div>
@@ -379,7 +379,7 @@ const AdminFileForm: React.FC = () => {
                   <span className="text-sm font-medium text-[#374151] hover:text-black">
                     Click to upload
                   </span>
-                  <span className="text-sm text-gray-500]">
+                  <span className="text-sm text-gray-500">
                     {" "}
                     or drag and drop
                   </span>
@@ -391,7 +391,7 @@ const AdminFileForm: React.FC = () => {
                     onChange={handleFileChange}
                   />
                 </label>
-                <p className="text-xs text-gray-500] mt-1">
+                <p className="text-xs text-gray-500 mt-1">
                   PDF, DOC, PPT, TXT, JPG, PNG up to 10MB
                 </p>
                 {selectedFile && (

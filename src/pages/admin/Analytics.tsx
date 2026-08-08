@@ -248,7 +248,7 @@ const AdminAnalytics: React.FC = () => {
                     </div>
                   </div>
                   <p className="text-2xl font-bold text-black">{value}</p>
-                  <p className="text-xs text-gray-500] mt-1">{sub}</p>
+                  <p className="text-xs text-gray-500 mt-1">{sub}</p>
                 </div>
               ))}
             </div>
@@ -265,7 +265,7 @@ const AdminAnalytics: React.FC = () => {
                 </div>
                 <div className="p-4 space-y-3">
                   {topPages.length === 0 ? (
-                    <p className="text-sm text-gray-500] text-center py-4">
+                    <p className="text-sm text-gray-500 text-center py-4">
                       No data
                     </p>
                   ) : (
@@ -303,7 +303,7 @@ const AdminAnalytics: React.FC = () => {
                 </div>
                 <div className="p-4 space-y-3">
                   {topCountries.length === 0 ? (
-                    <p className="text-sm text-gray-500] text-center py-4">
+                    <p className="text-sm text-gray-500 text-center py-4">
                       No data
                     </p>
                   ) : (
@@ -375,7 +375,7 @@ const AdminAnalytics: React.FC = () => {
                       return (
                         <tr key={sid} className="hover:bg-[#f9fafb]">
                           <td className="px-5 py-3">
-                            <span className="font-mono text-xs text-gray-500]">
+                            <span className="font-mono text-xs text-gray-500">
                               {isAnon ? "—" : sid.slice(0, 8) + "…"}
                             </span>
                             <span className="ml-2 text-xs text-gray-500">
@@ -389,7 +389,7 @@ const AdminAnalytics: React.FC = () => {
                             <div className="font-mono text-[#6b7280]">
                               {ip || "—"}
                             </div>
-                            <div className="text-gray-500]">
+                            <div className="text-gray-500">
                               {location || "—"}
                             </div>
                           </td>
@@ -420,7 +420,7 @@ const AdminAnalytics: React.FC = () => {
                                 </React.Fragment>
                               ))}
                               {pages.length > 6 && (
-                                <span className="text-xs text-gray-500]">
+                                <span className="text-xs text-gray-500">
                                   +{pages.length - 6} more
                                 </span>
                               )}
@@ -432,7 +432,7 @@ const AdminAnalytics: React.FC = () => {
                   </tbody>
                 </table>
                 {sessionJourneys.length === 0 && (
-                  <div className="text-center py-12 text-gray-500] text-sm">
+                  <div className="text-center py-12 text-gray-500 text-sm">
                     No sessions recorded yet
                   </div>
                 )}
@@ -475,11 +475,11 @@ const AdminAnalytics: React.FC = () => {
                         </td>
                         <td className="px-5 py-3">
                           <div className="flex items-center gap-1.5">
-                            <FileText className="h-3 w-3 text-gray-500] shrink-0" />
+                            <FileText className="h-3 w-3 text-gray-500 shrink-0" />
                             <span className="font-medium text-[#374151]">
                               {getPageLabel(v.page)}
                             </span>
-                            <span className="text-gray-500] text-xs">
+                            <span className="text-gray-500 text-xs">
                               {v.page}
                             </span>
                           </div>
@@ -508,7 +508,7 @@ const AdminAnalytics: React.FC = () => {
                   </tbody>
                 </table>
                 {visits.length === 0 && (
-                  <div className="text-center py-12 text-gray-500] text-sm">
+                  <div className="text-center py-12 text-gray-500 text-sm">
                     No visits recorded yet
                   </div>
                 )}

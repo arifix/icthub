@@ -172,7 +172,7 @@ const AdminFiles: React.FC = () => {
         <div className="bg-white rounded-xl border border-[#e5e7eb] px-6 py-4">
           <div className="flex flex-wrap gap-3">
             <div className="relative flex-1 min-w-[200px]">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500]" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
               <input
                 type="text"
                 placeholder="Search files..."
@@ -198,7 +198,7 @@ const AdminFiles: React.FC = () => {
                   </option>
                 ))}
               </select>
-              <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500] pointer-events-none" />
+              <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500 pointer-events-none" />
             </div>
             <div className="relative">
               <select
@@ -215,7 +215,7 @@ const AdminFiles: React.FC = () => {
                     </option>
                   ))}
               </select>
-              <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500] pointer-events-none" />
+              <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500 pointer-events-none" />
             </div>
             {(searchTerm || selectedSemester !== "" || selectedType) && (
               <button
@@ -250,7 +250,7 @@ const AdminFiles: React.FC = () => {
             {filteredFiles.length === 0 ? (
               <div className="text-center py-16">
                 <div className="bg-[#f3f4f6] p-3 rounded-xl w-fit mx-auto mb-4">
-                  <File className="h-8 w-8 text-gray-500]" />
+                  <File className="h-8 w-8 text-gray-500" />
                 </div>
                 <p className="text-sm font-semibold text-[#374151]">
                   {files.length === 0
@@ -310,7 +310,7 @@ const AdminFiles: React.FC = () => {
                               {file.subjects.title} ({file.subjects.code})
                             </span>
                           ) : (
-                            <span className="flex items-center gap-1 text-gray-500]">
+                            <span className="flex items-center gap-1 text-gray-500">
                               <Globe className="h-3 w-3" />
                               General
                             </span>
@@ -319,10 +319,10 @@ const AdminFiles: React.FC = () => {
                         <td className="px-5 py-3 text-xs text-[#6b7280]">
                           {file.semesters?.name || "—"}
                         </td>
-                        <td className="px-5 py-3 text-xs text-gray-500]">
+                        <td className="px-5 py-3 text-xs text-gray-500">
                           {formatFileSize(file.size)}
                         </td>
-                        <td className="px-5 py-3 text-xs text-gray-500] whitespace-nowrap">
+                        <td className="px-5 py-3 text-xs text-gray-500 whitespace-nowrap">
                           {new Date(file.created_at).toLocaleDateString(
                             undefined,
                             { year: "numeric", month: "short", day: "numeric" },

@@ -143,7 +143,7 @@ const AdminSemesters: React.FC = () => {
         {/* Search */}
         <div className="bg-white rounded-xl border border-[#e5e7eb] px-6 py-4">
           <div className="relative max-w-sm">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500]" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
             <input
               type="text"
               placeholder="Search semesters..."
@@ -175,7 +175,7 @@ const AdminSemesters: React.FC = () => {
             {filteredSemesters.length === 0 ? (
               <div className="text-center py-16">
                 <div className="bg-[#f3f4f6] p-3 rounded-xl w-fit mx-auto mb-4">
-                  <Calendar className="h-8 w-8 text-gray-500]" />
+                  <Calendar className="h-8 w-8 text-gray-500" />
                 </div>
                 <p className="text-sm font-semibold text-[#374151]">
                   {semesters.length === 0

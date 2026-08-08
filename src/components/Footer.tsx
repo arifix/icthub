@@ -25,7 +25,7 @@ const Footer: React.FC = () => {
             <p className="text-gray-400 text-sm leading-relaxed mb-4 max-w-md">
               A comprehensive academic portal for students of the M.Sc. Eng. in
               ICT programme at the Institute of Information and Communication
-              Technology (IICT), KUET.
+              Technology (IICT), KUET
             </p>
             <div className="flex items-start gap-2 text-sm text-gray-400">
               <MapPin className="h-4 w-4 mt-0.5 shrink-0" />
@@ -45,7 +45,7 @@ const Footer: React.FC = () => {
                 { to: "/calendar", label: "Calendar" },
                 { to: "/files", label: "Files & Resources" },
                 { to: "/archive", label: "Archive" },
-                { to: "/notifications", label: "Notifications" },
+                { to: "/information", label: "Information" },
               ].map(({ to, label }) => (
                 <li key={to}>
                   <Link
@@ -68,7 +68,7 @@ const Footer: React.FC = () => {
             <p className="text-gray-400 text-sm leading-relaxed mb-4">
               IICT, the first institute of KUET, was established on 05/10/2010
               by the approval of UGC Bangladesh. Dedicated to advancing ICT
-              education.
+              education
             </p>
             <ul className="space-y-2 text-sm">
               {[
@@ -100,7 +100,7 @@ const Footer: React.FC = () => {
             <div className="flex items-center space-x-2 text-sm text-gray-400">
               <span>&copy; {year} ICTHub</span>
             </div>
-            <div className="flex items-center space-x-2 text-sm text-gray-400">
+            <div className="flex items-center space-x-1 text-sm text-gray-400">
               <span>Made by</span>
               <a
                 href="https://www.arif-khan.net"
@@ -110,6 +110,7 @@ const Footer: React.FC = () => {
               >
                 Arif Khan
               </a>
+              <span>with ❤️</span>
             </div>
           </div>
         </div>

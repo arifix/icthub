@@ -67,7 +67,7 @@ const SubjectsPage: React.FC = () => {
         <div className="max-w-2xl mb-8">
           <div className="relative flex items-center gap-3">
             <div className="relative flex-1">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500]" />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
               <input
                 type="text"
                 placeholder="Search by name or code..."
@@ -131,12 +131,12 @@ const SubjectsPage: React.FC = () => {
 
                   <div className="border-t border-[#e5e7eb] pt-3 flex items-center justify-between">
                     {subject.semester && (
-                      <div className="flex items-center text-xs text-[#6b7280]">
+                      <div className="flex items-center text-sm text-[#6b7280]">
                         <div className="w-1.5 h-1.5 bg-[#9ca3af] rounded-full mr-2" />
                         {subject.semester.name}
                       </div>
                     )}
-                    <div className="flex items-center text-[#6b7280] text-xs font-medium ml-auto group-hover:text-black transition-colors">
+                    <div className="flex items-center text-[#6b7280] text-sm font-medium ml-auto group-hover:text-black transition-colors">
                       View <ChevronRight className="h-3.5 w-3.5 ml-1" />
                     </div>
                   </div>

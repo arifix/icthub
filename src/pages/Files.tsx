@@ -7,6 +7,7 @@ import {
   Download,
   BookOpen,
   ChevronRight,
+  Globe,
 } from "lucide-react";
 import { supabase } from "../lib/supabase";
 import { Database } from "../types/supabase";
@@ -108,7 +109,7 @@ const FilesPage: React.FC = () => {
         <div className="mb-8">
           <div className="flex flex-col sm:flex-row gap-3">
             <div className="relative flex-1 max-w-md">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500]" />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
               <input
                 type="text"
                 placeholder="Search files..."
@@ -134,7 +135,7 @@ const FilesPage: React.FC = () => {
                   </option>
                 ))}
               </select>
-              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500] pointer-events-none" />
+              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500 pointer-events-none" />
             </div>
             <div className="relative w-full sm:w-40">
               <select
@@ -149,7 +150,7 @@ const FilesPage: React.FC = () => {
                   </option>
                 ))}
               </select>
-              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500] pointer-events-none" />
+              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500 pointer-events-none" />
             </div>
           </div>
         </div>
@@ -197,16 +198,23 @@ const FilesPage: React.FC = () => {
                     >
                       {file.file_type}
                     </span>
-                    <span className="text-xs text-gray-500]">
+                    <span className="text-xs text-gray-500">
                       {formatFileSize(file.size)}
                     </span>
                   </div>
                   <Download className="h-4 w-4 text-gray-500 group-hover:text-[#6b7280] transition-colors" />
                 </div>
-                {file.subjects && (
+                {file.subjects ? (
                   <div className="mt-2 pt-2 border-t border-[#e5e7eb] flex items-center gap-1 text-sm text-[#6b7280]">
                     <BookOpen className="h-3 w-3 text-gray-500 shrink-0" />
-                    <span className="truncate">{file.subjects.title} ({file.subjects.code})</span>
+                    <span className="truncate">
+                      {file.subjects.title} ({file.subjects.code})
+                    </span>
+                  </div>
+                ) : (
+                  <div className="mt-2 pt-2 border-t border-[#e5e7eb] flex items-center gap-1 text-sm text-[#6b7280]">
+                    <Globe className="h-3 w-3 text-gray-500 shrink-0" />
+                    <span className="truncate">General File</span>
                   </div>
                 )}
               </a>

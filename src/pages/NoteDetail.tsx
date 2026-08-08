@@ -150,7 +150,7 @@ const NoteDetailPage: React.FC = () => {
       {/* Page header */}
       <div className="bg-white border-b border-[#e5e7eb]">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-7">
-          <div className="flex items-center gap-2 text-gray-500] text-xs mb-4">
+          <div className="flex items-center gap-2 text-gray-500 text-xs mb-4">
             <Link to="/" className="hover:text-black transition-colors">
               Home
             </Link>
@@ -253,7 +253,7 @@ const NoteDetailPage: React.FC = () => {
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-1">
                           <span className="text-sm font-semibold text-black">{comment.author_name}</span>
-                          <span className="text-xs text-gray-500]">{formatCommentTime(comment.created_at)}</span>
+                          <span className="text-xs text-gray-500">{formatCommentTime(comment.created_at)}</span>
                         </div>
                         <p className="text-sm text-[#374151] leading-relaxed whitespace-pre-wrap">{comment.content}</p>
                         {!isReplying && replies.length === 0 && (
@@ -289,7 +289,7 @@ const NoteDetailPage: React.FC = () => {
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center gap-2 mb-1">
                                 <span className="text-sm font-semibold text-black">{reply.author_name}</span>
-                                <span className="text-xs text-gray-500]">{formatCommentTime(reply.created_at)}</span>
+                                <span className="text-xs text-gray-500">{formatCommentTime(reply.created_at)}</span>
                               </div>
                               <p className="text-sm text-[#374151] leading-relaxed whitespace-pre-wrap">{reply.content}</p>
                             </div>
@@ -301,7 +301,7 @@ const NoteDetailPage: React.FC = () => {
                     {isReplying && (
                       <div className="ml-11 mt-4 space-y-2">
                         <div className="relative">
-                          <User className="absolute left-3 top-2.5 h-3.5 w-3.5 text-gray-500]" />
+                          <User className="absolute left-3 top-2.5 h-3.5 w-3.5 text-gray-500" />
                           <input
                             type="text"
                             placeholder="Your name"
