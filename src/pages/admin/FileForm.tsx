@@ -174,7 +174,7 @@ const AdminFileForm: React.FC = () => {
       if (selectedFile) {
         const { data, error } = await supabase.storage
           .from("icthub-files")
-          .upload(`${Date.now()}_${selectedFile.name}`, selectedFile);
+          .upload(`${Date.now()}_icthub_arif_${selectedFile.name}`, selectedFile);
         if (error) throw error;
         filePath =
           "https://fxercuesfbcpizrggehw.supabase.co/storage/v1/object/public/icthub-files/" +

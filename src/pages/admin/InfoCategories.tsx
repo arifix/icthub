@@ -90,13 +90,22 @@ const AdminInfoCategories: React.FC = () => {
               page
             </p>
           </div>
-          <Link
-            to="/admin/info-categories/new"
-            className="inline-flex items-center gap-2 px-4 py-2 bg-black text-white rounded-lg text-sm font-medium hover:bg-[#374151] transition-colors"
-          >
-            <Plus className="h-4 w-4" />
-            New Category
-          </Link>
+          <div className="flex gap-2">
+            <Link
+              to="/admin/info-notes"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-white border-black border rounded-lg text-sm font-medium hover:bg-black hover:text-white hover:border-black transition-colors"
+            >
+              <Info className="h-4 w-4" />
+              Info Notes
+            </Link>
+            <Link
+              to="/admin/info-categories/new"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-black text-white rounded-lg text-sm font-medium hover:bg-[#374151] transition-colors"
+            >
+              <Plus className="h-4 w-4" />
+              New Info Category
+            </Link>
+          </div>
         </div>
       </div>
 
@@ -122,9 +131,7 @@ const AdminInfoCategories: React.FC = () => {
           <div className="bg-white rounded-xl border border-[#e5e7eb] overflow-hidden">
             <div className="bg-[#f9fafb] border-b border-[#e5e7eb] px-6 py-4 flex items-center gap-2">
               <Info className="h-4 w-4 text-[#374151]" />
-              <span className="text-sm font-bold text-black">
-                Categories
-              </span>
+              <span className="text-sm font-bold text-black">Categories</span>
               <span className="ml-auto text-xs bg-[#f3f4f6] text-[#6b7280] font-semibold px-2 py-0.5 rounded-full">
                 {filteredCategories.length}
               </span>

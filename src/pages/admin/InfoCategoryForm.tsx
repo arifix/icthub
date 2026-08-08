@@ -111,7 +111,7 @@ const AdminInfoCategoryForm: React.FC = () => {
         <div className="max-w-3xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
             <h1 className="text-2xl sm:text-3xl font-bold text-black tracking-tight">
-              {isEditing ? "Edit Category" : "New Category"}
+              {isEditing ? "Edit Info Category" : "New Info Category"}
             </h1>
             <p className="text-sm text-[#6b7280] mt-1">
               Create a section for info notes like academic, rules, or tips

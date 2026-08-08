@@ -104,14 +104,14 @@ const AdminInfoNotes: React.FC = () => {
               className="inline-flex items-center gap-2 px-4 py-2 bg-white border-black border rounded-lg text-sm font-medium hover:bg-black hover:text-white hover:border-black transition-colors"
             >
               <Info className="h-4 w-4" />
-              Note Categories
+              Info Categories
             </Link>
             <Link
               to="/admin/info-notes/new"
               className="inline-flex items-center gap-2 px-4 py-2 bg-black text-white rounded-lg text-sm font-medium hover:bg-[#374151] transition-colors"
             >
               <Plus className="h-4 w-4" />
-              New Note
+              New Info Note
             </Link>
           </div>
         </div>

@@ -142,7 +142,7 @@ const AdminInfoNoteForm: React.FC = () => {
         <div className="max-w-3xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
             <h1 className="text-2xl sm:text-3xl font-bold text-black tracking-tight">
-              {isEditing ? "Edit Note" : "New Note"}
+              {isEditing ? "Edit Info Note" : "New Info Note"}
             </h1>
             <p className="text-sm text-[#6b7280] mt-1">
               Add a concise note under an info category
