@@ -4,7 +4,7 @@ import { useAuth } from "../context/AuthContext";
 import { toast } from "react-hot-toast";
 import { BookOpen, Lock, Mail } from "lucide-react";
 
-const Login: React.FC = () => {
+const AdminLogin: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -46,7 +46,7 @@ const Login: React.FC = () => {
         </p>
       </div>
 
-      <div className="w-full max-w-sm bg-white/80 backdrop-blur-sm border border-gray-100 rounded-2xl p-8 shadow-xl">
+      <div className="w-full max-w-md bg-white/80 backdrop-blur-sm border border-gray-100 rounded-2xl p-8 shadow-xl">
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label
@@ -114,4 +114,4 @@ const Login: React.FC = () => {
   );
 };
 
-export default Login;
+export default AdminLogin;

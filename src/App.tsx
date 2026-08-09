@@ -11,7 +11,7 @@ import PortalProtectedRoute from "./components/PortalProtectedRoute";
 
 // Public pages
 import Home from "./pages/Home";
-import Login from "./pages/Login";
+import AdminLogin from "./pages/AdminLogin";
 import PortalLogin from "./pages/PortalLogin";
 import SubjectsPage from "./pages/Subjects";
 import SubjectDetailPage from "./pages/SubjectDetail";
@@ -63,7 +63,7 @@ function App() {
       <Route path="/login" element={<PortalLogin />} />
 
       {/* Admin login */}
-      <Route path="/admin/login" element={<Login />} />
+      <Route path="/admin/login" element={<AdminLogin />} />
       <Route path="/manage" element={<Navigate to="/admin/login" />} />
       <Route path="/student-login" element={<Navigate to="/login" />} />
 

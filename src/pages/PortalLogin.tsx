@@ -43,7 +43,7 @@ const PortalLogin: React.FC = () => {
       </div>
 
       {/* Card */}
-      <div className="w-full max-w-sm bg-white/80 backdrop-blur-sm border border-gray-100 rounded-2xl p-8 shadow-xl">
+      <div className="w-full max-w-md bg-white/80 backdrop-blur-sm border border-gray-100 rounded-2xl p-8 shadow-xl">
         <div className="flex items-center gap-2 mb-6">
           <Lock className="h-4 w-4 text-blue-600" />
           <span className="text-xs font-semibold text-blue-600 uppercase tracking-wider">
@@ -82,19 +82,9 @@ const PortalLogin: React.FC = () => {
         </form>
 
         <p className="text-xs text-gray-400 text-center mt-6">
-          Contact your administrator if you don&apos;t have the password.
+          Contact your portal administrator if you don&apos;t have the password
         </p>
       </div>
-
-      <p className="mt-8 text-xs text-gray-400">
-        Admin?{" "}
-        <a
-          href="/admin/login"
-          className="text-blue-600 hover:text-blue-700 transition-colors font-medium"
-        >
-          Sign in here
-        </a>
-      </p>
     </div>
   );
 };
