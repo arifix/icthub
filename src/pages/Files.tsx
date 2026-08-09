@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import {
   File,
   Search,
   ChevronDown,
   Download,
   BookOpen,
-  ChevronRight,
   Globe,
 } from "lucide-react";
 import { supabase } from "../lib/supabase";
 import { Database } from "../types/supabase";
+import { trackUserActivity } from "../hooks/usePageTracking";
 
 type FileData = Database["public"]["Tables"]["files"]["Row"] & {
   subjects?: { title: string; code: string } | null;
@@ -56,6 +55,23 @@ const FilesPage: React.FC = () => {
     };
     fetchData();
   }, []);
+
+  const logFilterActivity = (
+    nextSearch: string,
+    nextSubject: number | "",
+    nextType: string,
+  ) => {
+    void trackUserActivity({
+      eventType: "filter_change",
+      page: "/files",
+      label: "files_filters",
+      metadata: {
+        search: nextSearch,
+        subjectId: nextSubject || null,
+        fileType: nextType || null,
+      },
+    });
+  };
 
   const filteredFiles = files.filter((file) => {
     const matchesSearch =
@@ -114,18 +130,24 @@ const FilesPage: React.FC = () => {
                 type="text"
                 placeholder="Search files..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={(e) => {
+                  const nextValue = e.target.value;
+                  setSearchTerm(nextValue);
+                  logFilterActivity(nextValue, selectedSubject, selectedType);
+                }}
                 className="w-full px-5 py-3 pl-11 border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-black focus:border-black transition-all bg-white text-sm"
               />
             </div>
             <div className="relative w-full sm:w-52">
               <select
                 value={selectedSubject}
-                onChange={(e) =>
-                  setSelectedSubject(
-                    e.target.value ? Number(e.target.value) : "",
-                  )
-                }
+                onChange={(e) => {
+                  const nextValue = e.target.value
+                    ? Number(e.target.value)
+                    : "";
+                  setSelectedSubject(nextValue);
+                  logFilterActivity(searchTerm, nextValue, selectedType);
+                }}
                 className="w-full pl-4 pr-8 py-3 border border-[#e5e7eb] rounded-xl text-sm bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-black cursor-pointer"
               >
                 <option value="">All Subjects</option>
@@ -140,7 +162,11 @@ const FilesPage: React.FC = () => {
             <div className="relative w-full sm:w-40">
               <select
                 value={selectedType}
-                onChange={(e) => setSelectedType(e.target.value)}
+                onChange={(e) => {
+                  const nextValue = e.target.value;
+                  setSelectedType(nextValue);
+                  logFilterActivity(searchTerm, selectedSubject, nextValue);
+                }}
                 className="w-full pl-4 pr-8 py-3 border border-[#e5e7eb] rounded-xl text-sm bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-black cursor-pointer"
               >
                 <option value="">All Types</option>
@@ -179,6 +205,20 @@ const FilesPage: React.FC = () => {
                 href={file.file_path}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() =>
+                  void trackUserActivity({
+                    eventType: "file_open",
+                    page: "/files",
+                    label: file.name,
+                    entityType: "file",
+                    entityId: file.id,
+                    metadata: {
+                      fileType: file.file_type,
+                      subjectId: file.subject_id,
+                      subjectCode: file.subjects?.code ?? null,
+                    },
+                  })
+                }
                 className="group bg-white rounded-xl border border-[#e5e7eb] hover:border-[#d1d5db] hover:shadow-md transition-all duration-200 p-4"
               >
                 <div className="flex items-start gap-3 mb-3">

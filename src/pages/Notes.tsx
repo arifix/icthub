@@ -7,11 +7,11 @@ import {
   Clock,
   BookOpen,
   MessageCircle,
-  ChevronRight,
 } from "lucide-react";
 import { supabase } from "../lib/supabase";
 import { Database } from "../types/supabase";
 import { stripHtmlAndTruncate } from "../utils/helper.js";
+import { trackUserActivity } from "../hooks/usePageTracking";
 
 type Note = Database["public"]["Tables"]["notes"]["Row"] & {
   subjects: { title: string; code: string };
@@ -44,13 +44,12 @@ const NotesPage: React.FC = () => {
         let notesWithCommentCount: Note[] = [];
         if (notesData) {
           notesWithCommentCount = await Promise.all(
-            notesData.map(async (note) => {
+            notesData.map(async (note: Note) => {
               const { count } = await supabase
                 .from("note_comments")
-                .select("*", { count: "exact", head: true })
-                .eq("note_id", note.id)
-                .eq("is_active", true);
-              return { ...note, comment_count: count || 0 };
+                .select("id", { count: "exact", head: true })
+                .eq("note_id", note.id);
+              return { ...note, comment_count: count || 0 } as Note;
             }),
           );
         }
@@ -72,6 +71,18 @@ const NotesPage: React.FC = () => {
     };
     fetchData();
   }, []);
+
+  const logFilterActivity = (nextSearch: string, nextSubject: number | "") => {
+    void trackUserActivity({
+      eventType: "filter_change",
+      page: "/notes",
+      label: "notes_filters",
+      metadata: {
+        search: nextSearch,
+        subjectId: nextSubject || null,
+      },
+    });
+  };
 
   const filteredNotes = notes.filter((note) => {
     const matchesSearch =
@@ -108,18 +119,24 @@ const NotesPage: React.FC = () => {
                 type="text"
                 placeholder="Search by title, content or subject..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={(e) => {
+                  const nextValue = e.target.value;
+                  setSearchTerm(nextValue);
+                  logFilterActivity(nextValue, selectedSubject);
+                }}
                 className="w-full px-5 py-3 pl-11 border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-black focus:border-black transition-all bg-white text-sm"
               />
             </div>
             <div className="relative w-full sm:w-56">
               <select
                 value={selectedSubject}
-                onChange={(e) =>
-                  setSelectedSubject(
-                    e.target.value ? Number(e.target.value) : "",
-                  )
-                }
+                onChange={(e) => {
+                  const nextValue = e.target.value
+                    ? Number(e.target.value)
+                    : "";
+                  setSelectedSubject(nextValue);
+                  logFilterActivity(searchTerm, nextValue);
+                }}
                 className="w-full pl-4 pr-10 py-3 border border-[#e5e7eb] rounded-xl text-sm bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-black cursor-pointer"
               >
                 <option value="">All Subjects</option>
@@ -156,6 +173,19 @@ const NotesPage: React.FC = () => {
               <Link
                 key={note.id}
                 to={`/notes/${note.id}`}
+                onClick={() =>
+                  void trackUserActivity({
+                    eventType: "note_open",
+                    page: "/notes",
+                    label: note.title,
+                    entityType: "note",
+                    entityId: note.id,
+                    metadata: {
+                      subjectId: note.subject_id,
+                      subjectCode: note.subjects?.code ?? null,
+                    },
+                  })
+                }
                 className="group bg-white rounded-xl border border-[#e5e7eb] hover:border-[#d1d5db] hover:shadow-md transition-all duration-200 overflow-hidden flex flex-col"
               >
                 <div className="p-6 flex flex-col flex-1">

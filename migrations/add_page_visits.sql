@@ -3,6 +3,11 @@ CREATE TABLE IF NOT EXISTS public.page_visits (
     id          bigserial    PRIMARY KEY,
     created_at  timestamptz  NOT NULL DEFAULT now(),
     page        text         NOT NULL,
+    event_type  text         NOT NULL DEFAULT 'page_view',
+    event_label text,
+    entity_type text,
+    entity_id   text,
+    metadata    jsonb        DEFAULT '{}'::jsonb,
     ip_address  text,
     country     text,
     city        text,
@@ -10,6 +15,12 @@ CREATE TABLE IF NOT EXISTS public.page_visits (
     referrer    text,
     session_id  text         -- groups visits within a single browser session
 );
+
+ALTER TABLE public.page_visits ADD COLUMN IF NOT EXISTS event_type text NOT NULL DEFAULT 'page_view';
+ALTER TABLE public.page_visits ADD COLUMN IF NOT EXISTS event_label text;
+ALTER TABLE public.page_visits ADD COLUMN IF NOT EXISTS entity_type text;
+ALTER TABLE public.page_visits ADD COLUMN IF NOT EXISTS entity_id text;
+ALTER TABLE public.page_visits ADD COLUMN IF NOT EXISTS metadata jsonb DEFAULT '{}'::jsonb;
 
 CREATE INDEX IF NOT EXISTS idx_page_visits_created_at ON public.page_visits(created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_page_visits_page       ON public.page_visits(page);

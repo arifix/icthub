@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Activity,
   Globe,
@@ -18,6 +18,11 @@ type Visit = {
   id: number;
   created_at: string;
   page: string;
+  event_type: string | null;
+  event_label: string | null;
+  entity_type: string | null;
+  entity_id: string | null;
+  metadata: Record<string, unknown> | null;
   ip_address: string | null;
   country: string | null;
   city: string | null;
@@ -61,12 +66,7 @@ const AdminAnalytics: React.FC = () => {
     "today",
   );
 
-  useEffect(() => {
-    document.title = "Analytics — ICTHub Admin";
-    fetchVisits();
-  }, [range]);
-
-  const fetchVisits = async () => {
+  const fetchVisits = useCallback(async () => {
     setLoading(true);
     try {
       let query = supabase
@@ -96,7 +96,12 @@ const AdminAnalytics: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [range]);
+
+  useEffect(() => {
+    document.title = "Analytics — ICTHub Admin";
+    void fetchVisits();
+  }, [fetchVisits]);
 
   // Aggregations
   const todayVisits = visits.filter(
@@ -118,6 +123,15 @@ const AdminAnalytics: React.FC = () => {
     return acc;
   }, {});
   const topPages = Object.entries(pageCounts)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 8);
+
+  const eventCounts = visits.reduce<Record<string, number>>((acc, v) => {
+    const eventType = v.event_type || "page_view";
+    acc[eventType] = (acc[eventType] || 0) + 1;
+    return acc;
+  }, {});
+  const topEvents = Object.entries(eventCounts)
     .sort((a, b) => b[1] - a[1])
     .slice(0, 8);
 
@@ -253,7 +267,7 @@ const AdminAnalytics: React.FC = () => {
               ))}
             </div>
 
-            {/* Top pages + Top countries */}
+            {/* Top pages + Activity types */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* Top Pages */}
               <div className="bg-white rounded-xl border border-[#e5e7eb]">
@@ -293,25 +307,25 @@ const AdminAnalytics: React.FC = () => {
                 </div>
               </div>
 
-              {/* Top Countries */}
+              {/* Activity Types */}
               <div className="bg-white rounded-xl border border-[#e5e7eb]">
                 <div className="bg-[#f9fafb] border-b border-[#e5e7eb] px-6 py-4 flex items-center gap-2">
-                  <MapPin className="h-4 w-4 text-[#374151]" />
+                  <Activity className="h-4 w-4 text-[#374151]" />
                   <span className="text-sm font-bold text-black">
-                    Top Countries
+                    Activity Types
                   </span>
                 </div>
                 <div className="p-4 space-y-3">
-                  {topCountries.length === 0 ? (
+                  {topEvents.length === 0 ? (
                     <p className="text-sm text-gray-500 text-center py-4">
                       No data
                     </p>
                   ) : (
-                    topCountries.map(([country, count]) => (
-                      <div key={country}>
+                    topEvents.map(([eventType, count]) => (
+                      <div key={eventType}>
                         <div className="flex items-center justify-between mb-1">
                           <span className="text-sm font-medium text-[#374151] truncate">
-                            {country}
+                            {eventType}
                           </span>
                           <span className="text-sm font-bold text-black ml-2 shrink-0">
                             {count}
@@ -321,7 +335,7 @@ const AdminAnalytics: React.FC = () => {
                           <div
                             className="h-full bg-black rounded-full"
                             style={{
-                              width: `${(count / maxCountryCount) * 100}%`,
+                              width: `${(count / (topEvents[0]?.[1] || 1)) * 100}%`,
                             }}
                           />
                         </div>
@@ -329,6 +343,44 @@ const AdminAnalytics: React.FC = () => {
                     ))
                   )}
                 </div>
+              </div>
+            </div>
+
+            {/* Top Countries */}
+            <div className="bg-white rounded-xl border border-[#e5e7eb]">
+              <div className="bg-[#f9fafb] border-b border-[#e5e7eb] px-6 py-4 flex items-center gap-2">
+                <MapPin className="h-4 w-4 text-[#374151]" />
+                <span className="text-sm font-bold text-black">
+                  Top Countries
+                </span>
+              </div>
+              <div className="p-4 space-y-3">
+                {topCountries.length === 0 ? (
+                  <p className="text-sm text-gray-500 text-center py-4">
+                    No data
+                  </p>
+                ) : (
+                  topCountries.map(([country, count]) => (
+                    <div key={country}>
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-sm font-medium text-[#374151] truncate">
+                          {country}
+                        </span>
+                        <span className="text-sm font-bold text-black ml-2 shrink-0">
+                          {count}
+                        </span>
+                      </div>
+                      <div className="h-1.5 bg-[#f3f4f6] rounded-full overflow-hidden">
+                        <div
+                          className="h-full bg-black rounded-full"
+                          style={{
+                            width: `${(count / maxCountryCount) * 100}%`,
+                          }}
+                        />
+                      </div>
+                    </div>
+                  ))
+                )}
               </div>
             </div>
 
@@ -474,14 +526,26 @@ const AdminAnalytics: React.FC = () => {
                           </div>
                         </td>
                         <td className="px-5 py-3">
-                          <div className="flex items-center gap-1.5">
-                            <FileText className="h-3 w-3 text-gray-500 shrink-0" />
-                            <span className="font-medium text-[#374151]">
-                              {getPageLabel(v.page)}
-                            </span>
-                            <span className="text-gray-500 text-xs">
-                              {v.page}
-                            </span>
+                          <div className="flex flex-col gap-1">
+                            <div className="flex items-center gap-1.5">
+                              <FileText className="h-3 w-3 text-gray-500 shrink-0" />
+                              <span className="font-medium text-[#374151]">
+                                {getPageLabel(v.page)}
+                              </span>
+                              <span className="text-gray-500 text-xs">
+                                {v.page}
+                              </span>
+                            </div>
+                            <div className="flex items-center gap-2 text-xs text-gray-500">
+                              <span className="font-semibold uppercase tracking-wide">
+                                {v.event_type || "page_view"}
+                              </span>
+                              {v.event_label && (
+                                <span className="truncate">
+                                  • {v.event_label}
+                                </span>
+                              )}
+                            </div>
                           </div>
                         </td>
                         <td className="px-5 py-3 font-mono text-xs text-[#6b7280]">

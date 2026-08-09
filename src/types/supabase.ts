@@ -148,6 +148,56 @@ export interface Database {
           content?: string;
         };
       };
+      page_visits: {
+        Row: {
+          id: number;
+          created_at: string;
+          page: string;
+          event_type: string | null;
+          event_label: string | null;
+          entity_type: string | null;
+          entity_id: string | null;
+          metadata: Json | null;
+          ip_address: string | null;
+          country: string | null;
+          city: string | null;
+          user_agent: string | null;
+          referrer: string | null;
+          session_id: string | null;
+        };
+        Insert: {
+          id?: number;
+          created_at?: string;
+          page: string;
+          event_type?: string | null;
+          event_label?: string | null;
+          entity_type?: string | null;
+          entity_id?: string | null;
+          metadata?: Json | null;
+          ip_address?: string | null;
+          country?: string | null;
+          city?: string | null;
+          user_agent?: string | null;
+          referrer?: string | null;
+          session_id?: string | null;
+        };
+        Update: {
+          id?: number;
+          created_at?: string;
+          page?: string;
+          event_type?: string | null;
+          event_label?: string | null;
+          entity_type?: string | null;
+          entity_id?: string | null;
+          metadata?: Json | null;
+          ip_address?: string | null;
+          country?: string | null;
+          city?: string | null;
+          user_agent?: string | null;
+          referrer?: string | null;
+          session_id?: string | null;
+        };
+      };
       notes: {
         Row: {
           id: number;
