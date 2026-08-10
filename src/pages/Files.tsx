@@ -10,6 +10,7 @@ import {
 import { supabase } from "../lib/supabase";
 import { Database } from "../types/supabase";
 import { trackUserActivity } from "../hooks/usePageTracking";
+import { useAuth } from "../context/AuthContext";
 
 type FileData = Database["public"]["Tables"]["files"]["Row"] & {
   subjects?: { title: string; code: string } | null;
@@ -17,6 +18,7 @@ type FileData = Database["public"]["Tables"]["files"]["Row"] & {
 type Subject = Database["public"]["Tables"]["subjects"]["Row"];
 
 const FilesPage: React.FC = () => {
+  const { isAdmin } = useAuth();
   const [files, setFiles] = useState<FileData[]>([]);
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [loading, setLoading] = useState(true);
@@ -55,23 +57,6 @@ const FilesPage: React.FC = () => {
     };
     fetchData();
   }, []);
-
-  const logFilterActivity = (
-    nextSearch: string,
-    nextSubject: number | "",
-    nextType: string,
-  ) => {
-    void trackUserActivity({
-      eventType: "filter_change",
-      page: "/files",
-      label: "files_filters",
-      metadata: {
-        search: nextSearch,
-        subjectId: nextSubject || null,
-        fileType: nextType || null,
-      },
-    });
-  };
 
   const filteredFiles = files.filter((file) => {
     const matchesSearch =
@@ -131,9 +116,7 @@ const FilesPage: React.FC = () => {
                 placeholder="Search files..."
                 value={searchTerm}
                 onChange={(e) => {
-                  const nextValue = e.target.value;
-                  setSearchTerm(nextValue);
-                  logFilterActivity(nextValue, selectedSubject, selectedType);
+                  setSearchTerm(e.target.value);
                 }}
                 className="w-full px-5 py-3 pl-11 border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-black focus:border-black transition-all bg-white text-sm"
               />
@@ -146,7 +129,6 @@ const FilesPage: React.FC = () => {
                     ? Number(e.target.value)
                     : "";
                   setSelectedSubject(nextValue);
-                  logFilterActivity(searchTerm, nextValue, selectedType);
                 }}
                 className="w-full pl-4 pr-8 py-3 border border-[#e5e7eb] rounded-xl text-sm bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-black cursor-pointer"
               >
@@ -165,7 +147,6 @@ const FilesPage: React.FC = () => {
                 onChange={(e) => {
                   const nextValue = e.target.value;
                   setSelectedType(nextValue);
-                  logFilterActivity(searchTerm, selectedSubject, nextValue);
                 }}
                 className="w-full pl-4 pr-8 py-3 border border-[#e5e7eb] rounded-xl text-sm bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-black cursor-pointer"
               >
@@ -206,18 +187,20 @@ const FilesPage: React.FC = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() =>
-                  void trackUserActivity({
-                    eventType: "file_open",
-                    page: "/files",
-                    label: file.name,
-                    entityType: "file",
-                    entityId: file.id,
-                    metadata: {
-                      fileType: file.file_type,
-                      subjectId: file.subject_id,
-                      subjectCode: file.subjects?.code ?? null,
-                    },
-                  })
+                  !isAdmin
+                    ? void trackUserActivity({
+                        eventType: "file_open",
+                        page: "/files",
+                        label: file.name,
+                        entityType: "file",
+                        entityId: file.id,
+                        metadata: {
+                          fileType: file.file_type,
+                          subjectId: file.subject_id,
+                          subjectCode: file.subjects?.code ?? null,
+                        },
+                      })
+                    : undefined
                 }
                 className="group bg-white rounded-xl border border-[#e5e7eb] hover:border-[#d1d5db] hover:shadow-md transition-all duration-200 p-4"
               >

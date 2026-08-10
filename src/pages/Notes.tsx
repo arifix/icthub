@@ -12,6 +12,7 @@ import { supabase } from "../lib/supabase";
 import { Database } from "../types/supabase";
 import { stripHtmlAndTruncate } from "../utils/helper.js";
 import { trackUserActivity } from "../hooks/usePageTracking";
+import { useAuth } from "../context/AuthContext";
 
 type Note = Database["public"]["Tables"]["notes"]["Row"] & {
   subjects: { title: string; code: string };
@@ -20,6 +21,7 @@ type Note = Database["public"]["Tables"]["notes"]["Row"] & {
 type Subject = Database["public"]["Tables"]["subjects"]["Row"];
 
 const NotesPage: React.FC = () => {
+  const { isAdmin } = useAuth();
   const [notes, setNotes] = useState<Note[]>([]);
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [loading, setLoading] = useState(true);
@@ -72,18 +74,6 @@ const NotesPage: React.FC = () => {
     fetchData();
   }, []);
 
-  const logFilterActivity = (nextSearch: string, nextSubject: number | "") => {
-    void trackUserActivity({
-      eventType: "filter_change",
-      page: "/notes",
-      label: "notes_filters",
-      metadata: {
-        search: nextSearch,
-        subjectId: nextSubject || null,
-      },
-    });
-  };
-
   const filteredNotes = notes.filter((note) => {
     const matchesSearch =
       note.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -120,9 +110,7 @@ const NotesPage: React.FC = () => {
                 placeholder="Search by title, content or subject..."
                 value={searchTerm}
                 onChange={(e) => {
-                  const nextValue = e.target.value;
-                  setSearchTerm(nextValue);
-                  logFilterActivity(nextValue, selectedSubject);
+                  setSearchTerm(e.target.value);
                 }}
                 className="w-full px-5 py-3 pl-11 border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-black focus:border-black transition-all bg-white text-sm"
               />
@@ -135,7 +123,6 @@ const NotesPage: React.FC = () => {
                     ? Number(e.target.value)
                     : "";
                   setSelectedSubject(nextValue);
-                  logFilterActivity(searchTerm, nextValue);
                 }}
                 className="w-full pl-4 pr-10 py-3 border border-[#e5e7eb] rounded-xl text-sm bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-black cursor-pointer"
               >
@@ -174,17 +161,19 @@ const NotesPage: React.FC = () => {
                 key={note.id}
                 to={`/notes/${note.id}`}
                 onClick={() =>
-                  void trackUserActivity({
-                    eventType: "note_open",
-                    page: "/notes",
-                    label: note.title,
-                    entityType: "note",
-                    entityId: note.id,
-                    metadata: {
-                      subjectId: note.subject_id,
-                      subjectCode: note.subjects?.code ?? null,
-                    },
-                  })
+                  !isAdmin
+                    ? void trackUserActivity({
+                        eventType: "note_open",
+                        page: "/notes",
+                        label: note.title,
+                        entityType: "note",
+                        entityId: note.id,
+                        metadata: {
+                          subjectId: note.subject_id,
+                          subjectCode: note.subjects?.code ?? null,
+                        },
+                      })
+                    : undefined
                 }
                 className="group bg-white rounded-xl border border-[#e5e7eb] hover:border-[#d1d5db] hover:shadow-md transition-all duration-200 overflow-hidden flex flex-col"
               >
@@ -195,7 +184,7 @@ const NotesPage: React.FC = () => {
                         <FileText className="h-4 w-4 text-teal-600" />
                       </div>
                       <span className="px-2.5 py-1 bg-[#f3f4f6] text-[#374151] text-xs font-semibold rounded-full font-mono">
-                        {note.subjects?.code}
+                        {note.subjects?.title} ({note.subjects?.code})
                       </span>
                     </div>
                     <span className="text-xs text-gray-500 flex items-center gap-1">
