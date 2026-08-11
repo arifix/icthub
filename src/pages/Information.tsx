@@ -70,7 +70,7 @@ const InformationPage: React.FC = () => {
             Information Center
           </h1>
           <p className="text-sm text-[#6b7280]">
-            Browse academic updates, rules, study guidance, and quick tips.
+            Browse academic updates, rules, study guidance, and quick tips
           </p>
         </div>
       </div>

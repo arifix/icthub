@@ -29,7 +29,7 @@ const Footer: React.FC = () => {
             </p>
             <div className="flex items-start gap-2 text-sm text-gray-400">
               <MapPin className="h-4 w-4 mt-0.5 shrink-0" />
-              <span>IICT, KUET, Khulna-9203, Bangladesh</span>
+              <span>IT Park, KUET, Khulna-9203, Bangladesh</span>
             </div>
           </div>
 
@@ -52,7 +52,7 @@ const Footer: React.FC = () => {
                     to={to}
                     className="text-gray-400 hover:text-blue-400 transition-colors duration-200 text-sm flex items-center group"
                   >
-                    <span className="w-1.5 h-1.5 bg-blue-400 rounded-full mr-2 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <span className="w-1.5 h-1.5 bg-blue-400 rounded-full mr-2" />
                     {label}
                   </Link>
                 </li>
@@ -85,7 +85,7 @@ const Footer: React.FC = () => {
                     rel="noopener noreferrer"
                     className="text-gray-400 hover:text-blue-400 transition-colors duration-200 flex items-center group"
                   >
-                    <span className="w-1.5 h-1.5 bg-blue-400 rounded-full mr-2 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <span className="w-1.5 h-1.5 bg-blue-400 rounded-full mr-2" />
                     {label}
                   </a>
                 </li>
@@ -95,13 +95,14 @@ const Footer: React.FC = () => {
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-gray-800 pt-8">
+        <div className="border-t border-gray-700 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-3 md:space-y-0">
-            <div className="flex items-center space-x-2 text-sm text-gray-400">
+            <div className="flex flex-col text-sm text-gray-400">
               <span>&copy; {year} ICTHub</span>
+              <span>Last updated on: 2026-08-11</span>
             </div>
-            <div className="flex items-center space-x-1 text-sm text-gray-400">
-              <span>Made by</span>
+            <div className="text-sm text-gray-400">
+              <span>Made by </span>
               <a
                 href="https://www.arif-khan.net"
                 target="_blank"
@@ -109,8 +110,8 @@ const Footer: React.FC = () => {
                 className="text-blue-400 hover:text-blue-300 transition-colors font-medium"
               >
                 Arif Khan
-              </a>
-              <span>with ❤️</span>
+              </a>{" "}
+              with <span className="animate-pulse">❤️</span>
             </div>
           </div>
         </div>

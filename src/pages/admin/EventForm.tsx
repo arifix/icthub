@@ -232,9 +232,7 @@ const AdminEventForm: React.FC = () => {
         <div className="bg-white rounded-xl border border-[#e5e7eb]">
           <div className="bg-[#f9fafb] border-b border-[#e5e7eb] px-6 py-4 flex items-center gap-2">
             <Calendar className="h-4 w-4 text-[#374151]" />
-            <span className="text-sm font-bold text-black">
-              Event Details
-            </span>
+            <span className="text-sm font-bold text-black">Event Details</span>
           </div>
 
           <form onSubmit={handleSubmit} className="p-6 space-y-5">
@@ -270,6 +268,7 @@ const AdminEventForm: React.FC = () => {
                   name="date"
                   value={event.date}
                   onChange={handleChange}
+                  min={new Date().toISOString().split("T")[0]}
                   required
                   className="w-full px-3 py-2.5 border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-black focus:border-black text-[#374151]"
                 />

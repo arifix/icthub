@@ -416,16 +416,16 @@ const Home: React.FC = () => {
                     <Link
                       key={note.id}
                       to={`/notes/${note.id}`}
-                      className="flex items-start gap-3 p-4 hover:bg-gray-50 transition-colors group"
+                      className="flex items-start gap-2 p-4 hover:bg-gray-50 transition-colors group"
                     >
                       <div className="w-9 h-9 bg-teal-50 rounded-xl flex items-center justify-center shrink-0 mt-0.5 group-hover:bg-teal-100 transition-colors">
-                        <FileText className="h-4 w-4 text-teal-600" />
+                        <FileText className="h-5 w-5 text-teal-600" />
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-1">
-                          {note.subjects?.code && (
+                          {note.subjects?.title && (
                             <span className="text-xs font-semibold text-teal-700 bg-teal-50 px-2 py-0.5 rounded-full font-mono">
-                              {note.subjects.code}
+                              {note.subjects.title}
                             </span>
                           )}
                           <span className="text-xs text-gray-400 flex items-center gap-1">

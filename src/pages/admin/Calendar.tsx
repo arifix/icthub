@@ -14,6 +14,7 @@ import {
 import { supabase } from "../../lib/supabase";
 import { Database } from "../../types/supabase";
 import { toast } from "react-hot-toast";
+import { isPastDate } from "../../utils/helper";
 
 type Event = Database["public"]["Tables"]["events"]["Row"] & {
   subjects?: { title: string; code: string } | null;
@@ -301,58 +302,78 @@ const AdminCalendar: React.FC = () => {
                 ))}
               </div>
               <div className="grid grid-cols-7 gap-1">
-                {calendarDays.map((day, index) => (
-                  <div
-                    key={index}
-                    className={`min-h-20 border rounded-lg overflow-hidden ${
-                      day.day === 0
-                        ? "border-transparent"
-                        : day.date && isToday(day.date)
-                          ? "border-black bg-white"
-                          : "border-[#f3f4f6] bg-white hover:border-[#e5e7eb]"
-                    }`}
-                  >
-                    {day.day > 0 && (
-                      <>
-                        <div className="p-1.5 flex justify-end">
-                          <span
-                            className={`inline-flex items-center justify-center w-6 h-6 rounded-full text-xs font-semibold ${
-                              day.date && isToday(day.date)
-                                ? "bg-black text-white"
-                                : day.date.getDay() === 5 ||
-                                    day.date.getDay() === 6
-                                  ? "text-red-500"
-                                  : "text-[#374151]"
-                            }`}
-                          >
-                            {day.day}
-                          </span>
-                        </div>
-                        <div className="px-1.5 pb-1.5 space-y-0.5">
-                          {day.events && day.events.length > 0 ? (
-                            day.events.map((event) => (
-                              <Link
-                                key={event.id}
-                                to={`/admin/events/${event.id}`}
-                                className="block text-xs bg-[#f3f4f6] text-[#374151] px-1.5 py-0.5 rounded truncate hover:bg-[#e5e7eb] transition-colors"
-                                title={event.title}
-                              >
-                                {event.title}
-                              </Link>
-                            ))
-                          ) : (
-                            <Link
-                              to={`/admin/events/new?date=${day.dateString}`}
-                              className="flex items-center justify-center p-1 text-gray-500 hover:text-gray-500 rounded"
+                {calendarDays.map((day, index) => {
+                  const pastDate = day.date && isPastDate(day.date);
+
+                  return (
+                    <div
+                      key={index}
+                      className={`min-h-20 border rounded-lg overflow-hidden ${
+                        day.day === 0
+                          ? "border-transparent"
+                          : pastDate
+                            ? "border-[#f3f4f6] bg-gray-50 opacity-50"
+                            : day.date && isToday(day.date)
+                              ? "border-black bg-white"
+                              : "border-[#f3f4f6] bg-white hover:border-[#e5e7eb]"
+                      }`}
+                    >
+                      {day.day > 0 && (
+                        <>
+                          <div className="p-1.5 flex justify-end">
+                            <span
+                              className={`inline-flex items-center justify-center w-6 h-6 rounded-full text-xs font-semibold ${
+                                day.date && isToday(day.date)
+                                  ? "bg-black text-white"
+                                  : day.date?.getDay() === 5 ||
+                                      day.date?.getDay() === 6
+                                    ? "text-red-500"
+                                    : "text-[#374151]"
+                              }`}
                             >
-                              <Plus className="h-3 w-3" />
-                            </Link>
-                          )}
-                        </div>
-                      </>
-                    )}
-                  </div>
-                ))}
+                              {day.day}
+                            </span>
+                          </div>
+
+                          <div className="px-1.5 pb-1.5 space-y-0.5">
+                            {day.events && day.events.length > 0 ? (
+                              day.events.map((event) => (
+                                <Link
+                                  key={event.id}
+                                  to={
+                                    pastDate ? "#" : `/admin/events/${event.id}`
+                                  }
+                                  onClick={(e) => {
+                                    if (pastDate) e.preventDefault();
+                                  }}
+                                  className={`block text-xs px-1.5 py-0.5 rounded truncate transition-colors ${
+                                    pastDate
+                                      ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                                      : "bg-[#f3f4f6] text-[#374151] hover:bg-[#e5e7eb]"
+                                  }`}
+                                  title={event.title}
+                                >
+                                  {event.title}
+                                </Link>
+                              ))
+                            ) : pastDate ? (
+                              <div className="flex items-center justify-center p-1 text-gray-300">
+                                <Plus className="h-3 w-3" />
+                              </div>
+                            ) : (
+                              <Link
+                                to={`/admin/events/new?date=${day.dateString}`}
+                                className="flex items-center justify-center p-1 text-gray-500 hover:text-gray-700 rounded"
+                              >
+                                <Plus className="h-3 w-3" />
+                              </Link>
+                            )}
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             </div>
           )}

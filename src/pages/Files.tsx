@@ -228,14 +228,14 @@ const FilesPage: React.FC = () => {
                   <Download className="h-4 w-4 text-gray-500 group-hover:text-[#6b7280] transition-colors" />
                 </div>
                 {file.subjects ? (
-                  <div className="mt-2 pt-2 border-t border-[#e5e7eb] flex items-center gap-1 text-sm text-[#6b7280]">
+                  <div className="mt-4 pt-2 border-t border-[#e5e7eb] flex items-center gap-1 text-sm text-[#6b7280]">
                     <BookOpen className="h-3 w-3 text-gray-500 shrink-0" />
                     <span className="truncate">
                       {file.subjects.title} ({file.subjects.code})
                     </span>
                   </div>
                 ) : (
-                  <div className="mt-2 pt-2 border-t border-[#e5e7eb] flex items-center gap-1 text-sm text-[#6b7280]">
+                  <div className="mt-4 pt-2 border-t border-[#e5e7eb] flex items-center gap-1 text-sm text-[#6b7280]">
                     <Globe className="h-3 w-3 text-gray-500 shrink-0" />
                     <span className="truncate">General File</span>
                   </div>

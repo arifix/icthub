@@ -7,13 +7,14 @@ import {
   ChevronLeft,
   ChevronRight,
   FileText,
-  Info,
   LogOut,
   File,
   BarChart3,
   Globe,
   Settings,
   Activity,
+  GraduationCap,
+  Info,
 } from "lucide-react";
 
 const AdminSidebar: React.FC = () => {
@@ -63,7 +64,7 @@ const AdminSidebar: React.FC = () => {
     {
       to: "/admin/info-notes",
       label: "Information",
-      icon: FileText,
+      icon: Info,
       description: "Tips & Guidance",
       matchPaths: ["/admin/info-notes/"],
     },
@@ -116,12 +117,12 @@ const AdminSidebar: React.FC = () => {
       <div className="flex items-center justify-between px-4 py-4 border-b border-gray-100">
         {!collapsed && (
           <div className="flex items-center gap-2.5">
-            <div className="bg-gradient-to-br from-blue-600 to-indigo-600 p-1.5 rounded-lg shadow-sm">
-              <BookOpen className="h-4 w-4 text-white" />
+            <div className="bg-gradient-to-br from-blue-600 to-indigo-600 p-2 rounded-lg shadow-sm">
+              <GraduationCap className="h-5 w-5 text-white" />
             </div>
             <div>
-              <h1 className="text-sm font-bold text-gray-900">ICTHub</h1>
-              <p className="text-xs text-gray-500">Admin Panel</p>
+              <h1 className="font-bold text-gray-900">ICTHub</h1>
+              <p className="text-sm text-gray-500">Admin Panel</p>
             </div>
           </div>
         )}
@@ -129,7 +130,7 @@ const AdminSidebar: React.FC = () => {
           className={`p-1.5 text-gray-400 hover:text-blue-600 hover:bg-gray-100 rounded-lg transition-all duration-200`}
           onClick={toggleSidebar}
         >
-          {collapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
+          {collapsed ? <ChevronRight size={22} /> : <ChevronLeft size={22} />}
         </button>
       </div>
 
@@ -146,7 +147,7 @@ const AdminSidebar: React.FC = () => {
             >
               <div className="flex-shrink-0">
                 <item.icon
-                  size={17}
+                  size={18}
                   className={
                     isActive
                       ? "text-white"
@@ -170,7 +171,7 @@ const AdminSidebar: React.FC = () => {
           title={collapsed ? "View Portal" : undefined}
         >
           <Globe
-            size={17}
+            size={18}
             className="text-gray-400 group-hover:text-blue-600 shrink-0"
           />
           {!collapsed && (
@@ -185,7 +186,7 @@ const AdminSidebar: React.FC = () => {
           }`}
           title={collapsed ? "Sign Out" : undefined}
         >
-          <LogOut size={17} className="shrink-0" />
+          <LogOut size={18} className="shrink-0" />
           {!collapsed && <span className="text-sm font-medium">Sign Out</span>}
         </button>
       </div>
