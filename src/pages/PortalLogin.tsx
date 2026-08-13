@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { usePortalAccess } from "../context/PortalAccessContext";
 import { toast } from "react-hot-toast";
 import { Lock, BookOpen } from "lucide-react";
@@ -8,11 +8,16 @@ const PortalLogin: React.FC = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const { signIn, isAuthenticated } = usePortalAccess();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     document.title = "ICTHub — IICT, KUET";
   }, []);
-  if (isAuthenticated) return <Navigate to="/" />;
+
+  const redirectPath =
+    (location.state as { from?: string } | null)?.from || "/";
+  if (isAuthenticated) return <Navigate to={redirectPath} replace />;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -20,6 +25,7 @@ const PortalLogin: React.FC = () => {
     setLoading(true);
     try {
       await signIn(password.trim());
+      navigate(redirectPath, { replace: true });
     } catch (err: any) {
       toast.error(err.message || "Incorrect password");
     } finally {

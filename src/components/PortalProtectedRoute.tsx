@@ -1,11 +1,12 @@
 import React from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 import { usePortalAccess } from "../context/PortalAccessContext";
 
 const PortalProtectedRoute: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const { isAuthenticated, loading } = usePortalAccess();
+  const location = useLocation();
 
   if (loading) {
     return (
@@ -15,7 +16,15 @@ const PortalProtectedRoute: React.FC<{ children: React.ReactNode }> = ({
     );
   }
 
-  if (!isAuthenticated) return <Navigate to="/login" />;
+  if (!isAuthenticated) {
+    return (
+      <Navigate
+        to="/login"
+        replace
+        state={{ from: `${location.pathname}${location.search}` }}
+      />
+    );
+  }
 
   return <>{children}</>;
 };
