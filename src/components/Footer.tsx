@@ -97,9 +97,9 @@ const Footer: React.FC = () => {
         {/* Bottom Bar */}
         <div className="border-t border-gray-700 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-3 md:space-y-0">
-            <div className="flex flex-col text-sm text-gray-400">
+            <div className="flex flex-col items-center md:items-start text-sm text-gray-400">
               <span>&copy; {year} ICTHub</span>
-              <span>Last updated on: 2026-08-11</span>
+              <span>Last updated on: 2026-08-14</span>
             </div>
             <div className="text-sm text-gray-400">
               <span>Made by </span>

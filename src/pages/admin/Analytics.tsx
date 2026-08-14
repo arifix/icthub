@@ -29,6 +29,7 @@ type Visit = {
   user_agent: string | null;
   referrer: string | null;
   session_id: string | null;
+  student_name: string | null;
 };
 
 const PAGE_LABELS: Record<string, string> = {
@@ -401,6 +402,7 @@ const AdminAnalytics: React.FC = () => {
                     <tr className="border-b border-[#e5e7eb]">
                       {[
                         "Session",
+                        "Student",
                         "Started",
                         "Location",
                         "Device",
@@ -422,6 +424,8 @@ const AdminAnalytics: React.FC = () => {
                       const location = [first.city, first.country]
                         .filter(Boolean)
                         .join(", ");
+                      const studentName =
+                        pages.find((p) => p.student_name)?.student_name || "—";
                       const mobile = isMobile(first.user_agent);
                       const isAnon = sid.startsWith("_");
                       return (
@@ -432,6 +436,11 @@ const AdminAnalytics: React.FC = () => {
                             </span>
                             <span className="ml-2 text-xs text-gray-500">
                               {pages.length}p
+                            </span>
+                          </td>
+                          <td className="px-5 py-3">
+                            <span className="text-sm font-medium text-[#374151]">
+                              {studentName}
                             </span>
                           </td>
                           <td className="px-5 py-3 text-[#6b7280] whitespace-nowrap text-xs">
@@ -506,7 +515,7 @@ const AdminAnalytics: React.FC = () => {
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="border-b border-[#e5e7eb]">
-                      {["Time", "Page", "IP", "Location", "Device"].map((h) => (
+                      {["Time", "Student", "Page", "IP", "Location", "Device"].map((h) => (
                         <th
                           key={h}
                           className="text-left px-5 py-3 text-xs font-semibold text-[#6b7280] uppercase tracking-wide"
@@ -524,6 +533,9 @@ const AdminAnalytics: React.FC = () => {
                             <Clock className="h-3 w-3 shrink-0" />
                             {formatTime(v.created_at)}
                           </div>
+                        </td>
+                        <td className="px-5 py-3 text-sm font-semibold text-[#374151] whitespace-nowrap">
+                          {v.student_name || "—"}
                         </td>
                         <td className="px-5 py-3">
                           <div className="flex flex-col gap-1">

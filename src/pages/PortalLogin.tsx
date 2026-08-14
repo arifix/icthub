@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { usePortalAccess } from "../context/PortalAccessContext";
+import { useAuth } from "../context/AuthContext";
 import { toast } from "react-hot-toast";
-import { Lock, BookOpen } from "lucide-react";
+import { Lock, BookOpen, User } from "lucide-react";
 
 const PortalLogin: React.FC = () => {
+  const [studentName, setStudentName] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const { signIn, isAuthenticated } = usePortalAccess();
+  const { isAdmin } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -22,9 +25,14 @@ const PortalLogin: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!password.trim()) return;
+    if (!isAdmin && !studentName.trim()) {
+      toast.error("Please enter your name");
+      return;
+    }
+
     setLoading(true);
     try {
-      await signIn(password.trim());
+      await signIn(password.trim(), studentName.trim());
       navigate(redirectPath, { replace: true });
     } catch (err: any) {
       toast.error(err.message || "Incorrect password");
@@ -58,6 +66,30 @@ const PortalLogin: React.FC = () => {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
+          {!isAdmin && (
+            <div>
+              <label
+                htmlFor="studentName"
+                className="block text-sm font-medium text-gray-700 mb-1.5"
+              >
+                Your Name
+              </label>
+              <div className="relative">
+                <User className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                <input
+                  id="studentName"
+                  type="text"
+                  value={studentName}
+                  onChange={(e) => setStudentName(e.target.value)}
+                  placeholder="Enter your name"
+                  required
+                  autoFocus
+                  className="w-full pl-11 pr-4 py-3 border border-gray-200 rounded-xl text-sm text-gray-900
+                         placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all bg-white"
+                />
+              </div>
+            </div>
+          )}
           <div>
             <label
               htmlFor="password"
@@ -72,7 +104,7 @@ const PortalLogin: React.FC = () => {
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter portal password"
               required
-              autoFocus
+              autoFocus={isAdmin}
               className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm text-gray-900
                          placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all bg-white"
             />

@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import { supabase } from "../lib/supabase";
 import { useAuth } from "../context/AuthContext";
 import type { Database } from "../types/supabase";
+import { getStoredStudentName } from "../utils/portalStudent";
 
 const GEO_CACHE_KEY = "ict_geo";
 const SESSION_ID_KEY = "ict_sid";
@@ -103,6 +104,7 @@ export const trackUserActivity = async (event: ActivityEvent) => {
   try {
     const sessionId = getOrCreateSessionId();
     const geo = await getGeoData();
+    const studentName = getStoredStudentName();
 
     const payload = {
       page: event.page ?? window.location.pathname,
@@ -118,6 +120,7 @@ export const trackUserActivity = async (event: ActivityEvent) => {
       user_agent: navigator.userAgent,
       referrer: document.referrer || null,
       session_id: sessionId,
+      student_name: studentName,
     };
 
     const fallbackPayload = {
@@ -128,6 +131,7 @@ export const trackUserActivity = async (event: ActivityEvent) => {
       user_agent: payload.user_agent,
       referrer: payload.referrer,
       session_id: payload.session_id,
+      student_name: payload.student_name,
     };
 
     const { error } = await supabase
@@ -156,6 +160,7 @@ export const trackUserActivity = async (event: ActivityEvent) => {
       user_agent: navigator.userAgent,
       referrer: document.referrer || null,
       session_id: getOrCreateSessionId(),
+      student_name: getStoredStudentName(),
     });
   }
 };

@@ -164,6 +164,7 @@ export interface Database {
           user_agent: string | null;
           referrer: string | null;
           session_id: string | null;
+          student_name: string | null;
         };
         Insert: {
           id?: number;
@@ -180,6 +181,7 @@ export interface Database {
           user_agent?: string | null;
           referrer?: string | null;
           session_id?: string | null;
+          student_name?: string | null;
         };
         Update: {
           id?: number;
@@ -196,6 +198,7 @@ export interface Database {
           user_agent?: string | null;
           referrer?: string | null;
           session_id?: string | null;
+          student_name?: string | null;
         };
       };
       notes: {

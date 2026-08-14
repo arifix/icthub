@@ -13,7 +13,8 @@ CREATE TABLE IF NOT EXISTS public.page_visits (
     city        text,
     user_agent  text,
     referrer    text,
-    session_id  text         -- groups visits within a single browser session
+    session_id  text,        -- groups visits within a single browser session
+    student_name text        -- student identity captured at portal login
 );
 
 ALTER TABLE public.page_visits ADD COLUMN IF NOT EXISTS event_type text NOT NULL DEFAULT 'page_view';
@@ -21,6 +22,7 @@ ALTER TABLE public.page_visits ADD COLUMN IF NOT EXISTS event_label text;
 ALTER TABLE public.page_visits ADD COLUMN IF NOT EXISTS entity_type text;
 ALTER TABLE public.page_visits ADD COLUMN IF NOT EXISTS entity_id text;
 ALTER TABLE public.page_visits ADD COLUMN IF NOT EXISTS metadata jsonb DEFAULT '{}'::jsonb;
+ALTER TABLE public.page_visits ADD COLUMN IF NOT EXISTS student_name text;
 
 CREATE INDEX IF NOT EXISTS idx_page_visits_created_at ON public.page_visits(created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_page_visits_page       ON public.page_visits(page);

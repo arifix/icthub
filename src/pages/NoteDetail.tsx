@@ -15,12 +15,11 @@ import {
 } from "lucide-react";
 import { supabase } from "../lib/supabase";
 import { Database } from "../types/supabase";
+import { getStoredStudentName } from "../utils/portalStudent";
 
 type Note = Database["public"]["Tables"]["notes"]["Row"];
 type Subject = Database["public"]["Tables"]["subjects"]["Row"];
 type Comment = Database["public"]["Tables"]["note_comments"]["Row"];
-
-const AUTHOR_KEY = "ict_comment_author";
 
 const formatCommentTime = (iso: string) => {
   const d = new Date(iso);
@@ -28,7 +27,11 @@ const formatCommentTime = (iso: string) => {
   if (diffSec < 60) return "just now";
   if (diffSec < 3600) return `${Math.floor(diffSec / 60)}m ago`;
   if (diffSec < 86400) return `${Math.floor(diffSec / 3600)}h ago`;
-  return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+  return d.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
 };
 
 const NoteDetailPage: React.FC = () => {
@@ -38,10 +41,16 @@ const NoteDetailPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [comments, setComments] = useState<Comment[]>([]);
   const [replyingTo, setReplyingTo] = useState<number | null>(null);
-  const [authorName, setAuthorName] = useState(() => localStorage.getItem(AUTHOR_KEY) ?? "");
+  const [authorName, setAuthorName] = useState(
+    () => getStoredStudentName() ?? "",
+  );
   const [newComment, setNewComment] = useState("");
   const [replyTexts, setReplyTexts] = useState<Record<number, string>>({});
   const [submitting, setSubmitting] = useState(false);
+
+  useEffect(() => {
+    setAuthorName(getStoredStudentName() ?? "");
+  }, []);
 
   useEffect(() => {
     if (!id) return;
@@ -53,15 +62,23 @@ const NoteDetailPage: React.FC = () => {
       .then(({ data }) => setComments((data as Comment[]) ?? []));
   }, [id]);
 
-  const submitComment = async (parentId: number | null, text: string, name: string) => {
+  const submitComment = async (
+    parentId: number | null,
+    text: string,
+    name: string,
+  ) => {
     const trimText = text.trim();
     const trimName = name.trim();
     if (!trimText || !trimName || !id) return;
     setSubmitting(true);
-    localStorage.setItem(AUTHOR_KEY, trimName);
     const { data, error } = await supabase
       .from("note_comments")
-      .insert({ note_id: Number(id), parent_id: parentId, author_name: trimName, content: trimText })
+      .insert({
+        note_id: Number(id),
+        parent_id: parentId,
+        author_name: trimName,
+        content: trimText,
+      })
       .select()
       .single();
     if (!error && data) {
@@ -74,7 +91,8 @@ const NoteDetailPage: React.FC = () => {
   };
 
   const rootComments = comments.filter((c) => c.parent_id === null);
-  const getReplies = (pid: number) => comments.filter((c) => c.parent_id === pid);
+  const getReplies = (pid: number) =>
+    comments.filter((c) => c.parent_id === pid);
 
   useEffect(() => {
     const fetchNoteData = async () => {
@@ -155,10 +173,7 @@ const NoteDetailPage: React.FC = () => {
               Home
             </Link>
             <ChevronRight className="h-3 w-3" />
-            <Link
-              to="/notes"
-              className="hover:text-black transition-colors"
-            >
+            <Link to="/notes" className="hover:text-black transition-colors">
               Notes
             </Link>
             <ChevronRight className="h-3 w-3" />
@@ -252,10 +267,16 @@ const NoteDetailPage: React.FC = () => {
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-1">
-                          <span className="text-sm font-semibold text-black">{comment.author_name}</span>
-                          <span className="text-xs text-gray-500">{formatCommentTime(comment.created_at)}</span>
+                          <span className="text-sm font-semibold text-black">
+                            {comment.author_name}
+                          </span>
+                          <span className="text-xs text-gray-500">
+                            {formatCommentTime(comment.created_at)}
+                          </span>
                         </div>
-                        <p className="text-sm text-[#374151] leading-relaxed whitespace-pre-wrap">{comment.content}</p>
+                        <p className="text-sm text-[#374151] leading-relaxed whitespace-pre-wrap">
+                          {comment.content}
+                        </p>
                         {!isReplying && replies.length === 0 && (
                           <button
                             onClick={() => setReplyingTo(comment.id)}
@@ -280,7 +301,10 @@ const NoteDetailPage: React.FC = () => {
                     {replies.length > 0 && (
                       <div className="ml-11 mt-4 space-y-4">
                         {replies.map((reply) => (
-                          <div key={reply.id} className="flex items-start gap-3">
+                          <div
+                            key={reply.id}
+                            className="flex items-start gap-3"
+                          >
                             <div className="w-7 h-7 bg-[#f3f4f6] rounded-full flex items-center justify-center shrink-0">
                               <span className="text-xs font-bold text-[#374151]">
                                 {reply.author_name[0].toUpperCase()}
@@ -288,10 +312,16 @@ const NoteDetailPage: React.FC = () => {
                             </div>
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center gap-2 mb-1">
-                                <span className="text-sm font-semibold text-black">{reply.author_name}</span>
-                                <span className="text-xs text-gray-500">{formatCommentTime(reply.created_at)}</span>
+                                <span className="text-sm font-semibold text-black">
+                                  {reply.author_name}
+                                </span>
+                                <span className="text-xs text-gray-500">
+                                  {formatCommentTime(reply.created_at)}
+                                </span>
                               </div>
-                              <p className="text-sm text-[#374151] leading-relaxed whitespace-pre-wrap">{reply.content}</p>
+                              <p className="text-sm text-[#374151] leading-relaxed whitespace-pre-wrap">
+                                {reply.content}
+                              </p>
                             </div>
                           </div>
                         ))}
@@ -306,8 +336,8 @@ const NoteDetailPage: React.FC = () => {
                             type="text"
                             placeholder="Your name"
                             value={authorName}
-                            onChange={(e) => setAuthorName(e.target.value)}
-                            className="w-full pl-8 pr-3 py-2 text-sm border border-[#e5e7eb] rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-black"
+                            readOnly
+                            className="w-full pl-8 pr-3 py-2 text-sm border border-[#e5e7eb] rounded-lg bg-[#f9fafb] text-[#6b7280] focus:outline-none"
                           />
                         </div>
                         <textarea
@@ -315,14 +345,27 @@ const NoteDetailPage: React.FC = () => {
                           placeholder="Write a reply…"
                           value={replyTexts[comment.id] ?? ""}
                           onChange={(e) =>
-                            setReplyTexts((prev) => ({ ...prev, [comment.id]: e.target.value }))
+                            setReplyTexts((prev) => ({
+                              ...prev,
+                              [comment.id]: e.target.value,
+                            }))
                           }
                           className="w-full px-3 py-2 text-sm border border-[#e5e7eb] rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-black focus:border-black"
                         />
                         <div className="flex items-center gap-2">
                           <button
-                            disabled={submitting || !authorName.trim() || !(replyTexts[comment.id] ?? "").trim()}
-                            onClick={() => submitComment(comment.id, replyTexts[comment.id] ?? "", authorName)}
+                            disabled={
+                              submitting ||
+                              !authorName.trim() ||
+                              !(replyTexts[comment.id] ?? "").trim()
+                            }
+                            onClick={() =>
+                              submitComment(
+                                comment.id,
+                                replyTexts[comment.id] ?? "",
+                                authorName,
+                              )
+                            }
                             className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-black text-white text-xs font-semibold rounded-lg disabled:opacity-40 transition-opacity"
                           >
                             <Send className="h-3 w-3" />
@@ -344,7 +387,9 @@ const NoteDetailPage: React.FC = () => {
           )}
 
           <div className="px-6 py-5 border-t border-[#e5e7eb]">
-            <p className="text-xs font-semibold text-[#6b7280] uppercase tracking-wide mb-3">Add a comment</p>
+            <p className="text-xs font-semibold text-[#6b7280] uppercase tracking-wide mb-3">
+              Add a comment
+            </p>
             <div className="space-y-2">
               <div className="relative">
                 <User className="absolute left-3 top-2.5 h-4 w-4 text-gray-500" />
@@ -352,8 +397,8 @@ const NoteDetailPage: React.FC = () => {
                   type="text"
                   placeholder="Your name"
                   value={authorName}
-                  onChange={(e) => setAuthorName(e.target.value)}
-                  className="w-full pl-8 pr-3 py-2 text-sm border border-[#e5e7eb] rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-black"
+                  readOnly
+                  className="w-full pl-8 pr-3 py-2 text-sm border border-[#e5e7eb] rounded-lg bg-[#f9fafb] text-[#6b7280] focus:outline-none"
                 />
               </div>
               <textarea
@@ -364,7 +409,9 @@ const NoteDetailPage: React.FC = () => {
                 className="w-full px-3 py-2 text-sm border border-[#e5e7eb] rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-black focus:border-black"
               />
               <button
-                disabled={submitting || !authorName.trim() || !newComment.trim()}
+                disabled={
+                  submitting || !authorName.trim() || !newComment.trim()
+                }
                 onClick={() => submitComment(null, newComment, authorName)}
                 className="inline-flex items-center gap-1.5 px-4 py-2 bg-black text-white text-sm font-semibold rounded-lg disabled:opacity-40 transition-opacity"
               >
