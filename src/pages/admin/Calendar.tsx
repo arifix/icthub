@@ -198,7 +198,7 @@ const AdminCalendar: React.FC = () => {
     <div className="min-h-screen bg-[#f9fafb]">
       {/* Header */}
       <div className="bg-white border-b border-[#e5e7eb] px-6 py-7">
-        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
             <h1 className="text-2xl sm:text-3xl font-bold text-black tracking-tight">
               Calendar
@@ -217,7 +217,7 @@ const AdminCalendar: React.FC = () => {
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-6 py-8 space-y-6">
+      <div className="max-w-7xl mx-auto px-6 py-8 space-y-6">
         {/* Semester Filter */}
         <div className="bg-white rounded-xl border border-[#e5e7eb] px-6 py-4">
           <div className="flex flex-wrap items-center gap-4">

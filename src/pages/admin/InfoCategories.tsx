@@ -80,7 +80,7 @@ const AdminInfoCategories: React.FC = () => {
   return (
     <div className="min-h-screen bg-[#f9fafb]">
       <div className="bg-white border-b border-[#e5e7eb] px-6 py-7">
-        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
             <h1 className="text-2xl sm:text-3xl font-bold text-black tracking-tight">
               Information Categories
@@ -109,7 +109,7 @@ const AdminInfoCategories: React.FC = () => {
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-6 py-8 space-y-6">
+      <div className="max-w-7xl mx-auto px-6 py-8 space-y-6">
         <div className="bg-white rounded-xl border border-[#e5e7eb] px-6 py-4">
           <div className="relative max-w-md">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />

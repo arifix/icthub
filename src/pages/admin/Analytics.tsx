@@ -184,7 +184,7 @@ const AdminAnalytics: React.FC = () => {
     <div className="min-h-screen bg-[#f9fafb]">
       {/* Header */}
       <div className="bg-white border-b border-[#e5e7eb] px-6 py-7">
-        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
             <h1 className="text-2xl sm:text-3xl font-bold text-black tracking-tight">
               Analytics
@@ -215,7 +215,7 @@ const AdminAnalytics: React.FC = () => {
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-6 py-8 space-y-8">
+      <div className="max-w-7xl mx-auto px-6 py-8 space-y-8">
         {loading ? (
           <div className="flex items-center justify-center py-24">
             <div className="animate-spin rounded-full h-8 w-8 border-2 border-black border-t-transparent" />

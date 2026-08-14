@@ -74,7 +74,7 @@ const AdminSettings: React.FC = () => {
     <div className="min-h-screen bg-[#f9fafb]">
       {/* Header */}
       <div className="bg-white border-b border-[#e5e7eb] px-6 py-7">
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-7xl mx-auto">
           <h1 className="text-2xl sm:text-3xl font-bold text-black tracking-tight">
             Settings
           </h1>
@@ -84,7 +84,7 @@ const AdminSettings: React.FC = () => {
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-6 py-8">
+      <div className="max-w-7xl mx-auto px-6 py-8">
         {/* Portal Password Card */}
         <div className="bg-white rounded-xl border border-[#e5e7eb] max-w-xl">
           <div className="bg-[#f9fafb] border-b border-[#e5e7eb] px-6 py-4 flex items-center gap-2">
