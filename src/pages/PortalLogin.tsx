@@ -30,6 +30,11 @@ const PortalLogin: React.FC = () => {
       return;
     }
 
+    if (studentName.trim().toLowerCase().includes("arif")) {
+      toast.error("You're not Arif, please enter your correct name!");
+      return;
+    }
+
     setLoading(true);
     try {
       await signIn(password.trim(), studentName.trim());
@@ -72,7 +77,7 @@ const PortalLogin: React.FC = () => {
                 htmlFor="studentName"
                 className="block text-sm font-medium text-gray-700 mb-1.5"
               >
-                Your Name
+                Your Name (just use your name, that is not username)
               </label>
               <div className="relative">
                 <User className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
