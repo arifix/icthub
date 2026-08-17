@@ -46,6 +46,11 @@ const getPageLabel = (path: string) => {
   if (PAGE_LABELS[path]) return PAGE_LABELS[path];
   if (path.startsWith("/notes/")) return "Note Detail";
   if (path.startsWith("/subjects/")) return "Subject Detail";
+  if (path.startsWith("/files")) return "Files";
+  if (path.startsWith("/archive")) return "Archive";
+  if (path.startsWith("/notifications")) return "Notifications";
+  if (path.startsWith("/calendar")) return "Calendar";
+  if (path.startsWith("/information")) return "Information";
   return path;
 };
 
@@ -515,7 +520,14 @@ const AdminAnalytics: React.FC = () => {
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="border-b border-[#e5e7eb]">
-                      {["Time", "Student", "Page", "IP", "Location", "Device"].map((h) => (
+                      {[
+                        "Time",
+                        "Student",
+                        "Page",
+                        "IP",
+                        "Location",
+                        "Device",
+                      ].map((h) => (
                         <th
                           key={h}
                           className="text-left px-5 py-3 text-xs font-semibold text-[#6b7280] uppercase tracking-wide"

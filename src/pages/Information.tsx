@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Info, BookOpen, ChevronRight, FileText } from "lucide-react";
+import { Info, BookOpen, FileText } from "lucide-react";
 import { supabase } from "../lib/supabase";
 import { Database } from "../types/supabase";
 
