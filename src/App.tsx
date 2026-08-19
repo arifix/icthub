@@ -22,6 +22,7 @@ import CalendarPage from "./pages/Calendar";
 import FilesPage from "./pages/Files";
 import ArchivePage from "./pages/Archive";
 import NotificationsPage from "./pages/Notifications";
+import Club from "./pages/Club";
 
 // Admin pages
 import AdminDashboard from "./pages/admin/Dashboard";
@@ -86,6 +87,7 @@ function App() {
         <Route path="files" element={<FilesPage />} />
         <Route path="archive" element={<ArchivePage />} />
         <Route path="notifications" element={<NotificationsPage />} />
+        <Route path="/club" element={<Club />} />
       </Route>
 
       {/* Admin-only routes */}

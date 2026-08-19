@@ -40,6 +40,8 @@ const PAGE_LABELS: Record<string, string> = {
   "/files": "Files",
   "/archive": "Archive",
   "/notifications": "Notifications",
+  "/clubs": "Clubs",
+  "/information": "Information",
 };
 
 const getPageLabel = (path: string) => {
@@ -51,6 +53,7 @@ const getPageLabel = (path: string) => {
   if (path.startsWith("/notifications")) return "Notifications";
   if (path.startsWith("/calendar")) return "Calendar";
   if (path.startsWith("/information")) return "Information";
+  if (path.startsWith("/club")) return "IICT Club";
   return path;
 };
 

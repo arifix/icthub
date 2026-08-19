@@ -18,6 +18,7 @@ import {
   Shield,
   ChevronDown,
   GraduationCap,
+  Users,
 } from "lucide-react";
 
 const NAV_ITEMS = [
@@ -26,8 +27,9 @@ const NAV_ITEMS = [
   { to: "/notes", label: "Notes", icon: FileText },
   { to: "/calendar", label: "Calendar", icon: Calendar },
   { to: "/files", label: "Files", icon: FolderOpen },
-  { to: "/archive", label: "Archive", icon: Archive },
+  //{ to: "/archive", label: "Archive", icon: Archive },
   { to: "/information", label: "Information", icon: Info },
+  { to: "/club", label: "IICT Club", icon: Users },
 ];
 
 const Navbar: React.FC = () => {
@@ -76,7 +78,7 @@ const Navbar: React.FC = () => {
           </Link>
 
           {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center space-x-1">
+          <nav className="hidden lg:flex items-center space-x-1">
             {NAV_ITEMS.map((item) => (
               <NavLink
                 key={item.to}
@@ -97,7 +99,7 @@ const Navbar: React.FC = () => {
           </nav>
 
           {/* Desktop Right */}
-          <div className="hidden md:flex items-center space-x-2 pl-4 border-l border-gray-200">
+          <div className="hidden lg:flex items-center space-x-2 pl-4 border-l border-gray-200">
             {isAuthenticated && (
               <NavLink
                 to="/notifications"
@@ -169,7 +171,7 @@ const Navbar: React.FC = () => {
           {/* Mobile hamburger */}
           <button
             onClick={() => setMenuOpen(!menuOpen)}
-            className="md:hidden p-2.5 rounded-xl text-gray-600 hover:bg-gray-100 transition-colors"
+            className="lg:hidden p-2.5 rounded-xl text-gray-600 hover:bg-gray-100 transition-colors"
             aria-label="Toggle menu"
           >
             {menuOpen ? (
@@ -183,7 +185,7 @@ const Navbar: React.FC = () => {
 
       {/* Mobile menu */}
       {menuOpen && (
-        <div className="md:hidden bg-white border-t border-gray-100 px-4 py-3 space-y-1">
+        <div className="lg:hidden bg-white border-t border-gray-100 px-4 py-3 space-y-1">
           {NAV_ITEMS.map((item) => (
             <NavLink
               key={item.to}
