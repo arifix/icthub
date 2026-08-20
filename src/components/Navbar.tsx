@@ -29,7 +29,7 @@ const NAV_ITEMS = [
   { to: "/files", label: "Files", icon: FolderOpen },
   //{ to: "/archive", label: "Archive", icon: Archive },
   { to: "/information", label: "Information", icon: Info },
-  { to: "/club", label: "IICT Club", icon: Users },
+  //{ to: "/club", label: "IICT Club", icon: Users },
 ];
 
 const Navbar: React.FC = () => {

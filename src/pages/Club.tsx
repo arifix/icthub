@@ -109,7 +109,7 @@ const Club: React.FC = () => {
                 </h1>
 
                 <p className="max-w-2xl mx-auto text-base sm:text-lg text-gray-600 leading-relaxed">
-                  A faculty-guided platform for MSc students of ICT and ICCT to
+                  A faculty-guided platform for MSc students of ICT and IICT to
                   collaborate in research, technology, innovation, and
                   professional development.
                 </p>
@@ -279,7 +279,7 @@ const Club: React.FC = () => {
               {
                 icon: Code2,
                 title: "Technical Workshop",
-                text: "Every 2–4 weeks",
+                text: "Every 2-3 months",
               },
               {
                 icon: Award,
