@@ -510,7 +510,7 @@ const Home: React.FC = () => {
                           {event.subjects ? (
                             <div className="flex items-center text-xs text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full w-fit">
                               <BookOpen className="h-3 w-3 mr-1" />
-                              <span className="font-medium">
+                              <span className="font-medium line-clamp-1">
                                 {event.subjects.title} ({event.subjects.code})
                               </span>
                             </div>
@@ -520,6 +520,13 @@ const Home: React.FC = () => {
                               <span>General</span>
                             </div>
                           )}
+                          <p className="text-sm font-semibold text-gray-900 mb-1 mt-2">
+                            <span
+                              dangerouslySetInnerHTML={{
+                                __html: event.description,
+                              }}
+                            />
+                          </p>
                         </div>
                       </div>
                     );

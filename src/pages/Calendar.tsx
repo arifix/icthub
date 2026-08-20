@@ -98,9 +98,9 @@ const CalendarPage: React.FC = () => {
       </div>
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
           {/* Calendar */}
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-3">
             <div className="bg-white rounded-xl border border-[#e5e7eb] overflow-hidden">
               <div className="flex items-center justify-between px-6 py-4 border-b border-[#e5e7eb] bg-[#f9fafb]">
                 <h2 className="text-sm font-bold text-black">
@@ -221,7 +221,7 @@ const CalendarPage: React.FC = () => {
           </div>
 
           {/* Upcoming Events Sidebar */}
-          <div>
+          <div className="lg:col-span-2">
             <div className="bg-white rounded-xl border border-[#e5e7eb] overflow-hidden">
               <div className="px-5 py-4 border-b border-[#e5e7eb] bg-[#f9fafb] flex items-center gap-2">
                 <Calendar className="h-4 w-4 text-[#374151]" />
@@ -252,7 +252,7 @@ const CalendarPage: React.FC = () => {
                         className="flex items-start gap-3 px-5 py-4"
                       >
                         <div
-                          className={`text-center text-white rounded-xl px-2 py-1.5 min-w-[42px] shrink-0 ${
+                          className={`text-center text-white rounded-xl px-2.5 py-2 min-w-[50px] shrink-0 ${
                             isWeekend
                               ? "bg-gradient-to-br from-red-500 to-red-600"
                               : "bg-black"
@@ -271,11 +271,13 @@ const CalendarPage: React.FC = () => {
                           <p className="text-sm font-semibold text-black line-clamp-2">
                             {event.title}
                           </p>
-                          <span className="text-xs text-[#6b7280] flex items-center gap-1 mt-0.5">
+                          <span className="text-sm text-[#6b7280] flex items-center gap-1 mt-0.5">
                             {event.subjects ? (
                               <>
                                 <BookOpen className="h-3 w-3 text-gray-500" />
-                                {event.subjects.title} ({event.subjects.code})
+                                <span className="line-clamp-1">
+                                  {event.subjects.title} ({event.subjects.code})
+                                </span>
                               </>
                             ) : (
                               <>
@@ -284,6 +286,13 @@ const CalendarPage: React.FC = () => {
                               </>
                             )}
                           </span>
+                          <p className="text-sm font-semibold text-gray-900 mb-1 mt-2">
+                            <span
+                              dangerouslySetInnerHTML={{
+                                __html: event.description,
+                              }}
+                            />
+                          </p>
                         </div>
                       </div>
                     );
