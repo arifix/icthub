@@ -8,6 +8,7 @@ import {
   ArrowLeft,
   ChevronRight,
   Download,
+  User,
 } from "lucide-react";
 import { supabase } from "../lib/supabase";
 import { Database } from "../types/supabase";
@@ -144,10 +145,7 @@ const SubjectDetailPage: React.FC = () => {
               Home
             </Link>
             <ChevronRight className="h-3 w-3" />
-            <Link
-              to="/subjects"
-              className="hover:text-black transition-colors"
-            >
+            <Link to="/subjects" className="hover:text-black transition-colors">
               Subjects
             </Link>
             <ChevronRight className="h-3 w-3" />
@@ -165,20 +163,20 @@ const SubjectDetailPage: React.FC = () => {
               <h1 className="text-2xl sm:text-3xl font-bold text-black tracking-tight">
                 {subject.title}
               </h1>
+              {subject.description && (
+                <p className="flex items-center gap-2 mt-4 text-sm text-[#374151] font-semibold max-w-3xl leading-relaxed">
+                  <User className="h-3.5 w-3.5" />
+                  Teacher: {subject.description}
+                </p>
+              )}
               {subject.semester && (
                 <div className="flex items-center gap-2 mt-2 text-sm text-[#6b7280]">
                   <Calendar className="h-3.5 w-3.5" />
-                  {subject.semester.name}
+                  Semester: {subject.semester.name}
                 </div>
               )}
             </div>
           </div>
-
-          {subject.description && (
-            <p className="mt-4 text-sm text-[#374151] max-w-3xl leading-relaxed border-t border-[#e5e7eb] pt-4">
-              {subject.description}
-            </p>
-          )}
         </div>
       </div>
 
@@ -279,7 +277,7 @@ const SubjectDetailPage: React.FC = () => {
                         {event.title}
                       </p>
                       <div
-                        className="text-xs text-gray-500 mt-1 line-clamp-2"
+                        className="text-sm text-gray-500 mt-1"
                         dangerouslySetInnerHTML={{ __html: event.description }}
                       />
                     </div>

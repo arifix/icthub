@@ -68,10 +68,9 @@ const NotificationsPage: React.FC = () => {
   };
 
   const typeBadge: Record<string, string> = {
-    note: "text-xs bg-[#f3f4f6] text-[#6b7280] font-semibold px-1.5 py-0.5 rounded",
-    file: "text-xs bg-[#f3f4f6] text-[#6b7280] font-semibold px-1.5 py-0.5 rounded",
-    event:
-      "text-xs bg-[#f3f4f6] text-[#6b7280] font-semibold px-1.5 py-0.5 rounded",
+    note: "text-xs bg-blue-400 text-white font-semibold px-1.5 py-0.5 rounded",
+    file: "text-xs bg-teal-400 text-white font-semibold px-1.5 py-0.5 rounded",
+    event: "text-xs bg-red-400 text-white font-semibold px-1.5 py-0.5 rounded",
   };
   const typeLabel: Record<string, string> = {
     note: "Note",

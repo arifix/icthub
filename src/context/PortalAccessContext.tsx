@@ -31,7 +31,7 @@ export const PortalAccessProvider: React.FC<{ children: React.ReactNode }> = ({
     if (authLoading) return;
 
     const verify = async () => {
-      const stored = localStorage.getItem("portal_access");
+      const stored = localStorage.getItem("icthub_access");
       if (!stored) {
         setStudentName(getStoredStudentName());
         setLoading(false);
@@ -50,17 +50,17 @@ export const PortalAccessProvider: React.FC<{ children: React.ReactNode }> = ({
             setIsAuthenticated(true);
             setStudentName(savedName);
           } else {
-            localStorage.removeItem("portal_access");
+            localStorage.removeItem("icthub_access");
             setIsAuthenticated(false);
             setStudentName(null);
           }
         } else {
-          localStorage.removeItem("portal_access");
+          localStorage.removeItem("icthub_access");
           setIsAuthenticated(false);
           setStudentName(null);
         }
       } catch {
-        localStorage.removeItem("portal_access");
+        localStorage.removeItem("icthub_access");
         setIsAuthenticated(false);
         setStudentName(null);
       } finally {
@@ -90,12 +90,12 @@ export const PortalAccessProvider: React.FC<{ children: React.ReactNode }> = ({
       setStudentName(getStoredStudentName());
     }
 
-    localStorage.setItem("portal_access", btoa(password));
+    localStorage.setItem("icthub_access", btoa(password));
     setIsAuthenticated(true);
   };
 
   const signOut = () => {
-    localStorage.removeItem("portal_access");
+    localStorage.removeItem("icthub_access");
     clearStoredStudentName();
     setStudentName(null);
     setIsAuthenticated(false);

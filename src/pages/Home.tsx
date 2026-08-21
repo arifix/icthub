@@ -38,7 +38,7 @@ const SubjectCard: React.FC<{ subject: Subject }> = ({ subject }) => (
           {subject.code}
         </span>
       </div>
-      <h2 className="text-lg font-bold mb-2 text-gray-900 group-hover:text-blue-600 transition-colors duration-200 line-clamp-2">
+      <h2 className="text-lg font-bold mb-2 text-gray-900 group-hover:text-blue-600 transition-colors duration-200 line-clamp-1">
         {subject.title}
       </h2>
       {subject.semester && (
@@ -229,8 +229,11 @@ const Home: React.FC = () => {
           </h1>
           <p className="text-lg text-gray-600 mb-10 max-w-2xl mx-auto">
             Your academic resource portal for the M.Sc. Eng. in ICT programme at
-            the Institute of Information and Communication Technology (IICT),
-            KUET
+            the
+            <br />
+            <strong>
+              Institute of Information and Communication Technology (IICT), KUET
+            </strong>
           </p>
 
           {/* Stats */}
@@ -422,9 +425,9 @@ const Home: React.FC = () => {
                         <FileText className="h-5 w-5 text-teal-600" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-1">
+                        <div className="flex items-center gap-2 mb-2">
                           {note.subjects?.title && (
-                            <span className="text-xs font-semibold text-teal-700 bg-teal-50 px-2 py-0.5 rounded-full font-mono">
+                            <span className="text-xs font-semibold text-teal-700 bg-teal-50 px-2 py-0.5 rounded-full font-mono line-clamp-1">
                               {note.subjects.title}
                             </span>
                           )}
@@ -433,13 +436,13 @@ const Home: React.FC = () => {
                             {new Date(note.created_at).toLocaleDateString()}
                           </span>
                         </div>
-                        <p className="text-sm font-semibold text-gray-900 group-hover:text-teal-600 transition-colors line-clamp-1">
+                        <p className="text-sm font-semibold text-gray-900 group-hover:text-teal-600 transition-colors line-clamp-1 px-2">
                           {note.title}
                         </p>
-                        <p className="text-xs text-gray-500 line-clamp-1 mt-0.5">
+                        <p className="text-xs text-gray-500 line-clamp-1 mt-1 px-2">
                           <span
                             dangerouslySetInnerHTML={{
-                              __html: stripHtmlAndTruncate(note.content, 80),
+                              __html: stripHtmlAndTruncate(note.content, 100),
                             }}
                           />
                         </p>

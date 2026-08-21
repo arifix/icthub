@@ -119,7 +119,7 @@ const SubjectsPage: React.FC = () => {
                     </span>
                   </div>
 
-                  <h2 className="text-base font-bold text-black group-hover:text-[#374151] transition-colors line-clamp-2 mb-2">
+                  <h2 className="text-base font-bold text-black group-hover:text-[#374151] transition-colors line-clamp-1 mb-2">
                     {subject.title}
                   </h2>
 
