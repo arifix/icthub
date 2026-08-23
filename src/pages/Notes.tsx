@@ -178,18 +178,12 @@ const NotesPage: React.FC = () => {
                 className="group bg-white rounded-xl border border-[#e5e7eb] hover:border-[#d1d5db] hover:shadow-md transition-all duration-200 overflow-hidden flex flex-col"
               >
                 <div className="p-6 flex flex-col flex-1">
-                  <div className="flex items-center justify-between gap-2 mb-4">
-                    <div className="flex items-center space-x-2">
-                      <div className="inline-flex items-center justify-center w-9 h-9 bg-[#f3f4f6] rounded-xl">
-                        <FileText className="h-4 w-4 text-teal-600" />
-                      </div>
-                      <span className="px-2.5 py-1 bg-[#f3f4f6] text-[#374151] text-xs font-semibold rounded-full font-mono">
-                        {note.subjects?.title} ({note.subjects?.code})
-                      </span>
+                  <div className="flex items-center gap-1 mb-4">
+                    <div className="inline-flex items-center justify-center w-9 h-9 bg-gray-100 rounded-xl">
+                      <FileText className="h-4 w-4 text-teal-600" />
                     </div>
-                    <span className="text-xs text-gray-500 flex items-center gap-1">
-                      <Clock className="h-3 w-3" />
-                      {new Date(note.created_at).toLocaleDateString()}
+                    <span className="px-2.5 py-2 bg-gray-100 text-[#374151] text-xs font-semibold rounded-full font-mono truncate">
+                      {note.subjects?.title} ({note.subjects?.code})
                     </span>
                   </div>
 
@@ -206,9 +200,9 @@ const NotesPage: React.FC = () => {
                   </p>
 
                   <div className="border-t border-[#e5e7eb] pt-3 flex items-center justify-between">
-                    <span className="text-xs text-[#6b7280] flex items-center gap-1 truncate">
-                      <BookOpen className="h-3 w-3 text-gray-500 shrink-0" />
-                      <span className="truncate">{note.subjects?.title}</span>
+                    <span className="text-xs text-gray-500 flex items-center gap-1">
+                      <Clock className="h-3 w-3" />
+                      {new Date(note.created_at).toLocaleDateString()}
                     </span>
                     <span className="text-xs text-gray-500 flex items-center gap-1 shrink-0">
                       <MessageCircle className="h-3 w-3" />

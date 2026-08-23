@@ -252,18 +252,18 @@ const CalendarPage: React.FC = () => {
                         className="flex items-start gap-3 px-5 py-4"
                       >
                         <div
-                          className={`text-center text-white rounded-xl px-2.5 py-2 min-w-[50px] shrink-0 ${
+                          className={`text-center text-white rounded-xl px-2.5 py-2.5 min-w-[54px] shrink-0 ${
                             isWeekend
                               ? "bg-gradient-to-br from-red-500 to-red-600"
                               : "bg-black"
                           }`}
                         >
-                          <div className="text-[9px] font-bold uppercase">
+                          <div className="text-[10px] font-bold uppercase opacity-70">
                             {d.toLocaleDateString(undefined, {
                               month: "short",
                             })}
                           </div>
-                          <div className="text-base font-bold leading-none">
+                          <div className="text-lg font-bold leading-none">
                             {d.getDate()}
                           </div>
                         </div>

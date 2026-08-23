@@ -264,11 +264,11 @@ const SubjectDetailPage: React.FC = () => {
                     key={event.id}
                     className="flex items-start gap-4 px-6 py-4"
                   >
-                    <div className="text-center bg-black text-white rounded-xl px-3 py-2 min-w-[48px] shrink-0">
-                      <div className="text-[9px] font-bold uppercase opacity-70">
+                    <div className="text-center bg-black text-white rounded-xl px-3 py-2.5 min-w-[54px] shrink-0">
+                      <div className="text-[10px] font-bold uppercase opacity-70">
                         {d.toLocaleDateString(undefined, { month: "short" })}
                       </div>
-                      <div className="text-lg font-bold leading-none">
+                      <div className="text-xl font-bold leading-none">
                         {d.getDate()}
                       </div>
                     </div>
@@ -335,6 +335,10 @@ const SubjectDetailPage: React.FC = () => {
                         {file.file_type}
                       </span>{" "}
                       &middot; {formatFileSize(file.size)}
+                    </p>
+                    <p className="text-xs text-gray-500">
+                      <span className="font-semibold">Added on:</span>{" "}
+                      {formatDate(file.created_at)}
                     </p>
                   </div>
                   <Download className="h-4 w-4 text-gray-500 group-hover:text-[#6b7280] shrink-0 transition-colors" />
