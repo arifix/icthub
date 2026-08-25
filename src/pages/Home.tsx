@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import { supabase } from "../lib/supabase";
 import { Database } from "../types/supabase";
-import { stripHtmlAndTruncate } from "../utils/helper";
+import { stripHtmlAndTruncate, getUpcomingEventAlert } from "../utils/helper";
 
 type Subject = Database["public"]["Tables"]["subjects"]["Row"] & {
   semester?: { name: string } | null;
@@ -56,78 +56,76 @@ const SubjectCard: React.FC<{ subject: Subject }> = ({ subject }) => (
 
 const NoteCard: React.FC<{ note: Note }> = ({ note }) => (
   <Link
+    key={note.id}
     to={`/notes/${note.id}`}
-    className="group bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-teal-200"
+    className="flex items-start gap-2 p-4 hover:bg-gray-50 transition-colors group"
   >
-    <div className="p-5">
-      <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center space-x-2">
-          <div className="inline-flex items-center justify-center w-9 h-9 bg-teal-100 rounded-lg">
-            <FileText className="h-4 w-4 text-teal-600" />
-          </div>
-          {note.subjects?.code && (
-            <span className="px-2.5 py-1 bg-teal-50 text-teal-700 text-xs font-semibold rounded-full font-mono">
-              {note.subjects.code}
-            </span>
-          )}
-        </div>
+    <div className="w-9 h-9 bg-teal-50 rounded-xl flex items-center justify-center shrink-0 mt-0.5 group-hover:bg-teal-100 transition-colors">
+      <FileText className="h-5 w-5 text-teal-600" />
+    </div>
+    <div className="flex-1 min-w-0">
+      <div className="flex items-center gap-2 mb-2">
+        {note.subjects?.title && (
+          <span className="text-xs font-semibold text-teal-700 bg-teal-50 px-2 py-0.5 rounded-full font-mono line-clamp-1">
+            {note.subjects.title}
+          </span>
+        )}
         <span className="text-xs text-gray-400 flex items-center gap-1">
-          <Clock className="h-3.5 w-3.5" />
+          <Clock className="h-3 w-3" />
           {new Date(note.created_at).toLocaleDateString()}
         </span>
       </div>
-      <h3 className="text-sm font-bold mb-2 text-gray-900 group-hover:text-teal-600 transition-colors line-clamp-2">
+      <p className="text-sm font-semibold text-gray-900 group-hover:text-teal-600 transition-colors line-clamp-1 px-2">
         {note.title}
-      </h3>
-      <p className="text-xs text-gray-500 line-clamp-2 mb-3">
+      </p>
+      <p className="text-xs text-gray-500 line-clamp-1 mt-1 px-2">
         <span
           dangerouslySetInnerHTML={{
-            __html: stripHtmlAndTruncate(note.content, 80),
+            __html: stripHtmlAndTruncate(note.content, 100),
           }}
         />
       </p>
-      <div className="flex items-center text-teal-600 font-medium text-sm group-hover:translate-x-1 transition-transform duration-200">
-        Read More <ArrowRight className="ml-2 h-4 w-4" />
-      </div>
     </div>
+    <ArrowRight className="h-4 w-4 text-gray-300 group-hover:text-teal-500 shrink-0 mt-2 group-hover:translate-x-0.5 transition-transform" />
   </Link>
 );
 
 const EventCard: React.FC<{ event: Event }> = ({ event }) => {
   const date = new Date(event.date);
   return (
-    <div className="group bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-amber-200">
-      <div className="p-5">
-        <div className="flex gap-4">
-          <div className="flex-shrink-0">
-            <div className="bg-gradient-to-br from-amber-500 to-amber-600 text-white rounded-xl p-3 text-center min-w-[60px] shadow-md">
-              <div className="text-xs font-medium opacity-90">
-                {date.toLocaleDateString(undefined, { month: "short" })}
-              </div>
-              <div className="text-2xl font-bold leading-tight">
-                {date.getDate()}
-              </div>
-            </div>
-          </div>
-          <div className="flex-1 min-w-0">
-            <h3 className="text-sm font-bold text-gray-900 group-hover:text-amber-600 transition-colors line-clamp-2 mb-2">
-              {event.title}
-            </h3>
-            {event.subjects ? (
-              <div className="flex items-center text-xs text-amber-600 bg-amber-50 px-2.5 py-1 rounded-full w-fit">
-                <BookOpen className="h-3 w-3 mr-1.5" />
-                <span className="font-medium">
-                  {event.subjects.title} ({event.subjects.code})
-                </span>
-              </div>
-            ) : (
-              <div className="flex items-center text-xs text-gray-500 bg-gray-100 px-2.5 py-1 rounded-full w-fit">
-                <Globe className="h-3 w-3 mr-1.5" />
-                <span>General</span>
-              </div>
-            )}
-          </div>
+    <div key={event.id} className="flex items-start gap-3 p-4">
+      <div className="flex-shrink-0 bg-gradient-to-br from-amber-500 to-amber-600 text-white rounded-xl px-3 py-2 text-center min-w-[52px] shadow-sm">
+        <div className="text-[10px] font-semibold uppercase opacity-90">
+          {date.toLocaleDateString(undefined, {
+            month: "short",
+          })}
         </div>
+        <div className="text-lg font-bold leading-tight">{date.getDate()}</div>
+      </div>
+      <div className="flex-1 min-w-0">
+        <p className="text-sm font-semibold text-gray-900 line-clamp-1 mb-1">
+          {event.title}
+        </p>
+        {event.subjects ? (
+          <div className="flex items-center text-xs text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full w-fit">
+            <BookOpen className="h-3 w-3 mr-1" />
+            <span className="font-medium line-clamp-1">
+              {event.subjects.title} ({event.subjects.code})
+            </span>
+          </div>
+        ) : (
+          <div className="flex items-center text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full w-fit">
+            <Globe className="h-3 w-3 mr-1" />
+            <span>General</span>
+          </div>
+        )}
+        <p className="text-sm font-semibold text-gray-900 mb-1 mt-2">
+          <span
+            dangerouslySetInnerHTML={{
+              __html: event.description,
+            }}
+          />
+        </p>
       </div>
     </div>
   );
@@ -139,6 +137,8 @@ const Home: React.FC = () => {
   const [upcomingEvents, setUpcomingEvents] = useState<Event[]>([]);
   const [filesCount, setFilesCount] = useState(0);
   const [loading, setLoading] = useState(true);
+
+  const alert = getUpcomingEventAlert(upcomingEvents);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -283,6 +283,92 @@ const Home: React.FC = () => {
 
       {/* Content */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 pb-16 space-y-10">
+        {/* Important updates */}
+        {alert.length > 0 && (
+          <div>
+            <div className="mb-5">
+              <h2 className="text-base section-label">Important updates</h2>
+            </div>
+
+            <div className="flex w-full flex-col gap-3">
+              {alert.map((events: any, index: number) => (
+                <div
+                  key={index}
+                  className="rounded-xl bg-white p-4 ring-1 ring-inset ring-red-200"
+                >
+                  <div className="flex items-start gap-3">
+                    <div className="mt-0.5 shrink-0">
+                      <svg
+                        className="size-5 text-red-500"
+                        viewBox="0 0 55 54"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          clipRule="evenodd"
+                          d="M19.9663 4.54867C23.1584 -1.51623 31.8415 -1.51622 35.0335 4.5487L35.0336 4.54875L54.0083 40.6026C54.0084 40.6029 54.0085 40.6031 54.0087 40.6034C56.993 46.2711 52.8794 53.0796 46.475 53.0796H8.52485C2.11871 53.0796 -1.9923 46.2696 0.991191 40.6006L0.991245 40.6005L19.9663 4.5487C19.9663 4.54869 19.9663 4.54868 19.9663 4.54867ZM30.0114 7.19191C28.9471 5.16965 26.0528 5.16965 24.9884 7.19191L24.9884 7.19193L6.01337 43.2436C6.01336 43.2437 6.01334 43.2437 6.01332 43.2437C5.01859 45.134 6.38982 47.4044 8.52485 47.4044H46.475C48.6115 47.4044 49.9801 45.1331 48.9869 43.2473L48.9865 43.2465L30.0114 7.19191ZM27.4999 16.1907C29.0671 16.1907 30.3375 17.4611 30.3375 19.0283V30.3787C30.3375 31.9459 29.0671 33.2163 27.4999 33.2163C25.9328 33.2163 24.6623 31.9459 24.6623 30.3787V19.0283C24.6623 17.4611 25.9328 16.1907 27.4999 16.1907ZM27.4999 36.0539C29.0671 36.0539 30.3375 37.3244 30.3375 38.8915V38.9199C30.3375 40.4871 29.0671 41.7575 27.4999 41.7575C25.9328 41.7575 24.6623 40.4871 24.6623 38.9199V38.8915C24.6623 37.3244 25.9328 36.0539 27.4999 36.0539Z"
+                          fill="currentColor"
+                        />
+                      </svg>
+                    </div>
+
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center justify-between gap-3">
+                        <h3 className="font-semibold text-red-700">
+                          {events.label}
+                        </h3>
+
+                        <span className="shrink-0 rounded-full bg-red-50 px-2 py-0.5 text-sm font-medium text-red-600">
+                          {events.count} event{events.count > 1 ? "s" : ""}
+                        </span>
+                      </div>
+
+                      <div className="mt-3 divide-y divide-red-200">
+                        {events.events.map((event: any, eventIndex: number) => (
+                          <div
+                            key={event.id ?? eventIndex}
+                            className="py-4 first:pt-0 last:pb-0"
+                          >
+                            <div className="flex items-start gap-2">
+                              <span className="mt-1 size-1.5 shrink-0 rounded-full bg-red-400" />
+
+                              <div className="min-w-0">
+                                <p className="font-semibold text-gray-900">
+                                  {event.title}
+                                </p>
+
+                                <p className="mt-0.5 text-sm text-gray-500">
+                                  {
+                                    new Date(event.date)
+                                      .toISOString()
+                                      .split("T")[0]
+                                  }
+                                  {" | "}
+                                  {event.subjects?.title || "General"}
+                                </p>
+                              </div>
+                            </div>
+
+                            {event.description && (
+                              <div
+                                className="prose prose-sm mt-3 max-w-none pl-3.5 text-gray-600 text-sm"
+                                dangerouslySetInnerHTML={{
+                                  __html: event.description,
+                                }}
+                              />
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Quick Access */}
         <div>
           <div className="mb-5">
@@ -416,39 +502,7 @@ const Home: React.FC = () => {
               <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
                 <div className="divide-y divide-gray-50">
                   {recentNotes.map((note) => (
-                    <Link
-                      key={note.id}
-                      to={`/notes/${note.id}`}
-                      className="flex items-start gap-2 p-4 hover:bg-gray-50 transition-colors group"
-                    >
-                      <div className="w-9 h-9 bg-teal-50 rounded-xl flex items-center justify-center shrink-0 mt-0.5 group-hover:bg-teal-100 transition-colors">
-                        <FileText className="h-5 w-5 text-teal-600" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-2">
-                          {note.subjects?.title && (
-                            <span className="text-xs font-semibold text-teal-700 bg-teal-50 px-2 py-0.5 rounded-full font-mono line-clamp-1">
-                              {note.subjects.title}
-                            </span>
-                          )}
-                          <span className="text-xs text-gray-400 flex items-center gap-1">
-                            <Clock className="h-3 w-3" />
-                            {new Date(note.created_at).toLocaleDateString()}
-                          </span>
-                        </div>
-                        <p className="text-sm font-semibold text-gray-900 group-hover:text-teal-600 transition-colors line-clamp-1 px-2">
-                          {note.title}
-                        </p>
-                        <p className="text-xs text-gray-500 line-clamp-1 mt-1 px-2">
-                          <span
-                            dangerouslySetInnerHTML={{
-                              __html: stripHtmlAndTruncate(note.content, 100),
-                            }}
-                          />
-                        </p>
-                      </div>
-                      <ArrowRight className="h-4 w-4 text-gray-300 group-hover:text-teal-500 shrink-0 mt-2 group-hover:translate-x-0.5 transition-transform" />
-                    </Link>
+                    <NoteCard key={note.id} note={note} />
                   ))}
                 </div>
                 <div className="px-4 py-3 bg-gray-50 border-t border-gray-100">
@@ -490,49 +544,7 @@ const Home: React.FC = () => {
               <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
                 <div className="divide-y divide-gray-50">
                   {upcomingEvents.map((event) => {
-                    const date = new Date(event.date);
-                    return (
-                      <div
-                        key={event.id}
-                        className="flex items-start gap-3 p-4"
-                      >
-                        <div className="flex-shrink-0 bg-gradient-to-br from-amber-500 to-amber-600 text-white rounded-xl px-3 py-2 text-center min-w-[52px] shadow-sm">
-                          <div className="text-[10px] font-semibold uppercase opacity-90">
-                            {date.toLocaleDateString(undefined, {
-                              month: "short",
-                            })}
-                          </div>
-                          <div className="text-lg font-bold leading-tight">
-                            {date.getDate()}
-                          </div>
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm font-semibold text-gray-900 line-clamp-1 mb-1">
-                            {event.title}
-                          </p>
-                          {event.subjects ? (
-                            <div className="flex items-center text-xs text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full w-fit">
-                              <BookOpen className="h-3 w-3 mr-1" />
-                              <span className="font-medium line-clamp-1">
-                                {event.subjects.title} ({event.subjects.code})
-                              </span>
-                            </div>
-                          ) : (
-                            <div className="flex items-center text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full w-fit">
-                              <Globe className="h-3 w-3 mr-1" />
-                              <span>General</span>
-                            </div>
-                          )}
-                          <p className="text-sm font-semibold text-gray-900 mb-1 mt-2">
-                            <span
-                              dangerouslySetInnerHTML={{
-                                __html: event.description,
-                              }}
-                            />
-                          </p>
-                        </div>
-                      </div>
-                    );
+                    return <EventCard key={event.id} event={event} />;
                   })}
                 </div>
                 <div className="px-4 py-3 bg-gray-50 border-t border-gray-100">

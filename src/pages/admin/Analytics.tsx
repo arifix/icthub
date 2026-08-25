@@ -476,7 +476,8 @@ const AdminAnalytics: React.FC = () => {
                           </td>
                           <td className="px-5 py-3">
                             <div className="flex items-center gap-1 flex-wrap">
-                              {pages.slice(0, 6).map((p, i) => (
+                              {/* {pages.slice(0, 6).map((p, i) => ( */}
+                              {pages.map((p, i) => (
                                 <React.Fragment key={p.id}>
                                   {i > 0 && (
                                     <span className="text-gray-500 text-xs select-none">
@@ -488,11 +489,11 @@ const AdminAnalytics: React.FC = () => {
                                   </span>
                                 </React.Fragment>
                               ))}
-                              {pages.length > 6 && (
+                              {/* {pages.length > 6 && (
                                 <span className="text-xs text-gray-500">
                                   +{pages.length - 6} more
                                 </span>
-                              )}
+                              )} */}
                             </div>
                           </td>
                         </tr>
