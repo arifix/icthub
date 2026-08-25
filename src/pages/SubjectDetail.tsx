@@ -12,6 +12,8 @@ import {
 } from "lucide-react";
 import { supabase } from "../lib/supabase";
 import { Database } from "../types/supabase";
+import { trackUserActivity } from "../hooks/usePageTracking";
+import { useAuth } from "../context/AuthContext";
 
 type Subject = Database["public"]["Tables"]["subjects"]["Row"] & {
   semester?: { name: string } | null;
@@ -27,6 +29,7 @@ const SubjectDetailPage: React.FC = () => {
   const [events, setEvents] = useState<Event[]>([]);
   const [files, setFiles] = useState<FileData[]>([]);
   const [loading, setLoading] = useState(true);
+  const { isAdmin } = useAuth();
 
   useEffect(() => {
     const fetchSubjectData = async () => {
@@ -321,6 +324,22 @@ const SubjectDetailPage: React.FC = () => {
                   href={file.file_path}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={() =>
+                    !isAdmin
+                      ? void trackUserActivity({
+                          eventType: "file_open",
+                          page: "/files",
+                          label: file.name,
+                          entityType: "file",
+                          entityId: file.id,
+                          metadata: {
+                            fileType: file.file_type,
+                            subjectId: file.subject_id,
+                            subjectCode: file.subjects?.code ?? null,
+                          },
+                        })
+                      : undefined
+                  }
                   className="group flex items-center gap-3 p-4 border border-[#e5e7eb] hover:border-[#d1d5db] rounded-xl hover:shadow-sm transition-all bg-white hover:bg-[#f9fafb]"
                 >
                   <div className="w-9 h-9 bg-[#f3f4f6] group-hover:bg-[#e5e7eb] rounded-xl flex items-center justify-center shrink-0 transition-colors">

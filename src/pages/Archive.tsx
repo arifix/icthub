@@ -13,6 +13,8 @@ import { supabase } from "../lib/supabase";
 import { Database } from "../types/supabase";
 import { useSemesterData } from "../hooks/useSemesterData";
 import { stripHtmlAndTruncate } from "../utils/helper.js";
+import { trackUserActivity } from "../hooks/usePageTracking";
+import { useAuth } from "../context/AuthContext";
 
 type Semester = Database["public"]["Tables"]["semesters"]["Row"];
 type Subject = Database["public"]["Tables"]["subjects"]["Row"];
@@ -50,6 +52,7 @@ const ArchivePage: React.FC = () => {
   const [events, setEvents] = useState<Event[]>([]);
   const [files, setFiles] = useState<FileData[]>([]);
   const [loading, setLoading] = useState(false);
+  const { isAdmin } = useAuth();
 
   const archivedSemesters = getArchivedSemesters(allSemesters)
     .filter((s) => !s.is_current)
@@ -223,9 +226,7 @@ const ArchivePage: React.FC = () => {
                     <Icon className="h-4 w-4 text-[#374151]" />
                   </div>
                   <div>
-                    <div className="text-xl font-bold text-black">
-                      {count}
-                    </div>
+                    <div className="text-xl font-bold text-black">{count}</div>
                     <div className="text-xs text-[#6b7280]">{label}</div>
                   </div>
                 </div>
@@ -277,6 +278,21 @@ const ArchivePage: React.FC = () => {
                     <Link
                       key={note.id}
                       to={`/notes/${note.id}`}
+                      onClick={() =>
+                        !isAdmin
+                          ? void trackUserActivity({
+                              eventType: "note_open",
+                              page: "/notes",
+                              label: note.title,
+                              entityType: "note",
+                              entityId: note.id,
+                              metadata: {
+                                subjectId: note.subject_id,
+                                subjectCode: note.subjects?.code ?? null,
+                              },
+                            })
+                          : undefined
+                      }
                       className="group bg-white rounded-xl border border-[#e5e7eb] hover:border-[#d1d5db] hover:shadow-md transition-all duration-200 p-4 flex flex-col"
                     >
                       <div className="flex items-center justify-between gap-2 mb-4">
@@ -361,6 +377,22 @@ const ArchivePage: React.FC = () => {
                       href={file.file_path}
                       target="_blank"
                       rel="noopener noreferrer"
+                      onClick={() =>
+                        !isAdmin
+                          ? void trackUserActivity({
+                              eventType: "file_open",
+                              page: "/files",
+                              label: file.name,
+                              entityType: "file",
+                              entityId: file.id,
+                              metadata: {
+                                fileType: file.file_type,
+                                subjectId: file.subject_id,
+                                subjectCode: file.subjects?.code ?? null,
+                              },
+                            })
+                          : undefined
+                      }
                       className="group bg-white rounded-xl border border-[#e5e7eb] hover:border-[#d1d5db] hover:shadow-md transition-all duration-200 p-4"
                     >
                       <div className="flex items-start gap-3 mb-4">
