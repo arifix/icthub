@@ -213,6 +213,21 @@ const SubjectDetailPage: React.FC = () => {
                 <Link
                   key={note.id}
                   to={`/notes/${note.id}`}
+                  onClick={() =>
+                    !isAdmin
+                      ? void trackUserActivity({
+                          eventType: "note_open",
+                          page: "/notes",
+                          label: note.title,
+                          entityType: "note",
+                          entityId: note.id,
+                          metadata: {
+                            subjectId: note.subject_id,
+                            subjectCode: note.subjects?.code ?? null,
+                          },
+                        })
+                      : undefined
+                  }
                   className="flex items-center gap-4 px-6 py-4 hover:bg-[#f9fafb] transition-colors group"
                 >
                   <div className="w-8 h-8 bg-[#f3f4f6] group-hover:bg-[#e5e7eb] rounded-xl flex items-center justify-center shrink-0 transition-colors">
