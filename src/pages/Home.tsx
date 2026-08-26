@@ -331,7 +331,7 @@ const Home: React.FC = () => {
                             className="py-4 first:pt-0 last:pb-0"
                           >
                             <div className="flex items-start gap-2">
-                              <span className="mt-1 size-1.5 shrink-0 rounded-full bg-red-400" />
+                              <span className="mt-3 relative -top-[2px] size-1.5 shrink-0 rounded-full bg-red-400" />
 
                               <div className="min-w-0">
                                 <p className="font-semibold text-gray-900">

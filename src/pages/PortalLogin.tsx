@@ -3,7 +3,7 @@ import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { usePortalAccess } from "../context/PortalAccessContext";
 import { useAuth } from "../context/AuthContext";
 import { toast } from "react-hot-toast";
-import { Lock, BookOpen, User } from "lucide-react";
+import { Lock, User, School } from "lucide-react";
 
 const PortalLogin: React.FC = () => {
   const [studentName, setStudentName] = useState("");
@@ -50,13 +50,13 @@ const PortalLogin: React.FC = () => {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 flex flex-col items-center justify-center px-4">
       {/* Branding */}
       <div className="mb-8 text-center">
-        <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl mb-4 shadow-lg">
-          <BookOpen className="h-8 w-8 text-white" />
+        <div className="inline-flex items-center justify-center w-16 h-16">
+          <School className="h-12 w-12 text-gray-800" />
         </div>
-        <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
+        <h1 className="text-2xl font-bold text-gray-800 tracking-tight">
           ICTHub
         </h1>
-        <p className="text-sm text-gray-500 mt-1.5">
+        <p className="text-gray-500 mt-1.5">
           Institute of IICT, KUET &mdash; M.Sc. Eng. in ICT Study Portal
         </p>
       </div>
@@ -65,7 +65,7 @@ const PortalLogin: React.FC = () => {
       <div className="w-full max-w-md bg-white/80 backdrop-blur-sm border border-gray-100 rounded-2xl p-8 shadow-xl">
         <div className="flex items-center gap-2 mb-6">
           <Lock className="h-4 w-4 text-blue-600" />
-          <span className="text-xs font-semibold text-blue-600 uppercase tracking-wider">
+          <span className="text-sm font-semibold text-blue-600 uppercase tracking-wider">
             Portal Access
           </span>
         </div>
@@ -77,7 +77,7 @@ const PortalLogin: React.FC = () => {
                 htmlFor="studentName"
                 className="block text-sm font-medium text-gray-700 mb-1.5"
               >
-                Your Name (just use your name, that is not username)
+                Your Name (just type your first name or full name)
               </label>
               <div className="relative">
                 <User className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
@@ -124,7 +124,7 @@ const PortalLogin: React.FC = () => {
           </button>
         </form>
 
-        <p className="text-xs text-gray-400 text-center mt-6">
+        <p className="text-sm text-gray-400 text-center mt-6">
           Contact your portal administrator if you don&apos;t have the password
         </p>
       </div>

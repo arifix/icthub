@@ -17,8 +17,8 @@ import {
   Bell,
   Shield,
   ChevronDown,
-  GraduationCap,
   Users,
+  School,
 } from "lucide-react";
 
 const NAV_ITEMS = [
@@ -64,13 +64,9 @@ const Navbar: React.FC = () => {
         <div className="flex justify-between h-20 items-center">
           {/* Logo */}
           <Link to="/" className="flex items-center group">
-            <div className="w-11 h-11 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-md group-hover:shadow-lg transition-all duration-300">
-              <GraduationCap className="h-6 w-6 text-white" />
-            </div>
+            <School className="h-10 w-10 text-gray-800" />
             <div className="ml-3">
-              <span className="text-lg font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-                ICTHub
-              </span>
+              <span className="text-xl font-bold text-gray-800">ICTHub</span>
               <p className="text-xs text-gray-600 leading-none mt-0.5">
                 M.Sc. Eng. in ICT Study Portal
               </p>

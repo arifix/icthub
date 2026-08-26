@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { toast } from "react-hot-toast";
-import { BookOpen, Lock, Mail } from "lucide-react";
+import { Lock, Mail, School } from "lucide-react";
 
 const AdminLogin: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -35,10 +35,10 @@ const AdminLogin: React.FC = () => {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 flex flex-col items-center justify-center px-4">
       {/* Logo */}
       <div className="mb-8 text-center">
-        <div className="inline-flex items-center justify-center w-14 h-14 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl mb-4 shadow-lg">
-          <BookOpen className="h-6 w-6 text-white" />
+        <div className="inline-flex items-center justify-center w-14 h-14 mb-2">
+          <School className="h-12 w-12 text-gray-800" />
         </div>
-        <h1 className="text-2xl font-bold text-gray-900 tracking-tight">
+        <h1 className="text-2xl font-bold text-gray-800 tracking-tight">
           ICTHub Admin
         </h1>
         <p className="text-sm text-gray-500 mt-1">
@@ -100,7 +100,7 @@ const AdminLogin: React.FC = () => {
             {loading ? "Signing in…" : "Sign In"}
           </button>
         </form>
-        <p className="text-xs text-gray-400 text-center mt-6">
+        <p className="text-sm text-gray-400 text-center mt-6">
           Portal visitor?{" "}
           <a
             href="/login"

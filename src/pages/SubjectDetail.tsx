@@ -143,7 +143,7 @@ const SubjectDetailPage: React.FC = () => {
       {/* Page header */}
       <div className="bg-white border-b border-[#e5e7eb]">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-7">
-          <div className="flex items-center gap-2 text-gray-500 text-xs mb-4">
+          {/* <div className="flex items-center gap-2 text-gray-500 text-xs mb-4">
             <Link to="/" className="hover:text-black transition-colors">
               Home
             </Link>
@@ -153,7 +153,7 @@ const SubjectDetailPage: React.FC = () => {
             </Link>
             <ChevronRight className="h-3 w-3" />
             <span className="text-[#6b7280] truncate">{subject.title}</span>
-          </div>
+          </div> */}
 
           <div className="flex items-start gap-4">
             <div className="w-14 h-14 bg-black rounded-xl flex items-center justify-center shrink-0">
@@ -167,15 +167,17 @@ const SubjectDetailPage: React.FC = () => {
                 {subject.title}
               </h1>
               {subject.description && (
-                <p className="flex items-center gap-2 mt-4 text-sm text-[#374151] font-semibold max-w-3xl leading-relaxed">
+                <p className="flex items-center gap-2 mt-4 text-sm text-[#374151] max-w-3xl leading-relaxed">
                   <User className="h-3.5 w-3.5" />
-                  Teacher: {subject.description}
+                  Teacher:{" "}
+                  <span className="font-semibold">{subject.description}</span>
                 </p>
               )}
               {subject.semester && (
-                <div className="flex items-center gap-2 mt-2 text-sm text-[#6b7280]">
+                <div className="flex items-center gap-2 mt-2 text-sm text-[#374151]">
                   <Calendar className="h-3.5 w-3.5" />
-                  Semester: {subject.semester.name}
+                  Semester:{" "}
+                  <span className="font-semibold">{subject.semester.name}</span>
                 </div>
               )}
             </div>

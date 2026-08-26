@@ -5,4 +5,4 @@ export declare const stripHtmlAndTruncate: (
 
 export declare const isPastDate: (date: string) => boolean;
 
-export declare const isPastDate: (events: Event) => object | undefined;
+export declare const getUpcomingEventAlert: (events: any) => object | undefined;

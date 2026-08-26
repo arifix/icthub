@@ -168,7 +168,7 @@ const NoteDetailPage: React.FC = () => {
       {/* Page header */}
       <div className="bg-white border-b border-[#e5e7eb]">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-7">
-          <div className="flex items-center gap-2 text-gray-500 text-xs mb-4">
+          {/* <div className="flex items-center gap-2 text-gray-500 text-xs mb-4">
             <Link to="/" className="hover:text-black transition-colors">
               Home
             </Link>
@@ -180,7 +180,8 @@ const NoteDetailPage: React.FC = () => {
             <span className="text-[#6b7280] truncate max-w-xs">
               {note.title}
             </span>
-          </div>
+          </div> */}
+
           <h1 className="text-2xl sm:text-3xl font-bold text-black tracking-tight mb-4">
             {note.title}
           </h1>
@@ -194,7 +195,7 @@ const NoteDetailPage: React.FC = () => {
                 {subject.code} — {subject.title}
               </Link>
             )}
-            <span className="inline-flex items-center gap-1.5 text-xs text-[#6b7280]">
+            <span className="inline-flex items-center gap-1.5 text-sm text-[#6b7280]">
               <Calendar className="h-3.5 w-3.5" />
               {new Date(note.created_at).toLocaleDateString("en-US", {
                 year: "numeric",
@@ -202,7 +203,7 @@ const NoteDetailPage: React.FC = () => {
                 day: "numeric",
               })}
             </span>
-            <span className="inline-flex items-center gap-1.5 text-xs text-[#6b7280]">
+            <span className="inline-flex items-center gap-1.5 text-sm text-[#6b7280]">
               <Clock className="h-3.5 w-3.5" />
               {Math.max(
                 1,
