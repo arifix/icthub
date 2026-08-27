@@ -137,8 +137,9 @@ const Home: React.FC = () => {
   const [upcomingEvents, setUpcomingEvents] = useState<Event[]>([]);
   const [filesCount, setFilesCount] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [totalEventsCount, setTotalEventsCount] = useState(0);
 
-  const alert = getUpcomingEventAlert(upcomingEvents);
+  const eventAlert = getUpcomingEventAlert(upcomingEvents) || [];
 
   useEffect(() => {
     const fetchData = async () => {
@@ -199,6 +200,14 @@ const Home: React.FC = () => {
             .slice(0, 4) || [];
         setUpcomingEvents(currentEvents);
 
+        const { count: eventsCount, error: countError } = await supabase
+          .from("events")
+          .select("*", { count: "exact", head: true })
+          .eq("is_active", true);
+
+        setTotalEventsCount(eventsCount ?? 0);
+        if (countError) throw countError;
+
         const { data: allFiles, error: filesError } = await supabase
           .from("files")
           .select(`*, semester:semesters(id, is_current)`)
@@ -253,7 +262,7 @@ const Home: React.FC = () => {
               },
               {
                 icon: Calendar,
-                value: upcomingEvents.length,
+                value: totalEventsCount,
                 label: "Events",
                 color: "text-amber-600",
               },
@@ -284,14 +293,14 @@ const Home: React.FC = () => {
       {/* Content */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 pb-16 space-y-10">
         {/* Important updates */}
-        {alert.length > 0 && (
+        {eventAlert.length > 0 && (
           <div>
             <div className="mb-5">
               <h2 className="text-base section-label">Important updates</h2>
             </div>
 
             <div className="flex w-full flex-col gap-3">
-              {alert.map((events: any, index: number) => (
+              {eventAlert.map((events: any, index: number) => (
                 <div
                   key={index}
                   className="rounded-xl bg-white p-4 ring-1 ring-inset ring-red-200"

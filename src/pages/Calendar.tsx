@@ -6,6 +6,7 @@ import {
   ChevronRight,
   BookOpen,
   Globe,
+  CalendarXIcon,
 } from "lucide-react";
 import { supabase } from "../lib/supabase";
 import { Database } from "../types/supabase";
@@ -82,6 +83,7 @@ const CalendarPage: React.FC = () => {
   const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   const today = new Date().toISOString().split("T")[0];
   const upcomingEvents = events.filter((e) => e.date >= today);
+  const pastEvents = events.filter((e) => e.date < today);
 
   return (
     <div className="min-h-screen bg-[#f9fafb]">
@@ -220,8 +222,9 @@ const CalendarPage: React.FC = () => {
             </div>
           </div>
 
-          {/* Upcoming Events Sidebar */}
-          <div className="lg:col-span-2">
+          {/* Events Sidebar */}
+          <div className="lg:col-span-2 space-y-5">
+            {/* Upcoming Events */}
             <div className="bg-white rounded-xl border border-[#e5e7eb] overflow-hidden">
               <div className="px-5 py-4 border-b border-[#e5e7eb] bg-[#f9fafb] flex items-center gap-2">
                 <Calendar className="h-4 w-4 text-[#374151]" />
@@ -287,6 +290,85 @@ const CalendarPage: React.FC = () => {
                             )}
                           </span>
                           <p className="text-sm font-semibold text-gray-900 mb-1 mt-2">
+                            <span
+                              dangerouslySetInnerHTML={{
+                                __html: event.description,
+                              }}
+                            />
+                          </p>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+
+            {/* Past Events */}
+            <div className="bg-white rounded-xl border border-[#e5e7eb] overflow-hidden">
+              <div className="px-5 py-4 border-b border-[#e5e7eb] bg-[#f9fafb] flex items-center gap-2">
+                <CalendarXIcon className="h-4 w-4 text-[#374151]" />
+                <h2 className="text-sm font-bold text-black">Past Events</h2>
+                <span className="ml-auto text-xs bg-[#f3f4f6] text-[#6b7280] font-semibold px-2 py-0.5 rounded-full">
+                  {pastEvents.length}
+                </span>
+              </div>
+
+              {loading ? (
+                <div className="flex justify-center py-8">
+                  <div className="animate-spin rounded-full h-6 w-6 border-2 border-black border-t-transparent" />
+                </div>
+              ) : pastEvents.length === 0 ? (
+                <div className="text-center py-10 text-gray-500 text-sm">
+                  No upcoming events.
+                </div>
+              ) : (
+                <div className="divide-y divide-[#e5e7eb] max-h-[600px] overflow-y-auto">
+                  {pastEvents.map((event) => {
+                    const d = new Date(event.date);
+                    const isWeekend = d.getDay() === 5 || d.getDay() === 6;
+                    return (
+                      <div
+                        key={event.id}
+                        className="flex items-start gap-3 px-5 py-4"
+                      >
+                        <div
+                          className={`flex flex-col justify-center text-center text-white rounded-xl px-2.5 py-2.5 min-w-[54px] min-h-[70px] shrink-0 ${
+                            isWeekend
+                              ? "bg-gradient-to-br from-red-500 to-red-600"
+                              : "bg-gray-500"
+                          }`}
+                        >
+                          <div className="text-[10px] font-bold uppercase opacity-70">
+                            {d.toLocaleDateString(undefined, {
+                              month: "short",
+                              year: "numeric",
+                            })}
+                          </div>
+                          <div className="text-lg font-bold leading-none">
+                            {d.getDate()}
+                          </div>
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-semibold text-gray-400 line-clamp-2">
+                            {event.title}
+                          </p>
+                          <span className="text-sm text-[#6b7280] flex items-center gap-1 mt-0.5">
+                            {event.subjects ? (
+                              <>
+                                <BookOpen className="h-3 w-3 text-gray-400" />
+                                <span className="line-clamp-1">
+                                  {event.subjects.title} ({event.subjects.code})
+                                </span>
+                              </>
+                            ) : (
+                              <>
+                                <Globe className="h-3 w-3 text-gray-500" />
+                                General
+                              </>
+                            )}
+                          </span>
+                          <p className="text-sm font-semibold text-gray-400 mb-1 mt-2">
                             <span
                               dangerouslySetInnerHTML={{
                                 __html: event.description,
