@@ -320,7 +320,7 @@ const CalendarPage: React.FC = () => {
                 </div>
               ) : pastEvents.length === 0 ? (
                 <div className="text-center py-10 text-gray-500 text-sm">
-                  No upcoming events.
+                  No past events.
                 </div>
               ) : (
                 <div className="divide-y divide-[#e5e7eb] max-h-[600px] overflow-y-auto">
@@ -330,19 +330,18 @@ const CalendarPage: React.FC = () => {
                     return (
                       <div
                         key={event.id}
-                        className="flex items-start gap-3 px-5 py-4"
+                        className="flex items-start gap-3 px-5 py-4 opacity-50"
                       >
                         <div
-                          className={`flex flex-col justify-center text-center text-white rounded-xl px-2.5 py-2.5 min-w-[54px] min-h-[70px] shrink-0 ${
+                          className={`text-center text-white rounded-xl px-2.5 py-2.5 min-w-[54px] shrink-0 ${
                             isWeekend
                               ? "bg-gradient-to-br from-red-500 to-red-600"
-                              : "bg-gray-500"
+                              : "bg-black"
                           }`}
                         >
                           <div className="text-[10px] font-bold uppercase opacity-70">
                             {d.toLocaleDateString(undefined, {
                               month: "short",
-                              year: "numeric",
                             })}
                           </div>
                           <div className="text-lg font-bold leading-none">
@@ -350,13 +349,13 @@ const CalendarPage: React.FC = () => {
                           </div>
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm font-semibold text-gray-400 line-clamp-2">
+                          <p className="text-sm font-semibold text-black line-clamp-2">
                             {event.title}
                           </p>
                           <span className="text-sm text-[#6b7280] flex items-center gap-1 mt-0.5">
                             {event.subjects ? (
                               <>
-                                <BookOpen className="h-3 w-3 text-gray-400" />
+                                <BookOpen className="h-3 w-3 text-gray-500" />
                                 <span className="line-clamp-1">
                                   {event.subjects.title} ({event.subjects.code})
                                 </span>
@@ -368,7 +367,7 @@ const CalendarPage: React.FC = () => {
                               </>
                             )}
                           </span>
-                          <p className="text-sm font-semibold text-gray-400 mb-1 mt-2">
+                          <p className="text-sm font-semibold text-gray-900 mb-1 mt-2">
                             <span
                               dangerouslySetInnerHTML={{
                                 __html: event.description,

@@ -194,6 +194,15 @@ const AdminCalendar: React.FC = () => {
     })
     .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
+  const pastEvents = filteredEvents
+    .filter((event) => {
+      const eventDate = new Date(event.date);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      return eventDate < today;
+    })
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
   return (
     <div className="min-h-screen bg-[#f9fafb]">
       {/* Header */}
@@ -379,93 +388,175 @@ const AdminCalendar: React.FC = () => {
           )}
         </div>
 
-        {/* Upcoming Events */}
-        <div className="bg-white rounded-xl border border-[#e5e7eb]">
-          <div className="bg-[#f9fafb] border-b border-[#e5e7eb] px-6 py-4 flex items-center gap-2">
-            <CalendarIcon className="h-4 w-4 text-[#374151]" />
-            <span className="text-sm font-bold text-black">
-              Upcoming Events
-            </span>
-            <span className="ml-auto text-xs bg-[#f3f4f6] text-[#6b7280] font-semibold px-2 py-0.5 rounded-full">
-              {upcomingEvents.length}
-            </span>
-          </div>
-          {loading ? (
-            <div className="flex items-center justify-center py-12">
-              <div className="animate-spin rounded-full h-8 w-8 border-2 border-black border-t-transparent" />
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Upcoming Events */}
+          <div className="bg-white rounded-xl border border-[#e5e7eb]">
+            <div className="bg-[#f9fafb] border-b border-[#e5e7eb] px-6 py-4 flex items-center gap-2">
+              <CalendarIcon className="h-4 w-4 text-[#374151]" />
+              <span className="text-sm font-bold text-black">
+                Upcoming Events
+              </span>
+              <span className="ml-auto text-xs bg-[#f3f4f6] text-[#6b7280] font-semibold px-2 py-0.5 rounded-full">
+                {upcomingEvents.length}
+              </span>
             </div>
-          ) : upcomingEvents.length === 0 ? (
-            <div className="text-center py-12">
-              <div className="bg-[#f3f4f6] p-3 rounded-xl w-fit mx-auto mb-4">
-                <CalendarIcon className="h-8 w-8 text-gray-500" />
+            {loading ? (
+              <div className="flex items-center justify-center py-12">
+                <div className="animate-spin rounded-full h-8 w-8 border-2 border-black border-t-transparent" />
               </div>
-              <p className="text-sm font-semibold text-[#374151]">
-                No upcoming events
-              </p>
-              <Link
-                to="/admin/events/new"
-                className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-black text-white rounded-lg text-sm font-medium"
-              >
-                <Plus className="h-4 w-4" />
-                Add Event
-              </Link>
-            </div>
-          ) : (
-            <div className="divide-y divide-[#e5e7eb]">
-              {upcomingEvents.map((event) => (
-                <div
-                  key={event.id}
-                  className="flex items-center gap-4 px-6 py-4 hover:bg-[#f9fafb]"
-                >
-                  <div className="bg-black text-white rounded-lg px-3 py-2 text-center min-w-[56px] shrink-0">
-                    <div className="text-xs font-medium opacity-70">
-                      {new Date(event.date).toLocaleDateString(undefined, {
-                        month: "short",
-                      })}
-                    </div>
-                    <div className="text-lg font-bold leading-none">
-                      {new Date(event.date).getDate()}
-                    </div>
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-[#374151] truncate">
-                      {event.title}
-                    </p>
-                    <div className="flex items-center gap-1 text-xs text-gray-500 mt-0.5">
-                      {event.subjects ? (
-                        <>
-                          <BookOpen className="h-3 w-3 shrink-0" />
-                          <span>
-                            {event.subjects.title} ({event.subjects.code})
-                          </span>
-                        </>
-                      ) : (
-                        <>
-                          <Globe className="h-3 w-3 shrink-0" />
-                          <span>General</span>
-                        </>
-                      )}
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-1 shrink-0">
-                    <Link
-                      to={`/admin/events/${event.id}`}
-                      className="p-1.5 text-[#374151] hover:text-black hover:bg-[#f3f4f6] rounded-lg"
-                    >
-                      <Edit className="h-4 w-4" />
-                    </Link>
-                    <button
-                      onClick={() => handleDelete(event.id)}
-                      disabled={isDeleting}
-                      className="p-1.5 text-[#6b7280] hover:text-red-600 hover:bg-red-50 rounded-lg disabled:opacity-50"
-                    >
-                      <Trash className="h-4 w-4" />
-                    </button>
-                  </div>
+            ) : upcomingEvents.length === 0 ? (
+              <div className="text-center py-12">
+                <div className="bg-[#f3f4f6] p-3 rounded-xl w-fit mx-auto mb-4">
+                  <CalendarIcon className="h-8 w-8 text-gray-500" />
                 </div>
-              ))}
+                <p className="text-sm font-semibold text-[#374151]">
+                  No upcoming events
+                </p>
+                <Link
+                  to="/admin/events/new"
+                  className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-black text-white rounded-lg text-sm font-medium"
+                >
+                  <Plus className="h-4 w-4" />
+                  Add Event
+                </Link>
+              </div>
+            ) : (
+              <div className="divide-y divide-[#e5e7eb]">
+                {upcomingEvents.map((event) => (
+                  <div
+                    key={event.id}
+                    className="flex items-center gap-4 px-6 py-4 hover:bg-[#f9fafb]"
+                  >
+                    <div className="bg-black text-white rounded-lg px-3 py-2 text-center min-w-[56px] shrink-0">
+                      <div className="text-xs font-medium opacity-70">
+                        {new Date(event.date).toLocaleDateString(undefined, {
+                          month: "short",
+                        })}
+                      </div>
+                      <div className="text-lg font-bold leading-none">
+                        {new Date(event.date).getDate()}
+                      </div>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-[#374151] truncate">
+                        {event.title}
+                      </p>
+                      <div className="flex items-center gap-1 text-xs text-gray-500 mt-0.5">
+                        {event.subjects ? (
+                          <>
+                            <BookOpen className="h-3 w-3 shrink-0" />
+                            <span>
+                              {event.subjects.title} ({event.subjects.code})
+                            </span>
+                          </>
+                        ) : (
+                          <>
+                            <Globe className="h-3 w-3 shrink-0" />
+                            <span>General</span>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-1 shrink-0">
+                      <Link
+                        to={`/admin/events/${event.id}`}
+                        className="p-1.5 text-[#374151] hover:text-black hover:bg-[#f3f4f6] rounded-lg"
+                      >
+                        <Edit className="h-4 w-4" />
+                      </Link>
+                      <button
+                        onClick={() => handleDelete(event.id)}
+                        disabled={isDeleting}
+                        className="p-1.5 text-[#6b7280] hover:text-red-600 hover:bg-red-50 rounded-lg disabled:opacity-50"
+                      >
+                        <Trash className="h-4 w-4" />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Past Events */}
+          <div className="bg-white rounded-xl border border-[#e5e7eb]">
+            <div className="bg-[#f9fafb] border-b border-[#e5e7eb] px-6 py-4 flex items-center gap-2">
+              <CalendarIcon className="h-4 w-4 text-[#374151]" />
+              <span className="text-sm font-bold text-black">Past Events</span>
+              <span className="ml-auto text-xs bg-[#f3f4f6] text-[#6b7280] font-semibold px-2 py-0.5 rounded-full">
+                {pastEvents.length}
+              </span>
             </div>
-          )}
+            {loading ? (
+              <div className="flex items-center justify-center py-12">
+                <div className="animate-spin rounded-full h-8 w-8 border-2 border-black border-t-transparent" />
+              </div>
+            ) : pastEvents.length === 0 ? (
+              <div className="text-center py-12">
+                <div className="bg-[#f3f4f6] p-3 rounded-xl w-fit mx-auto mb-4">
+                  <CalendarIcon className="h-8 w-8 text-gray-500" />
+                </div>
+                <p className="text-sm font-semibold text-[#374151]">
+                  No past events
+                </p>
+              </div>
+            ) : (
+              <div className="divide-y divide-[#e5e7eb]">
+                {pastEvents.map((event) => (
+                  <div
+                    key={event.id}
+                    className="flex items-center gap-4 px-6 py-4 hover:bg-[#f9fafb]"
+                  >
+                    <div className="bg-black text-white rounded-lg px-3 py-2 text-center min-w-[56px] shrink-0 opacity-50">
+                      <div className="text-xs font-medium opacity-70">
+                        {new Date(event.date).toLocaleDateString(undefined, {
+                          month: "short",
+                        })}
+                      </div>
+                      <div className="text-lg font-bold leading-none">
+                        {new Date(event.date).getDate()}
+                      </div>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-[#374151] truncate">
+                        {event.title}
+                      </p>
+                      <div className="flex items-center gap-1 text-xs text-gray-500 mt-0.5">
+                        {event.subjects ? (
+                          <>
+                            <BookOpen className="h-3 w-3 shrink-0" />
+                            <span>
+                              {event.subjects.title} ({event.subjects.code})
+                            </span>
+                          </>
+                        ) : (
+                          <>
+                            <Globe className="h-3 w-3 shrink-0" />
+                            <span>General</span>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-1 shrink-0">
+                      <Link
+                        to={`/admin/events/${event.id}`}
+                        className="p-1.5 text-[#374151] hover:text-black hover:bg-[#f3f4f6] rounded-lg"
+                      >
+                        <Edit className="h-4 w-4" />
+                      </Link>
+                      {/* <button
+                        onClick={() => handleDelete(event.id)}
+                        disabled={isDeleting}
+                        className="p-1.5 text-[#6b7280] hover:text-red-600 hover:bg-red-50 rounded-lg disabled:opacity-50"
+                      >
+                        <Trash className="h-4 w-4" />
+                      </button> */}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>

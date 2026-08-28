@@ -41,6 +41,7 @@ export interface Database {
           created_at: string;
           title: string;
           description: string;
+          additional_info: string | null;
           code: string;
           is_active?: boolean;
           semester_id: number | null;
@@ -50,6 +51,7 @@ export interface Database {
           created_at?: string;
           title: string;
           description: string;
+          additional_info: string | null;
           code: string;
           is_active?: boolean;
           semester_id?: number | null;
@@ -59,6 +61,7 @@ export interface Database {
           created_at?: string;
           title?: string;
           description?: string;
+          additional_info: string | null;
           code?: string;
           is_active?: boolean;
           semester_id?: number | null;

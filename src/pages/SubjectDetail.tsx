@@ -9,6 +9,7 @@ import {
   ChevronRight,
   Download,
   User,
+  Info,
 } from "lucide-react";
 import { supabase } from "../lib/supabase";
 import { Database } from "../types/supabase";
@@ -78,7 +79,7 @@ const SubjectDetailPage: React.FC = () => {
             .from("events")
             .select("*")
             .eq("subject_id", id)
-            .order("date", { ascending: true }),
+            .order("date", { ascending: false }),
           supabase
             .from("files")
             .select("*")
@@ -180,6 +181,14 @@ const SubjectDetailPage: React.FC = () => {
                   <span className="font-semibold">{subject.semester.name}</span>
                 </div>
               )}
+              {subject.additional_info && (
+                <p className="flex items-center gap-2 mt-2 text-sm text-[#374151] max-w-3xl leading-relaxed">
+                  <Info className="h-3.5 w-3.5" />
+                  <span className="font-medium">
+                    {subject.additional_info}
+                  </span>
+                </p>
+              )}
             </div>
           </div>
         </div>
@@ -271,7 +280,7 @@ const SubjectDetailPage: React.FC = () => {
               View calendar →
             </Link>
           </div>
-          <div className="divide-y divide-[#e5e7eb]">
+          <div className="divide-y divide-gray-300">
             {events.length === 0 ? (
               <div className="text-center py-10 text-gray-500 text-sm">
                 No events for this subject yet.
@@ -279,10 +288,11 @@ const SubjectDetailPage: React.FC = () => {
             ) : (
               events.map((event) => {
                 const d = new Date(event.date);
+                const isPast = d < new Date();
                 return (
                   <div
                     key={event.id}
-                    className="flex items-start gap-4 px-6 py-4"
+                    className={`flex items-start gap-4 px-6 py-4 ${isPast ? "opacity-50" : ""}`}
                   >
                     <div className="text-center bg-black text-white rounded-xl px-3 py-2.5 min-w-[54px] shrink-0">
                       <div className="text-[10px] font-bold uppercase opacity-70">
@@ -297,7 +307,7 @@ const SubjectDetailPage: React.FC = () => {
                         {event.title}
                       </p>
                       <div
-                        className="text-sm text-gray-500 mt-1"
+                        className="text-sm text-gray-600 mt-1"
                         dangerouslySetInnerHTML={{ __html: event.description }}
                       />
                     </div>

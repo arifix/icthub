@@ -15,6 +15,7 @@ import {
   Activity,
   GraduationCap,
   Info,
+  School,
 } from "lucide-react";
 
 const AdminSidebar: React.FC = () => {
@@ -116,9 +117,9 @@ const AdminSidebar: React.FC = () => {
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-4 border-b border-gray-100">
         {!collapsed && (
-          <div className="flex items-center gap-2.5">
-            <div className="bg-gradient-to-br from-blue-600 to-indigo-600 p-2 rounded-lg shadow-sm">
-              <GraduationCap className="h-5 w-5 text-white" />
+          <div className="flex items-center gap-1">
+            <div className="p-2">
+              <School className="h-9 w-9 text-gray-800" />
             </div>
             <div>
               <h1 className="font-bold text-gray-900">ICTHub</h1>

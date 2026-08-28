@@ -303,9 +303,9 @@ const AdminFiles: React.FC = () => {
                             {file.file_type.toUpperCase()}
                           </span>
                         </td>
-                        <td className="px-5 py-3 text-xs text-[#6b7280]">
+                        <td className="px-5 py-3 text-xs text-[#6b7280] truncate max-w-[200px]">
                           {file.subjects ? (
-                            <span className="flex items-center gap-1 truncate">
+                            <span className="flex items-center gap-1">
                               <BookOpen className="h-3 w-3 shrink-0" />
                               {file.subjects.title} ({file.subjects.code})
                             </span>

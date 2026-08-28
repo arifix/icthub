@@ -17,6 +17,7 @@ const AdminSubjectForm: React.FC = () => {
     title: "",
     code: "",
     description: "",
+    additional_info: "",
     is_active: true,
     semester_id: null,
   });
@@ -46,6 +47,7 @@ const AdminSubjectForm: React.FC = () => {
           title: "",
           code: "",
           description: "",
+          additional_info: "",
           is_active: true,
           semester_id: null,
         },
@@ -102,6 +104,7 @@ const AdminSubjectForm: React.FC = () => {
             title: subject.title,
             code: subject.code,
             description: subject.description,
+            additional_info: subject.additional_info,
             is_active: subject.is_active ?? true,
             semester_id: subject.semester_id ?? null,
           })
@@ -115,6 +118,7 @@ const AdminSubjectForm: React.FC = () => {
             title: subject.title,
             code: subject.code,
             description: subject.description,
+            additional_info: subject.additional_info,
             is_active: subject.is_active ?? true,
             semester_id: subject.semester_id ?? null,
           },
@@ -230,6 +234,25 @@ const AdminSubjectForm: React.FC = () => {
                 onChange={handleChange}
                 rows={5}
                 placeholder="Enter a description of the subject…"
+                required
+                className="w-full px-3 py-2.5 border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-black focus:border-black text-[#374151] resize-none"
+              />
+            </div>
+
+            <div>
+              <label
+                htmlFor="additional_info"
+                className="block text-xs font-semibold text-[#6b7280] uppercase tracking-wide mb-1.5"
+              >
+                Additional Information
+              </label>
+              <textarea
+                id="additional_info"
+                name="additional_info"
+                value={subject.additional_info}
+                onChange={handleChange}
+                rows={5}
+                placeholder="Enter additional information of the subject…"
                 required
                 className="w-full px-3 py-2.5 border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-black focus:border-black text-[#374151] resize-none"
               />
