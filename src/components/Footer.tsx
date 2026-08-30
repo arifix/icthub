@@ -99,7 +99,7 @@ const Footer: React.FC = () => {
           <div className="flex flex-col md:flex-row justify-between items-center space-y-3 md:space-y-0">
             <div className="flex flex-col items-center md:items-start text-sm text-gray-400">
               <span>&copy; {year} ICTHub</span>
-              <span>Last updated on: 2026-08-28</span>
+              <span>Last updated on: 2026-08-30</span>
             </div>
             <div className="text-sm text-gray-400">
               <span>Made by </span>
@@ -110,8 +110,10 @@ const Footer: React.FC = () => {
                 className="text-blue-400 hover:text-blue-300 transition-colors font-medium"
               >
                 Arif Khan
-              </a>{" "}
-              with <span className="animate-pulse">❤️</span>
+              </a>
+              <br />
+              Built with React, TypeScript, TailwindCSS &{" "}
+              <span className="animate-pulse">❤️</span>
             </div>
           </div>
         </div>

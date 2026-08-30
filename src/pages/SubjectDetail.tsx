@@ -144,27 +144,15 @@ const SubjectDetailPage: React.FC = () => {
       {/* Page header */}
       <div className="bg-white border-b border-[#e5e7eb]">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-7">
-          {/* <div className="flex items-center gap-2 text-gray-500 text-xs mb-4">
-            <Link to="/" className="hover:text-black transition-colors">
-              Home
-            </Link>
-            <ChevronRight className="h-3 w-3" />
-            <Link to="/subjects" className="hover:text-black transition-colors">
-              Subjects
-            </Link>
-            <ChevronRight className="h-3 w-3" />
-            <span className="text-[#6b7280] truncate">{subject.title}</span>
-          </div> */}
-
           <div className="flex items-start gap-4">
-            <div className="w-14 h-14 bg-black rounded-xl flex items-center justify-center shrink-0">
-              <BookOpen className="h-7 w-7 text-white" />
+            <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center shrink-0">
+              <BookOpen className="h-6 w-6 text-white" />
             </div>
             <div>
-              <div className="inline-block text-xs font-semibold text-[#374151] bg-[#f3f4f6] px-2.5 py-1 rounded-full mb-2 font-mono">
+              <div className="inline-block text-sm font-semibold text-[#374151] bg-gray-200 px-2.5 py-1 rounded-full mb-2 font-mono">
                 {subject.code}
               </div>
-              <h1 className="text-2xl sm:text-3xl font-bold text-black tracking-tight">
+              <h1 className="text-2xl font-bold text-black tracking-tight">
                 {subject.title}
               </h1>
               {subject.description && (
@@ -184,9 +172,7 @@ const SubjectDetailPage: React.FC = () => {
               {subject.additional_info && (
                 <p className="flex items-center gap-2 mt-2 text-sm text-[#374151] max-w-3xl leading-relaxed">
                   <Info className="h-3.5 w-3.5" />
-                  <span className="font-medium">
-                    {subject.additional_info}
-                  </span>
+                  <span className="font-medium">{subject.additional_info}</span>
                 </p>
               )}
             </div>

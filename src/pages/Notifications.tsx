@@ -80,37 +80,16 @@ const NotificationsPage: React.FC = () => {
 
   return (
     <div className="min-h-[800px] bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
-      <div className="border-b border-gray-200/80 bg-white/80 backdrop-blur-sm">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="flex items-center gap-2 text-gray-400 text-xs mb-2">
-            <Link to="/" className="hover:text-blue-600 transition-colors">
-              Home
-            </Link>
-            <ChevronRight className="h-3 w-3" />
-            <span className="text-gray-600">Notifications</span>
-          </div>
-          <div className="flex items-center justify-between gap-4">
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900 tracking-tight">
-                Notifications
-              </h1>
-              {unreadCount > 0 && (
-                <p className="text-blue-600 text-sm mt-1">
-                  {unreadCount} unread notification
-                  {unreadCount !== 1 ? "s" : ""}
-                </p>
-              )}
-            </div>
-            {unreadCount > 0 && (
-              <button
-                onClick={markAllAsRead}
-                className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-semibold rounded-xl hover:shadow-md transition-all shrink-0"
-              >
-                <CheckCheck className="h-4 w-4" />
-                Mark all read
-              </button>
-            )}
-          </div>
+      {/* Page header */}
+      <div className="bg-white border-b border-[#e5e7eb]">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-7">
+          <h1 className="text-2xl sm:text-3xl font-bold text-black tracking-tight mb-1">
+            Notifications
+          </h1>
+          <p className="text-sm text-[#6b7280]">
+            Stay updated with the latest notes, files, and events for your
+            courses
+          </p>
         </div>
       </div>
 

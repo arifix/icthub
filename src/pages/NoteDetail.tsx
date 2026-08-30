@@ -168,21 +168,7 @@ const NoteDetailPage: React.FC = () => {
       {/* Page header */}
       <div className="bg-white border-b border-[#e5e7eb]">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-7">
-          {/* <div className="flex items-center gap-2 text-gray-500 text-xs mb-4">
-            <Link to="/" className="hover:text-black transition-colors">
-              Home
-            </Link>
-            <ChevronRight className="h-3 w-3" />
-            <Link to="/notes" className="hover:text-black transition-colors">
-              Notes
-            </Link>
-            <ChevronRight className="h-3 w-3" />
-            <span className="text-[#6b7280] truncate max-w-xs">
-              {note.title}
-            </span>
-          </div> */}
-
-          <h1 className="text-2xl sm:text-3xl font-bold text-black tracking-tight mb-4">
+          <h1 className="text-2xl font-bold text-black tracking-tight mb-4">
             {note.title}
           </h1>
           <div className="flex flex-wrap items-center gap-3">
