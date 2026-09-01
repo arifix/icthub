@@ -1,6 +1,7 @@
 import React from "react";
-import { BookOpen, MapPin } from "lucide-react";
+import { MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
+import logo from "../assets/logo.png";
 
 const Footer: React.FC = () => {
   const year = new Date().getFullYear();
@@ -11,16 +12,17 @@ const Footer: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 mb-12">
           {/* Brand */}
           <div className="lg:col-span-2">
-            <div className="flex items-center mb-4">
-              <div className="w-11 h-11 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg">
-                <BookOpen className="h-6 w-6 text-white" />
-              </div>
-              <div className="ml-3">
-                <span className="text-xl font-bold text-white">ICTHub</span>
-                <p className="text-xs text-gray-400 leading-none mt-0.5">
+            <div className="flex items-center mb-4 gap-1">
+              <Link to="/" className="flex flex-col">
+                <img
+                  src={logo}
+                  alt="ICTHub Logo"
+                  className="w-[200px] brightness-0 invert"
+                />
+                <p className="text-xs text-white leading-none -mt-1 ml-[72px]">
                   M.Sc. Eng. in ICT Study Portal
                 </p>
-              </div>
+              </Link>
             </div>
             <p className="text-gray-400 text-sm leading-relaxed mb-4 max-w-md">
               A comprehensive academic portal for students of the M.Sc. Eng. in
@@ -38,7 +40,7 @@ const Footer: React.FC = () => {
             <h3 className="text-white font-semibold mb-4 text-sm uppercase tracking-wider">
               Quick Links
             </h3>
-            <ul className="space-y-2">
+            <ul className="space-y-2 ml-2">
               {[
                 { to: "/subjects", label: "Subjects" },
                 { to: "/notes", label: "Study Notes" },
@@ -70,7 +72,7 @@ const Footer: React.FC = () => {
               by the approval of UGC Bangladesh. Dedicated to advancing ICT
               education
             </p>
-            <ul className="space-y-2 text-sm">
+            <ul className="space-y-2 text-sm ml-2">
               {[
                 {
                   href: "https://www.kuet.ac.bd",
@@ -99,7 +101,7 @@ const Footer: React.FC = () => {
           <div className="flex flex-col md:flex-row justify-between items-center space-y-3 md:space-y-0">
             <div className="flex flex-col items-center md:items-start text-sm text-gray-400">
               <span>&copy; {year} ICTHub</span>
-              <span>Last updated on: 2026-08-31</span>
+              <span>Last updated on: 2026-09-01</span>
             </div>
             <div className="text-center md:text-left text-sm text-gray-400">
               <span>Made by </span>

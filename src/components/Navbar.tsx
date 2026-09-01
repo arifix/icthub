@@ -18,8 +18,9 @@ import {
   Shield,
   ChevronDown,
   Users,
-  School,
 } from "lucide-react";
+import icthub from "../assets/icthub.png";
+import logo from "../assets/logo.png";
 
 const NAV_ITEMS = [
   { to: "/", label: "Home", icon: Home, end: true },
@@ -60,17 +61,24 @@ const Navbar: React.FC = () => {
 
   return (
     <header className="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-50 border-b border-gray-200/50">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="container mx-auto px-3 sm:px-6 lg:px-8">
         <div className="flex justify-between h-20 items-center">
           {/* Logo */}
-          <Link to="/" className="flex items-center group">
-            <School className="h-10 w-10 text-gray-800" />
-            <div className="ml-3">
-              <span className="text-xl font-bold text-gray-800">ICTHub</span>
-              <p className="text-xs text-gray-600 leading-none mt-0.5">
-                M.Sc. Eng. in ICT Study Portal
-              </p>
-            </div>
+          <Link to="/" className="flex flex-col">
+            <img
+              src={icthub}
+              alt="ICTHub Logo"
+              className="w-[55px] hidden lg:block xl:hidden mr-2"
+            />
+
+            <img
+              src={logo}
+              alt="ICTHub Logo"
+              className="w-[200px] lg:hidden xl:block"
+            />
+            <p className="text-xs text-gray-600 leading-none -mt-1 ml-[72px] lg:hidden xl:block">
+              M.Sc. Eng. in ICT Study Portal
+            </p>
           </Link>
 
           {/* Desktop Nav */}
@@ -81,7 +89,7 @@ const Navbar: React.FC = () => {
                 to={item.to}
                 end={item.end}
                 className={({ isActive }) =>
-                  `px-4 py-2.5 rounded-xl font-medium transition-all duration-200 flex items-center space-x-2 text-sm ${
+                  `px-3 py-2.5 rounded-xl font-medium transition-all duration-200 flex items-center space-x-2 text-sm ${
                     isActive
                       ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md"
                       : "text-gray-700 hover:bg-gray-100 hover:text-blue-600"
@@ -143,7 +151,7 @@ const Navbar: React.FC = () => {
                     {isAdmin && (
                       <Link
                         to="/admin/dashboard"
-                        className="flex items-center space-x-3 px-4 py-2.5 text-gray-700 hover:bg-gray-50 transition-colors mx-1 rounded-xl"
+                        className="flex items-center space-x-3 px-3 py-2.5 text-gray-700 hover:bg-gray-50 transition-colors mx-1 rounded-xl"
                         onClick={() => setProfileOpen(false)}
                       >
                         <Settings className="h-4 w-4 text-blue-600" />
@@ -152,7 +160,7 @@ const Navbar: React.FC = () => {
                     )}
                     <button
                       onClick={handleSignOut}
-                      className="w-full flex items-center space-x-3 px-4 py-2.5 text-red-600 hover:bg-red-50 transition-colors mx-1 rounded-xl"
+                      className="w-full flex items-center space-x-3 px-3 py-2.5 text-red-600 hover:bg-red-50 transition-colors mx-1 rounded-xl"
                       style={{ width: "calc(100% - 8px)" }}
                     >
                       <LogOut className="h-4 w-4" />
@@ -181,14 +189,14 @@ const Navbar: React.FC = () => {
 
       {/* Mobile menu */}
       {menuOpen && (
-        <div className="lg:hidden bg-white border-t border-gray-100 px-4 py-3 space-y-1">
+        <div className="lg:hidden bg-white border-t border-gray-100 px-3 py-3 space-y-1">
           {NAV_ITEMS.map((item) => (
             <NavLink
               key={item.to}
               to={item.to}
               end={item.end}
               className={({ isActive }) =>
-                `flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${
+                `flex items-center space-x-3 px-3 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${
                   isActive
                     ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-sm"
                     : "text-gray-700 hover:bg-gray-100 hover:text-blue-600"
@@ -205,7 +213,7 @@ const Navbar: React.FC = () => {
               <NavLink
                 to="/notifications"
                 className={({ isActive }) =>
-                  `flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${
+                  `flex items-center space-x-3 px-3 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${
                     isActive
                       ? "bg-blue-50 text-blue-600"
                       : "text-gray-700 hover:bg-blue-100 hover:text-blue-600 bg-blue-50"
@@ -219,7 +227,7 @@ const Navbar: React.FC = () => {
               {isAdmin && (
                 <Link
                   to="/admin/dashboard"
-                  className="flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 text-white"
+                  className="flex items-center space-x-3 px-3 py-3 rounded-xl text-sm font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 text-white"
                   onClick={() => setMenuOpen(false)}
                 >
                   <Settings className="h-4 w-4" />
@@ -228,7 +236,7 @@ const Navbar: React.FC = () => {
               )}
               <button
                 onClick={handleSignOut}
-                className="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium text-red-600 hover:bg-red-50 transition-colors"
+                className="w-full flex items-center space-x-3 px-3 py-3 rounded-xl text-sm font-medium text-red-600 hover:bg-red-50 transition-colors"
               >
                 <LogOut className="h-4 w-4" />
                 <span>Sign Out</span>

@@ -197,7 +197,9 @@ const AdminAnalytics: React.FC = () => {
             <h1 className="text-2xl sm:text-3xl font-bold text-black tracking-tight">
               Analytics
             </h1>
-            <p className="text-sm text-[#6b7280] mt-1">Visitor tracking</p>
+            <p className="text-sm text-[#6b7280] mt-1">
+              Overview of user activity and engagement on the portal
+            </p>
           </div>
           <div className="flex gap-2">
             {(["today", "week", "month", "all"] as const).map((r) => (

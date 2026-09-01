@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { toast } from "react-hot-toast";
-import { Lock, Mail, School } from "lucide-react";
+import { Lock, Mail } from "lucide-react";
+import logo from "../assets/logo.png";
 
 const AdminLogin: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -35,13 +36,17 @@ const AdminLogin: React.FC = () => {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 flex flex-col items-center justify-center px-4">
       {/* Logo */}
       <div className="mb-8 text-center">
-        <div className="inline-flex items-center justify-center w-14 h-14 mb-2">
-          <School className="h-12 w-12 text-gray-800" />
+        <div className="flex flex-col">
+          <img
+            src={logo}
+            alt="ICTHub Logo"
+            className="w-[200px]"
+          />
+          <p className="text-xs text-gray-600 leading-none -mt-1 ml-[52px]">
+            M.Sc. Eng. in ICT Study Portal
+          </p>
         </div>
-        <h1 className="text-2xl font-bold text-gray-800 tracking-tight">
-          ICTHub Admin
-        </h1>
-        <p className="text-sm text-gray-500 mt-1">
+        <p className="text-lg font-semibold text-gray-500 mt-3">
           IICT, KUET &middot; Management Panel
         </p>
       </div>

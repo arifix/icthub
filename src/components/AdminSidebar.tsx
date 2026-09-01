@@ -13,10 +13,9 @@ import {
   Globe,
   Settings,
   Activity,
-  GraduationCap,
   Info,
-  School,
 } from "lucide-react";
+import icthub from "../assets/icthub.png";
 
 const AdminSidebar: React.FC = () => {
   const { signOut: adminSignOut } = useAuth();
@@ -118,9 +117,7 @@ const AdminSidebar: React.FC = () => {
       <div className="flex items-center justify-between px-4 py-4 border-b border-gray-100">
         {!collapsed && (
           <div className="flex items-center gap-1">
-            <div className="p-2">
-              <School className="h-9 w-9 text-gray-800" />
-            </div>
+            <img src={icthub} alt="ICTHub Logo" className="w-[50px]" />
             <div>
               <h1 className="font-bold text-gray-900">ICTHub</h1>
               <p className="text-sm text-gray-500">Admin Panel</p>

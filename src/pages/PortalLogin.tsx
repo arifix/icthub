@@ -3,7 +3,8 @@ import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { usePortalAccess } from "../context/PortalAccessContext";
 import { useAuth } from "../context/AuthContext";
 import { toast } from "react-hot-toast";
-import { Lock, User, School } from "lucide-react";
+import { Lock, User } from "lucide-react";
+import logo from "../assets/logo.png";
 
 const PortalLogin: React.FC = () => {
   const [studentName, setStudentName] = useState("");
@@ -50,13 +51,13 @@ const PortalLogin: React.FC = () => {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 flex flex-col items-center justify-center px-4">
       {/* Branding */}
       <div className="mb-8 text-center">
-        <div className="inline-flex items-center justify-center w-16 h-16">
-          <School className="h-12 w-12 text-gray-800" />
+        <div className="flex flex-col items-center">
+          <img src={logo} alt="ICTHub Logo" className="w-[200px]" />
+          <p className="text-xs text-gray-600 leading-none -mt-1 ml-[112px]">
+            M.Sc. Eng. in ICT Study Portal
+          </p>
         </div>
-        <h1 className="text-2xl font-bold text-gray-800 tracking-tight">
-          ICTHub
-        </h1>
-        <p className="text-gray-500 mt-1.5">
+        <p className="text-lg font-semibold text-gray-500 mt-3">
           Institute of IICT, KUET &mdash; M.Sc. Eng. in ICT Study Portal
         </p>
       </div>

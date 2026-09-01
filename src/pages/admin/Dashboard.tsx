@@ -208,7 +208,9 @@ const AdminDashboard: React.FC = () => {
           <h1 className="text-2xl sm:text-3xl font-bold text-black tracking-tight">
             Dashboard
           </h1>
-          <p className="text-sm text-[#6b7280] mt-1">ICTHub Admin</p>
+          <p className="text-sm text-[#6b7280] mt-1">
+            Overview of recent activities and statistics
+          </p>
         </div>
       </div>
 
