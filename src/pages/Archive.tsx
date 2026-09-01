@@ -297,7 +297,7 @@ const ArchivePage: React.FC = () => {
                     >
                       <div className="flex items-center justify-between gap-2 mb-4">
                         <div className="inline-flex items-center justify-center w-9 h-9 bg-[#f3f4f6] rounded-xl">
-                          <FileText className="h-4 w-4 text-teal-600" />
+                          <FileText className="h-4 w-4 text-[#0066ff]" />
                         </div>
                         <span className="text-xs font-semibold text-[#6b7280] bg-[#f3f4f6] px-2.5 py-1 rounded-full font-mono">
                           {note.subjects?.code}

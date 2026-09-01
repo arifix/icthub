@@ -48,7 +48,7 @@ const PortalLogin: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 flex flex-col items-center justify-center px-4">
+    <div className="min-h-screen bg-[#f9fafb] flex flex-col items-center justify-center px-4">
       {/* Branding */}
       <div className="mb-8 text-center">
         <div className="flex flex-col items-center">
@@ -65,8 +65,8 @@ const PortalLogin: React.FC = () => {
       {/* Card */}
       <div className="w-full max-w-md bg-white/80 backdrop-blur-sm border border-gray-100 rounded-2xl p-8 shadow-xl">
         <div className="flex items-center gap-2 mb-6">
-          <Lock className="h-4 w-4 text-blue-600" />
-          <span className="text-sm font-semibold text-blue-600 uppercase tracking-wider">
+          <Lock className="h-4 w-4 text-[#0066ff]" />
+          <span className="text-sm font-semibold text-[#0066ff] uppercase tracking-wider">
             Portal Access
           </span>
         </div>
@@ -91,7 +91,7 @@ const PortalLogin: React.FC = () => {
                   required
                   autoFocus
                   className="w-full pl-11 pr-4 py-3 border border-gray-200 rounded-xl text-sm text-gray-900
-                         placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all bg-white"
+                         placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0066ff] focus:border-[#0066ff] transition-all bg-white"
                 />
               </div>
             </div>
@@ -112,14 +112,14 @@ const PortalLogin: React.FC = () => {
               required
               autoFocus={isAdmin}
               className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm text-gray-900
-                         placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all bg-white"
+                         placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0066ff] focus:border-[#0066ff] transition-all bg-white"
             />
           </div>
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-semibold rounded-xl
-                       hover:shadow-lg transition-all disabled:opacity-60"
+            className="w-full py-3 bg-[#0066ff] text-white text-sm font-semibold rounded-xl
+                       hover:bg-[#0052cc] transition-all disabled:opacity-60"
           >
             {loading ? "Verifying…" : "Enter Portal"}
           </button>

@@ -180,7 +180,7 @@ const NotesPage: React.FC = () => {
                 <div className="p-6 flex flex-col flex-1">
                   <div className="flex items-center gap-1 mb-4">
                     <div className="inline-flex items-center justify-center w-9 h-9 bg-gray-100 rounded-xl">
-                      <FileText className="h-4 w-4 text-teal-600" />
+                      <FileText className="h-4 w-4 text-[#0066ff]" />
                     </div>
                     <span className="px-2.5 py-2 bg-gray-100 text-[#374151] text-xs font-semibold rounded-full font-mono truncate">
                       {note.subjects?.title} ({note.subjects?.code})

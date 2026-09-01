@@ -143,7 +143,7 @@ const SubjectDetailPage: React.FC = () => {
     <div className="min-h-screen bg-[#f9fafb]">
       {/* Page header */}
       <div className="bg-white border-b border-[#e5e7eb]">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-7">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-10">
           <div className="flex items-start gap-4">
             <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center shrink-0">
               <BookOpen className="h-6 w-6 text-white" />
@@ -186,7 +186,7 @@ const SubjectDetailPage: React.FC = () => {
           <div className="flex items-center justify-between px-6 py-4 border-b border-[#e5e7eb] bg-[#f9fafb]">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 bg-[#f3f4f6] rounded-xl flex items-center justify-center">
-                <FileText className="h-4 w-4 text-teal-600" />
+                <FileText className="h-4 w-4 text-[#0066ff]" />
               </div>
               <h2 className="text-sm font-bold text-black">Notes</h2>
               <span className="text-xs bg-[#f3f4f6] text-[#6b7280] font-semibold px-2 py-0.5 rounded-full">
@@ -228,7 +228,7 @@ const SubjectDetailPage: React.FC = () => {
                   className="flex items-center gap-4 px-6 py-4 hover:bg-[#f9fafb] transition-colors group"
                 >
                   <div className="w-8 h-8 bg-[#f3f4f6] group-hover:bg-[#e5e7eb] rounded-xl flex items-center justify-center shrink-0 transition-colors">
-                    <FileText className="h-4 w-4 text-teal-600" />
+                    <FileText className="h-4 w-4 text-[#0066ff]" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-semibold text-black group-hover:text-[#374151] transition-colors truncate">

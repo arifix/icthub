@@ -168,7 +168,7 @@ const NoteDetailPage: React.FC = () => {
       {/* Page header */}
       <div className="bg-white border-b border-[#e5e7eb]">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-7">
-          <h1 className="text-2xl font-bold text-black tracking-tight mb-4">
+          <h1 className="text-2xl font-bold text-black tracking-tight mb-2">
             {note.title}
           </h1>
           <div className="flex flex-wrap items-center gap-3">

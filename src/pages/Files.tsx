@@ -81,8 +81,8 @@ const FilesPage: React.FC = () => {
   const getTypeBadgeColor = (type: string) => {
     const map: Record<string, string> = {
       pdf: "bg-red-100 text-red-700",
-      doc: "bg-blue-100 text-blue-700",
-      docx: "bg-blue-100 text-blue-700",
+      doc: "bg-[#e6f2ff] text-[#0052cc]",
+      docx: "bg-[#e6f2ff] text-[#0052cc]",
       ppt: "bg-orange-100 text-orange-700",
       pptx: "bg-orange-100 text-orange-700",
       xls: "bg-green-100 text-green-700",

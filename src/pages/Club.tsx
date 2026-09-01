@@ -73,9 +73,9 @@ const Club: React.FC = () => {
   ];
 
   const colorClasses: Record<string, string> = {
-    blue: "bg-blue-50 text-blue-600 border-blue-100",
+    blue: "bg-[#f0f7ff] text-[#0066ff] border-[#e6f2ff]",
     indigo: "bg-indigo-50 text-indigo-600 border-indigo-100",
-    teal: "bg-teal-50 text-teal-600 border-teal-100",
+    teal: "bg-[#f0f7ff] text-[#0066ff] border-[#e6f2ff]",
     amber: "bg-amber-50 text-amber-600 border-amber-100",
     purple: "bg-purple-50 text-purple-600 border-purple-100",
     rose: "bg-rose-50 text-rose-600 border-rose-100",
@@ -86,21 +86,21 @@ const Club: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+    <div className="min-h-screen bg-[#f9fafb]">
       {/* Hero */}
       <section className="container mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-12">
         <div className="max-w-7xl mx-auto">
           <div className="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden">
             <div className="relative px-6 sm:px-10 lg:px-14 py-12 sm:py-16 text-center">
-              <div className="absolute top-0 right-0 w-56 h-56 bg-blue-100 rounded-bl-full opacity-50" />
+              <div className="absolute top-0 right-0 w-56 h-56 bg-[#e6f2ff] rounded-bl-full opacity-50" />
               <div className="absolute bottom-0 left-0 w-40 h-40 bg-indigo-100 rounded-tr-full opacity-40" />
 
               <div className="relative">
-                <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl shadow-lg mb-5">
+                <div className="inline-flex items-center justify-center w-16 h-16 bg-[#0066ff] rounded-2xl shadow-lg mb-5">
                   <GraduationCap className="w-8 h-8 text-white" />
                 </div>
 
-                <span className="block text-xs font-bold uppercase tracking-[0.2em] text-blue-600 mb-3">
+                <span className="block text-xs font-bold uppercase tracking-[0.2em] text-[#0066ff] mb-3">
                   IICT • KUET
                 </span>
 
@@ -146,7 +146,7 @@ const Club: React.FC = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-              <Target className="w-7 h-7 text-blue-600 mb-4" />
+              <Target className="w-7 h-7 text-[#0066ff] mb-4" />
               <h3 className="font-bold text-gray-900 mb-2">
                 Academic Excellence
               </h3>
@@ -203,7 +203,7 @@ const Club: React.FC = () => {
                   <Icon className="w-6 h-6" />
                 </div>
 
-                <h3 className="text-base font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
+                <h3 className="text-base font-bold text-gray-900 mb-2 group-hover:text-[#0066ff] transition-colors">
                   {title}
                 </h3>
 
@@ -221,8 +221,8 @@ const Club: React.FC = () => {
         <div className="max-w-5xl mx-auto">
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 sm:p-8">
             <div className="flex items-start gap-4 mb-6">
-              <div className="w-11 h-11 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
-                <BookOpen className="w-5 h-5 text-blue-600" />
+              <div className="w-11 h-11 rounded-xl bg-[#f0f7ff] flex items-center justify-center shrink-0">
+                <BookOpen className="w-5 h-5 text-[#0066ff]" />
               </div>
 
               <div>
@@ -243,7 +243,7 @@ const Club: React.FC = () => {
                   key={group}
                   className="flex items-center gap-3 rounded-xl bg-gray-50 border border-gray-100 px-4 py-3"
                 >
-                  <div className="w-2 h-2 rounded-full bg-blue-500 shrink-0" />
+                  <div className="w-2 h-2 rounded-full bg-[#f0f7ff]0 shrink-0" />
                   <span className="text-sm font-medium text-gray-700">
                     {group}
                   </span>
@@ -305,12 +305,12 @@ const Club: React.FC = () => {
       {/* Faculty Guidance */}
       <section className="container mx-auto px-4 sm:px-6 lg:px-8 pb-16">
         <div className="max-w-5xl mx-auto">
-          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-7 sm:p-10">
+          <div className="relative overflow-hidden rounded-3xl bg-[#0066ff] text-white p-7 sm:p-10">
             <div className="absolute right-0 top-0 w-64 h-64 bg-white/10 rounded-bl-full" />
 
             <div className="relative grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
               <div>
-                <span className="text-xs uppercase tracking-[0.18em] font-semibold text-blue-100">
+                <span className="text-xs uppercase tracking-[0.18em] font-semibold text-[#e6f2ff]">
                   Faculty Guided
                 </span>
 
@@ -318,7 +318,7 @@ const Club: React.FC = () => {
                   Students lead. Teachers guide.
                 </h2>
 
-                <p className="text-blue-100 text-sm leading-relaxed max-w-xl">
+                <p className="text-[#e6f2ff] text-sm leading-relaxed max-w-xl">
                   The club will operate under the guidance of IICT faculty
                   members, with students taking responsibility for planning,
                   coordination, projects, research discussions, and community

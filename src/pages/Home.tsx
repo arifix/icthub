@@ -27,27 +27,27 @@ type Event = Database["public"]["Tables"]["events"]["Row"] & {
 const SubjectCard: React.FC<{ subject: Subject }> = ({ subject }) => (
   <Link
     to={`/subjects/${subject.id}`}
-    className="group bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-blue-200"
+    className="group bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-[#0066ff]/20"
   >
     <div className="p-7">
       <div className="flex items-center justify-between mb-5">
-        <div className="inline-flex items-center justify-center w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl shadow-md group-hover:scale-110 transition-transform duration-300">
+        <div className="inline-flex items-center justify-center w-14 h-14 bg-[#0066ff] rounded-2xl shadow-md group-hover:scale-110 transition-transform duration-300">
           <BookOpen className="h-7 w-7 text-white" />
         </div>
-        <span className="px-3 py-1 bg-blue-50 text-blue-700 text-xs font-semibold rounded-full font-mono">
+        <span className="px-3 py-1 bg-[#f0f7ff] text-[#0066ff] text-xs font-semibold rounded-full font-mono">
           {subject.code}
         </span>
       </div>
-      <h2 className="text-lg font-bold mb-2 text-gray-900 group-hover:text-blue-600 transition-colors duration-200 line-clamp-1">
+      <h2 className="text-lg font-bold mb-2 text-gray-900 group-hover:text-[#0066ff] transition-colors duration-200 line-clamp-1">
         {subject.title}
       </h2>
       {subject.semester && (
         <div className="flex items-center text-sm text-gray-500 mb-5">
-          <div className="w-2 h-2 bg-blue-400 rounded-full mr-2" />
+          <div className="w-2 h-2 bg-[#0066ff] rounded-full mr-2" />
           <span>{subject.semester.name}</span>
         </div>
       )}
-      <div className="flex items-center text-blue-600 font-medium text-sm group-hover:translate-x-1 transition-transform duration-200">
+      <div className="flex items-center text-[#0066ff] font-medium text-sm group-hover:translate-x-1 transition-transform duration-200">
         View Details <ArrowRight className="ml-2 h-4 w-4" />
       </div>
     </div>
@@ -60,13 +60,13 @@ const NoteCard: React.FC<{ note: Note }> = ({ note }) => (
     to={`/notes/${note.id}`}
     className="flex items-start gap-2 p-4 hover:bg-gray-50 transition-colors group"
   >
-    <div className="w-9 h-9 bg-teal-50 rounded-xl flex items-center justify-center shrink-0 mt-0.5 group-hover:bg-teal-100 transition-colors">
-      <FileText className="h-5 w-5 text-teal-600" />
+    <div className="w-9 h-9 bg-[#f0f7ff] rounded-xl flex items-center justify-center shrink-0 mt-0.5 group-hover:bg-[#e6f2ff] transition-colors">
+      <FileText className="h-5 w-5 text-[#0066ff]" />
     </div>
     <div className="flex-1 min-w-0">
       <div className="flex items-center gap-2 mb-2">
         {note.subjects?.title && (
-          <span className="text-xs font-semibold text-teal-700 bg-teal-50 px-2 py-0.5 rounded-full font-mono line-clamp-1">
+          <span className="text-xs font-semibold text-[#0066ff] bg-[#f0f7ff] px-2 py-0.5 rounded-full font-mono line-clamp-1">
             {note.subjects.title}
           </span>
         )}
@@ -75,7 +75,7 @@ const NoteCard: React.FC<{ note: Note }> = ({ note }) => (
           {new Date(note.created_at).toLocaleDateString()}
         </span>
       </div>
-      <p className="text-sm font-semibold text-gray-900 group-hover:text-teal-600 transition-colors line-clamp-1 px-2">
+      <p className="text-sm font-semibold text-gray-900 group-hover:text-[#0066ff] transition-colors line-clamp-1 px-2">
         {note.title}
       </p>
       <p className="text-xs text-gray-500 line-clamp-1 mt-1 px-2">
@@ -86,7 +86,7 @@ const NoteCard: React.FC<{ note: Note }> = ({ note }) => (
         />
       </p>
     </div>
-    <ArrowRight className="h-4 w-4 text-gray-300 group-hover:text-teal-500 shrink-0 mt-2 group-hover:translate-x-0.5 transition-transform" />
+    <ArrowRight className="h-4 w-4 text-gray-300 group-hover:text-[#0066ff] shrink-0 mt-2 group-hover:translate-x-0.5 transition-transform" />
   </Link>
 );
 
@@ -229,7 +229,7 @@ const Home: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+    <div className="min-h-screen bg-[#f9fafb]">
       {/* Hero */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-10">
         <div className="max-w-4xl mx-auto text-center">
@@ -252,13 +252,13 @@ const Home: React.FC = () => {
                 icon: BookOpen,
                 value: recentSubjects.length,
                 label: "Subjects",
-                color: "text-blue-600",
+                color: "text-[#0066ff]",
               },
               {
                 icon: FileText,
                 value: recentNotes.length,
                 label: "Notes",
-                color: "text-teal-600",
+                color: "text-[#0066ff]",
               },
               {
                 icon: Calendar,
@@ -389,12 +389,12 @@ const Home: React.FC = () => {
               to="/subjects"
               className="group relative bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-blue-200"
             >
-              <div className="absolute top-0 right-0 w-28 h-28 bg-blue-100 rounded-bl-full transform translate-x-4 -translate-y-4 opacity-60" />
+              <div className="absolute top-0 right-0 w-28 h-28 bg-[#e6f2ff] rounded-bl-full transform translate-x-4 -translate-y-4 opacity-60" />
               <div className="relative p-6 sm:p-7">
                 <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-600 rounded-2xl mb-4 shadow-md group-hover:scale-110 transition-transform duration-300">
                   <BookOpen className="h-8 w-8 text-white" />
                 </div>
-                <h3 className="text-base font-bold text-gray-900 mb-1 group-hover:text-blue-600 transition-colors">
+                <h3 className="text-base font-bold text-gray-900 mb-1 group-hover:text-[#0066ff] transition-colors">
                   Subjects
                 </h3>
                 <p className="text-sm text-gray-500">Courses & materials</p>
@@ -402,14 +402,14 @@ const Home: React.FC = () => {
             </Link>
             <Link
               to="/notes"
-              className="group relative bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-teal-200"
+              className="group relative bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-[#e6f2ff]"
             >
-              <div className="absolute top-0 right-0 w-28 h-28 bg-teal-100 rounded-bl-full transform translate-x-4 -translate-y-4 opacity-60" />
+              <div className="absolute top-0 right-0 w-28 h-28 bg-[#e6f2ff] rounded-bl-full transform translate-x-4 -translate-y-4 opacity-60" />
               <div className="relative p-6 sm:p-7">
-                <div className="inline-flex items-center justify-center w-16 h-16 bg-teal-600 rounded-2xl mb-4 shadow-md group-hover:scale-110 transition-transform duration-300">
+                <div className="inline-flex items-center justify-center w-16 h-16 bg-[#0066ff] rounded-2xl mb-4 shadow-md group-hover:scale-110 transition-transform duration-300">
                   <FileText className="h-8 w-8 text-white" />
                 </div>
-                <h3 className="text-base font-bold text-gray-900 mb-1 group-hover:text-teal-600 transition-colors">
+                <h3 className="text-base font-bold text-gray-900 mb-1 group-hover:text-[#0066ff] transition-colors">
                   Notes
                 </h3>
                 <p className="text-sm text-gray-500">Study materials</p>
@@ -459,7 +459,7 @@ const Home: React.FC = () => {
             </div>
             <Link
               to="/subjects"
-              className="flex items-center text-blue-600 font-medium text-sm hover:text-blue-700 transition-colors"
+              className="flex items-center text-[#0066ff] font-medium text-sm hover:text-[#0052cc] transition-colors"
             >
               View all <ArrowRight className="ml-1 h-4 w-4" />
             </Link>
@@ -467,7 +467,7 @@ const Home: React.FC = () => {
 
           {loading ? (
             <div className="flex justify-center py-16">
-              <div className="animate-spin rounded-full h-10 w-10 border-3 border-blue-600 border-t-transparent" />
+              <div className="animate-spin rounded-full h-10 w-10 border-3 border-[#0066ff] border-t-transparent" />
             </div>
           ) : recentSubjects.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -498,14 +498,14 @@ const Home: React.FC = () => {
               </div>
               <Link
                 to="/notes"
-                className="flex items-center text-teal-600 font-medium text-sm hover:text-teal-700 transition-colors"
+                className="flex items-center text-[#0066ff] font-medium text-sm hover:text-[#0052cc] transition-colors"
               >
                 View all <ArrowRight className="ml-1 h-4 w-4" />
               </Link>
             </div>
             {loading ? (
               <div className="flex justify-center py-12">
-                <div className="animate-spin rounded-full h-8 w-8 border-2 border-teal-600 border-t-transparent" />
+                <div className="animate-spin rounded-full h-8 w-8 border-2 border-[#0066ff] border-t-transparent" />
               </div>
             ) : recentNotes.length > 0 ? (
               <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
@@ -517,7 +517,7 @@ const Home: React.FC = () => {
                 <div className="px-4 py-3 bg-gray-50 border-t border-gray-100">
                   <Link
                     to="/notes"
-                    className="text-sm text-teal-600 font-medium hover:text-teal-700 flex items-center gap-1"
+                    className="text-sm text-[#0066ff] font-medium hover:text-[#0052cc] flex items-center gap-1"
                   >
                     Browse all notes <ArrowRight className="h-3.5 w-3.5" />
                   </Link>

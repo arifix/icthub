@@ -68,8 +68,8 @@ const NotificationsPage: React.FC = () => {
   };
 
   const typeBadge: Record<string, string> = {
-    note: "text-xs bg-blue-400 text-white font-semibold px-1.5 py-0.5 rounded",
-    file: "text-xs bg-teal-400 text-white font-semibold px-1.5 py-0.5 rounded",
+    note: "text-xs bg-[#0066ff] text-white font-semibold px-1.5 py-0.5 rounded",
+    file: "text-xs bg-[#0066ff] text-white font-semibold px-1.5 py-0.5 rounded",
     event: "text-xs bg-red-400 text-white font-semibold px-1.5 py-0.5 rounded",
   };
   const typeLabel: Record<string, string> = {
@@ -79,7 +79,7 @@ const NotificationsPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-[800px] bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+    <div className="min-h-[800px] bg-[#f9fafb]">
       {/* Page header */}
       <div className="bg-white border-b border-[#e5e7eb]">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-7">
@@ -119,13 +119,13 @@ const NotificationsPage: React.FC = () => {
                 }}
                 className={`flex items-start gap-4 p-4 rounded-2xl border transition-all duration-200 hover:shadow-sm ${
                   !notification.is_read
-                    ? "bg-blue-100 border-blue-100 hover:border-blue-200"
+                    ? "bg-[#f0f7ff] border-[#f0f7ff] hover:border-[#e6f2ff]"
                     : "bg-white border-gray-100 hover:border-gray-200"
                 }`}
               >
                 <div
                   className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${
-                    !notification.is_read ? "bg-blue-100" : "bg-gray-100"
+                    !notification.is_read ? "bg-[#e6f2ff]" : "bg-gray-100"
                   }`}
                 >
                   {getNotificationIcon(notification.type)}

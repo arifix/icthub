@@ -91,8 +91,8 @@ const Navbar: React.FC = () => {
                 className={({ isActive }) =>
                   `px-3 py-2.5 rounded-xl font-medium transition-all duration-200 flex items-center space-x-2 text-sm ${
                     isActive
-                      ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md"
-                      : "text-gray-700 hover:bg-gray-100 hover:text-blue-600"
+                      ? "bg-[#0066ff] text-white shadow-md"
+                      : "text-gray-700 hover:bg-gray-100 hover:text-[#0066ff]"
                   }`
                 }
               >
@@ -110,8 +110,8 @@ const Navbar: React.FC = () => {
                 className={({ isActive }) =>
                   `p-2.5 rounded-xl transition-all duration-200 ${
                     isActive
-                      ? "bg-blue-50 text-blue-600"
-                      : "text-gray-600 hover:bg-blue-100 hover:text-blue-600 bg-blue-50"
+                      ? "bg-[#f0f7ff] text-[#0066ff]"
+                      : "text-gray-600 hover:bg-[#f0f7ff] hover:text-[#0066ff] bg-[#f0f7ff]"
                   }`
                 }
                 title="Notifications"
@@ -126,7 +126,7 @@ const Navbar: React.FC = () => {
                   onClick={() => setProfileOpen(!profileOpen)}
                   className="flex items-center space-x-2 px-3 py-2 rounded-xl hover:bg-gray-50 transition-all duration-200"
                 >
-                  <div className="w-9 h-9 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-sm">
+                  <div className="w-9 h-9 bg-[#0066ff] rounded-xl flex items-center justify-center shadow-sm">
                     {isAdmin ? (
                       <Shield className="h-4 w-4 text-white" />
                     ) : (
@@ -154,7 +154,7 @@ const Navbar: React.FC = () => {
                         className="flex items-center space-x-3 px-3 py-2.5 text-gray-700 hover:bg-gray-50 transition-colors mx-1 rounded-xl"
                         onClick={() => setProfileOpen(false)}
                       >
-                        <Settings className="h-4 w-4 text-blue-600" />
+                        <Settings className="h-4 w-4 text-[#0066ff]" />
                         <span className="text-sm">Admin Panel</span>
                       </Link>
                     )}
@@ -198,8 +198,8 @@ const Navbar: React.FC = () => {
               className={({ isActive }) =>
                 `flex items-center space-x-3 px-3 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${
                   isActive
-                    ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-sm"
-                    : "text-gray-700 hover:bg-gray-100 hover:text-blue-600"
+                    ? "bg-[#0066ff] text-white shadow-sm"
+                    : "text-gray-700 hover:bg-gray-100 hover:text-[#0066ff]"
                 }`
               }
               onClick={() => setMenuOpen(false)}
@@ -215,8 +215,8 @@ const Navbar: React.FC = () => {
                 className={({ isActive }) =>
                   `flex items-center space-x-3 px-3 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${
                     isActive
-                      ? "bg-blue-50 text-blue-600"
-                      : "text-gray-700 hover:bg-blue-100 hover:text-blue-600 bg-blue-50"
+                      ? "bg-[#f0f7ff] text-[#0066ff]"
+                      : "text-gray-700 hover:bg-[#f0f7ff] hover:text-[#0066ff] bg-[#f0f7ff]"
                   }`
                 }
                 onClick={() => setMenuOpen(false)}
@@ -227,7 +227,7 @@ const Navbar: React.FC = () => {
               {isAdmin && (
                 <Link
                   to="/admin/dashboard"
-                  className="flex items-center space-x-3 px-3 py-3 rounded-xl text-sm font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 text-white"
+                  className="flex items-center space-x-3 px-3 py-3 rounded-xl text-sm font-semibold bg-[#0066ff] text-white"
                   onClick={() => setMenuOpen(false)}
                 >
                   <Settings className="h-4 w-4" />

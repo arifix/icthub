@@ -177,10 +177,10 @@ const CalendarPage: React.FC = () => {
                             day.day === 0
                               ? "bg-transparent"
                               : day.date && isToday(day.date)
-                                ? "bg-gradient-to-br from-blue-500 to-indigo-500 text-white rounded-xl"
+                                ? "bg-[#0066ff] text-white rounded-xl"
                                 : isWeekend
                                   ? "bg-red-50 hover:bg-red-100/60 border border-red-100 rounded-lg"
-                                  : "bg-white hover:bg-blue-50 border border-gray-100 rounded-lg"
+                                  : "bg-white hover:bg-[#f0f7ff] border border-gray-100 rounded-lg"
                           }`}
                         >
                           {day.day > 0 && (
@@ -200,7 +200,7 @@ const CalendarPage: React.FC = () => {
                                 day.events.slice(0, 2).map((event: Event) => (
                                   <div
                                     key={event.id}
-                                    className="text-[12px] bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded px-1 py-0.5 truncate mb-0.5 font-medium"
+                                    className="text-[12px] bg-[#0066ff] text-white rounded px-1 py-0.5 truncate mb-0.5 font-medium"
                                     title={event.title}
                                   >
                                     {event.title}
