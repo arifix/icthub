@@ -6,6 +6,56 @@ import { toast } from "react-hot-toast";
 import { Lock, User } from "lucide-react";
 import logo from "../assets/logo.png";
 
+const isValidStudentName = (studentName: string) => {
+  const name = studentName.trim();
+  const normalizedName = name.toLowerCase();
+
+  if (!name) {
+    return false;
+  }
+
+  // Allow only letters, spaces, dots, hyphens and apostrophes.
+  // Numbers and other special characters are rejected.
+  if (!/^[a-zA-ZÀ-ÿ.' -]+$/.test(name)) {
+    return false;
+  }
+
+  // Must contain at least 2 letters
+  const lettersOnly = name.replace(/[^a-zA-ZÀ-ÿ]/g, "");
+
+  if (lettersOnly.length < 2) {
+    return false;
+  }
+
+  // Reject obvious test/placeholder names
+  const invalidNames = [
+    "test",
+    "testing",
+    "tester",
+    "demo",
+    "sample",
+    "asdf",
+    "qwerty",
+    "unknown",
+    "none",
+    "null",
+    "undefined",
+    "n/a",
+    "na",
+  ];
+
+  if (invalidNames.includes(normalizedName)) {
+    return false;
+  }
+
+  // Arif is reserved
+  if (normalizedName === "arif") {
+    return false;
+  }
+
+  return true;
+};
+
 const PortalLogin: React.FC = () => {
   const [studentName, setStudentName] = useState("");
   const [password, setPassword] = useState("");
@@ -31,8 +81,8 @@ const PortalLogin: React.FC = () => {
       return;
     }
 
-    if (studentName.trim().toLowerCase().includes("arif")) {
-      toast.error("You're not Arif, please enter your correct name!");
+    if (!isValidStudentName(studentName.trim())) {
+      toast.error("Please enter a valid name");
       return;
     }
 
