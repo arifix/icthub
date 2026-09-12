@@ -5,7 +5,6 @@ import {
   Search,
   ChevronDown,
   Clock,
-  BookOpen,
   MessageCircle,
 } from "lucide-react";
 import { supabase } from "../lib/supabase";

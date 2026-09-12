@@ -1,13 +1,6 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
-import {
-  Bell,
-  FileText,
-  File,
-  Calendar,
-  CheckCheck,
-  ChevronRight,
-} from "lucide-react";
+import { Bell, FileText, File, Calendar } from "lucide-react";
 import { useNotifications } from "../hooks/useNotifications";
 import { Database } from "../types/supabase";
 
@@ -17,8 +10,7 @@ type Notification = Database["public"]["Tables"]["notifications"]["Row"] & {
 };
 
 const NotificationsPage: React.FC = () => {
-  const { notifications, unreadCount, loading, markAsRead, markAllAsRead } =
-    useNotifications();
+  const { notifications, loading, markAsRead } = useNotifications();
 
   useEffect(() => {
     document.title = "Notifications — ICTHub";

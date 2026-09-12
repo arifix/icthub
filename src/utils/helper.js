@@ -23,7 +23,9 @@ export const getUpcomingEventAlert = (events) => {
 
   const labels = ["Today", "Tomorrow", "Day after tomorrow"];
 
-  for (let i = 0; i < 3; i++) {
+  const startIndex = now.getHours() >= 17 ? 1 : 0;
+
+  for (let i = startIndex; i < 3; i++) {
     const target = new Date(now);
     target.setHours(0, 0, 0, 0);
     target.setDate(target.getDate() + i);

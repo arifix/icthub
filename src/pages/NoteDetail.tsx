@@ -4,7 +4,6 @@ import {
   BookOpen,
   FileText,
   Sparkles,
-  ChevronRight,
   Clock,
   ArrowLeft,
   Calendar,

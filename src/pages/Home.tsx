@@ -8,7 +8,6 @@ import {
   ArrowRight,
   Clock,
   Globe,
-  ChevronRight,
 } from "lucide-react";
 import { supabase } from "../lib/supabase";
 import { Database } from "../types/supabase";
