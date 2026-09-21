@@ -1,6 +1,6 @@
-# StudyHub - Educational Management Platform
+# ICTHub - Educational Management Platform
 
-A comprehensive educational management platform built with React, TypeScript, Tailwind CSS, and Supabase for the Spring 2025 MBA batch at Khulna Khan Bahadur Ahsanullah University.
+A comprehensive educational management platform built with React, TypeScript, Tailwind CSS, and Supabase for the Spring 2025 MBA batch at Khulna University of Engineering & Technology.
 
 ## Features
 
@@ -132,4 +132,4 @@ This is a private educational platform. For any issues or feature requests, plea
 
 ## License
 
-This project is proprietary software developed for Khulna Khan Bahadur Ahsanullah University.
+This project is proprietary software developed for Khulna University of Engineering & Technology.
