@@ -1,18 +1,19 @@
 # ICTHub - Educational Management Platform
 
-A comprehensive educational management platform built with React, TypeScript, Tailwind CSS, and Supabase for the Spring 2025 MBA batch at Khulna University of Engineering & Technology.
+A comprehensive educational management platform built with React, TypeScript, Tailwind CSS, and Supabase for the M.Sc. Eng. in ICT, July 2026 semester at Khulna University of Engineering & Technology (KUET).
 
 ## Features
 
 ### For Students
+
 - **Dashboard**: Overview of subjects, recent notes, and upcoming events
 - **Subjects**: Browse all available courses with detailed information
 - **Notes**: Access study materials and notes for each subject
 - **Calendar**: View academic events, class schedules, and important dates
 - **Files**: Download study materials, presentations, and resources
 
-
 ### For Administrators
+
 - **Complete Management System**: Manage all aspects of the platform
 - **Semester Management**: Create and manage academic semesters
 - **Subject Management**: Add subjects
@@ -22,6 +23,7 @@ A comprehensive educational management platform built with React, TypeScript, Ta
 ## In-App Notifications
 
 The platform includes a comprehensive in-app notification system that alerts users when:
+
 - New files are uploaded
 - New notes are added
 - New events are scheduled
@@ -56,6 +58,7 @@ The platform includes a comprehensive in-app notification system that alerts use
 ## Getting Started
 
 ### Prerequisites
+
 - Node.js 18+ and npm
 - Supabase account
 
@@ -63,12 +66,14 @@ The platform includes a comprehensive in-app notification system that alerts use
 
 1. **Clone the repository**
 2. **Install dependencies**:
+
    ```bash
    npm install
    ```
 
 3. **Set up environment variables**:
    Copy `.env.example` to `.env` and fill in your credentials:
+
    ```env
    VITE_SUPABASE_URL=your_supabase_url
    VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
@@ -87,17 +92,19 @@ The platform includes a comprehensive in-app notification system that alerts use
 ## Authentication
 
 ### Student Login
+
 - Students log in using their student ID (format: 10025100040830XX) and password
 - Student IDs follow the university's numbering system
 
-
 ### Admin Login
+
 - Administrators log in using email and password via Supabase Auth
 - Have full access to all management features
 
 ## Database Schema
 
 The application uses the following main tables:
+
 - `semesters` - Academic semesters
 - `subjects` - Course subjects
 - `notes` - Study notes and materials
@@ -118,6 +125,7 @@ The application uses the following main tables:
 The application can be deployed to any static hosting service:
 
 1. **Build the application**:
+
    ```bash
    npm run build
    ```

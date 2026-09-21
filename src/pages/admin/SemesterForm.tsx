@@ -170,7 +170,7 @@ const AdminSemesterForm: React.FC = () => {
                 name="name"
                 value={semester.name}
                 onChange={handleChange}
-                placeholder="e.g., Spring 2025, Fall 2025"
+                placeholder="e.g., January 2026, July 2026"
                 required
                 className="w-full px-3 py-2.5 border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-black focus:border-black text-[#374151]"
               />
