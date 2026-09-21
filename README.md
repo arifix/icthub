@@ -1,143 +1,118 @@
-# ICTHub - Educational Management Platform
+# ICTHub
 
-A comprehensive educational management platform built with React, TypeScript, Tailwind CSS, and Supabase for the M.Sc. Eng. in ICT, July 2026 semester at Khulna University of Engineering & Technology (KUET).
+ICTHub is a student portal and admin dashboard for the M.Sc. Eng. in ICT programme at the Institute of Information and Communication Technology (IICT), KUET. The app is built with React, TypeScript, Vite, Tailwind CSS, and Supabase.
+
+## Overview
+
+The platform provides a focused academic workspace for students and administrators:
+
+- Student-facing portal with subject listings, notes, study files, calendar, and information resources
+- Admin management area for semesters, subjects, notes, events, files, and content settings
+- Real-time in-app notifications for new academic content
+- Current-semester filtering so the portal stays focused on the active term
 
 ## Features
 
-### For Students
+### Student portal
 
-- **Dashboard**: Overview of subjects, recent notes, and upcoming events
-- **Subjects**: Browse all available courses with detailed information
-- **Notes**: Access study materials and notes for each subject
-- **Calendar**: View academic events, class schedules, and important dates
-- **Files**: Download study materials, presentations, and resources
+- Secure portal access with a shared access password and student name validation
+- Home dashboard showing current subjects, recent notes, and upcoming events
+- Subject browser with detailed subject pages
+- Notes section with subject-linked academic material
+- Calendar view for semester events and academic dates
+- File/resource library for downloadable study materials
+- Information center with categories and notes for academic updates and guidance
+- Notification center for new files, notes, and events
 
-### For Administrators
+### Admin panel
 
-- **Complete Management System**: Manage all aspects of the platform
-- **Semester Management**: Create and manage academic semesters
-- **Subject Management**: Add subjects
-- **Content Management**: Add notes, files, and events
-- **Calendar Management**: Schedule and manage academic events
+- Dashboard with counts for semesters, subjects, notes, events, and files
+- Semester management and current-semester switching
+- Subject management and semester-specific subject creation
+- Notes management with subject assignment
+- Information categories and information notes management
+- Event management for calendar entries
+- File management with upload-related metadata
+- Settings and analytics sections
 
-## In-App Notifications
+## Actual app behavior
 
-The platform includes a comprehensive in-app notification system that alerts users when:
+The current project includes these operational flows:
 
-- New files are uploaded
-- New notes are added
-- New events are scheduled
+- Admin login uses Supabase Auth
+- Student access uses a portal password stored in Supabase `portal_settings`
+- The app tracks the current semester and filters active content for the portal
+- Notification creation is handled in the app logic for file upload, note creation, and event creation
+- Archive and club routes exist in the router but are currently hidden from the main navigation
 
-### Notification Features
+## Tech stack
 
-- **Real-time Updates**: Notifications appear instantly when new content is added
-- **Unread Counter**: Bell icon shows count of unread notifications
-- **Smart Grouping**: Notifications are organized by semester and subject
-- **Mark as Read**: Individual or bulk mark as read functionality
-- **Rich Content**: Shows relevant details like subject, semester, and creator
-- **Direct Links**: Click notifications to go directly to the related content
+- React 18
+- TypeScript
+- Vite
+- Tailwind CSS
+- Supabase (database + auth + storage)
+- React Router DOM
+- React Hot Toast
+- Lucide React
+- React Quill
+- date-fns
+- html2canvas, jsPDF, pdf-lib
 
-### Notification Types
+## Project structure
 
-- **📁 File Uploads**: Shows file name, type, and subject
-- **📝 New Notes**: Shows note title and subject
-- **📅 New Events**: Shows event title, date, and subject
+- `src/pages` — public portal and admin pages
+- `src/components` — navigation, protected routes, layout components
+- `src/context` — auth and portal access providers
+- `src/hooks` — notifications, tracking, semester data helpers
+- `src/lib` — Supabase client setup
+- `migrations` — SQL migration files for database schema changes
 
-## Technology Stack
-
-- **Frontend**: React 18 with TypeScript
-- **Styling**: Tailwind CSS
-- **Backend**: Supabase (PostgreSQL database, Authentication, Storage)
-- **Rich Text Editor**: React Quill
-- **Icons**: Lucide React
-- **Notifications**: React Hot Toast
-- **Routing**: React Router DOM
-- **Password Hashing**: bcryptjs
-- **Date Handling**: date-fns
-
-## Getting Started
+## Getting started
 
 ### Prerequisites
 
-- Node.js 18+ and npm
-- Supabase account
+- Node.js 18+
+- npm
+- Supabase project with the required tables and storage configuration
 
 ### Installation
 
-1. **Clone the repository**
-2. **Install dependencies**:
+1. Clone the repository.
+2. Install dependencies:
 
    ```bash
    npm install
    ```
 
-3. **Set up environment variables**:
-   Copy `.env.example` to `.env` and fill in your credentials:
+3. Create a `.env` file in the project root and add your Supabase variables:
 
    ```env
    VITE_SUPABASE_URL=your_supabase_url
-   VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+   VITE_SUPABASE_PUBLISHABLE_KEY=your_supabase_publishable_key
    ```
 
-4. **Set up Supabase database**:
-   - Create the required tables using the provided SQL schema
-   - Set up Row Level Security (RLS) policies
-   - Configure storage buckets for file uploads
+4. Set up the Supabase database using the migration files in `migrations/` and configure the required storage bucket(s) for uploaded files.
+5. Start the app:
 
-5. **Start the development server**:
    ```bash
    npm run dev
    ```
 
-## Authentication
+## Build
 
-### Student Login
+To create a production build:
 
-- Students log in using their student ID (format: 10025100040830XX) and password
-- Student IDs follow the university's numbering system
+```bash
+npm run build
+```
 
-### Admin Login
+## Notes
 
-- Administrators log in using email and password via Supabase Auth
-- Have full access to all management features
-
-## Database Schema
-
-The application uses the following main tables:
-
-- `semesters` - Academic semesters
-- `subjects` - Course subjects
-- `notes` - Study notes and materials
-- `events` - Academic calendar events
-- `files` - File uploads and resources
-- `notifications` - In-app notifications for users
-
-## Security Features
-
-- Row Level Security (RLS) on all tables
-- Password hashing using bcryptjs
-- Secure file storage with Supabase Storage
-- Role-based access control
-- Input validation and sanitization
-
-## Deployment
-
-The application can be deployed to any static hosting service:
-
-1. **Build the application**:
-
-   ```bash
-   npm run build
-   ```
-
-2. **Deploy the `dist` folder** to your hosting service
-
-3. **Configure environment variables** on your hosting platform
-
-## Contributing
-
-This is a private educational platform. For any issues or feature requests, please contact the development team.
+- This project is tailored to the IICT KUET academic workflow and is intended for a specific institutional context.
+- The README reflects the implemented features and current app behavior, rather than generic app scaffolding or outdated assumptions.
+- Some routes such as archive and club are present in the codebase but are not currently active in the main navigation.
 
 ## License
 
-This project is proprietary software developed for Khulna University of Engineering & Technology.
+This project is proprietary software for the ICTHub academic platform.
