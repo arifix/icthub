@@ -29,8 +29,16 @@ export const PortalAccessProvider: React.FC<{ children: React.ReactNode }> = ({
 
   useEffect(() => {
     if (authLoading) return;
+    setLoading(true);
 
     const verify = async () => {
+      if (isAdmin) {
+        setIsAuthenticated(true);
+        setStudentName(getStoredStudentName());
+        setLoading(false);
+        return;
+      }
+
       const stored = localStorage.getItem("icthub_access");
       if (!stored) {
         setStudentName(getStoredStudentName());

@@ -11,7 +11,7 @@ const PortalProtectedRoute: React.FC<{ children: React.ReactNode }> = ({
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen bg-white">
-        <div className="animate-spin rounded-full h-8 w-8 border-2 border-green-600 border-t-transparent" />
+        <div className="animate-spin rounded-full h-8 w-8 border-2 border-[#0066ff] border-t-transparent" />
       </div>
     );
   }
