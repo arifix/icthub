@@ -8,6 +8,7 @@ import {
   ArrowLeft,
   ChevronRight,
   Download,
+  ExternalLink,
   User,
   Info,
 } from "lucide-react";
@@ -15,6 +16,7 @@ import { supabase } from "../lib/supabase";
 import { Database } from "../types/supabase";
 import { trackUserActivity } from "../hooks/usePageTracking";
 import { useAuth } from "../context/AuthContext";
+import { toast } from "react-hot-toast";
 
 type Subject = Database["public"]["Tables"]["subjects"]["Row"] & {
   semester?: { name: string } | null;
@@ -31,6 +33,9 @@ const SubjectDetailPage: React.FC = () => {
   const [files, setFiles] = useState<FileData[]>([]);
   const [loading, setLoading] = useState(true);
   const { isAdmin } = useAuth();
+  const [downloadingFileId, setDownloadingFileId] = useState<number | null>(
+    null,
+  );
 
   useEffect(() => {
     const fetchSubjectData = async () => {
@@ -57,7 +62,7 @@ const SubjectDetailPage: React.FC = () => {
             return;
           }
           setSubject(basicSubject as Subject);
-          document.title = (basicSubject as any)?.title || "Subject";
+          document.title = (basicSubject as Subject).title || "Subject";
           return;
         }
 
@@ -67,7 +72,7 @@ const SubjectDetailPage: React.FC = () => {
         }
 
         setSubject(subjectData as Subject);
-        document.title = `${(subjectData as any)?.title} — ICTHub`;
+        document.title = `${(subjectData as Subject).title} — ICTHub`;
 
         const [notesRes, eventsRes, filesRes] = await Promise.all([
           supabase
@@ -109,6 +114,45 @@ const SubjectDetailPage: React.FC = () => {
     if (bytes < 1024) return bytes + " B";
     if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + " KB";
     return (bytes / (1024 * 1024)).toFixed(1) + " MB";
+  };
+
+  const downloadFile = async (file: FileData) => {
+    setDownloadingFileId(file.id);
+    try {
+      const fileUrl = new URL(file.file_path, window.location.origin);
+      const storageMarker = "/object/public/icthub-files/";
+      const markerIndex = fileUrl.pathname.indexOf(storageMarker);
+      let fileBlob: Blob;
+
+      if (markerIndex >= 0) {
+        const storagePath = decodeURIComponent(
+          fileUrl.pathname.slice(markerIndex + storageMarker.length),
+        );
+        const { data, error } = await supabase.storage
+          .from("icthub-files")
+          .download(storagePath);
+        if (error) throw error;
+        fileBlob = data;
+      } else {
+        const response = await fetch(file.file_path);
+        if (!response.ok) throw new Error("Unable to download file");
+        fileBlob = await response.blob();
+      }
+
+      const objectUrl = URL.createObjectURL(fileBlob);
+      const downloadLink = document.createElement("a");
+      downloadLink.href = objectUrl;
+      downloadLink.download = file.name;
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      downloadLink.remove();
+      URL.revokeObjectURL(objectUrl);
+    } catch (error) {
+      console.error("Error downloading file:", error);
+      toast.error("Unable to download this file. Please try again.");
+    } finally {
+      setDownloadingFileId(null);
+    }
   };
 
   if (loading) {
@@ -332,49 +376,87 @@ const SubjectDetailPage: React.FC = () => {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-6">
               {files.map((file) => (
-                <a
+                <div
                   key={file.id}
-                  href={file.file_path}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() =>
-                    !isAdmin
-                      ? void trackUserActivity({
-                          eventType: "file_open",
-                          page: "/files",
-                          label: file.name,
-                          entityType: "file",
-                          entityId: file.id,
-                          metadata: {
-                            fileType: file.file_type,
-                            subjectId: file.subject_id,
-                            subjectCode: file.subjects?.code ?? null,
-                          },
-                        })
-                      : undefined
-                  }
-                  className="group flex items-center gap-3 p-4 border border-[#e5e7eb] hover:border-[#d1d5db] rounded-xl hover:shadow-sm transition-all bg-white hover:bg-[#f9fafb]"
+                  className="group flex flex-col p-4 border border-[#e5e7eb] hover:border-[#d1d5db] rounded-xl hover:shadow-sm transition-all bg-white hover:bg-[#f9fafb]"
                 >
-                  <div className="w-9 h-9 bg-[#f3f4f6] group-hover:bg-[#e5e7eb] rounded-xl flex items-center justify-center shrink-0 transition-colors">
-                    <File className="h-4 w-4 text-[#374151]" />
+                  <div className="flex items-center gap-3">
+                    <div className="w-9 h-9 bg-[#f3f4f6] group-hover:bg-[#e5e7eb] rounded-xl flex items-center justify-center shrink-0 transition-colors">
+                      <File className="h-4 w-4 text-[#374151]" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-black truncate group-hover:text-[#374151] transition-colors">
+                        {file.name}
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        <span className="uppercase font-semibold">
+                          {file.file_type}
+                        </span>{" "}
+                        &middot; {formatFileSize(file.size)}
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        <span className="font-semibold">Added on:</span>{" "}
+                        {formatDate(file.created_at)}
+                      </p>
+                    </div>
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-black truncate group-hover:text-[#374151] transition-colors">
-                      {file.name}
-                    </p>
-                    <p className="text-xs text-gray-500">
-                      <span className="uppercase font-semibold">
-                        {file.file_type}
-                      </span>{" "}
-                      &middot; {formatFileSize(file.size)}
-                    </p>
-                    <p className="text-xs text-gray-500">
-                      <span className="font-semibold">Added on:</span>{" "}
-                      {formatDate(file.created_at)}
-                    </p>
+                  <div className="mt-3 grid grid-cols-2 gap-2">
+                    <a
+                      href={file.file_path}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() =>
+                        !isAdmin
+                          ? void trackUserActivity({
+                              eventType: "file_open",
+                              page: `/subjects/${id}`,
+                              label: file.name,
+                              entityType: "file",
+                              entityId: file.id,
+                              metadata: {
+                                fileType: file.file_type,
+                                subjectId: file.subject_id,
+                                subjectCode: subject.code,
+                              },
+                            })
+                          : undefined
+                      }
+                      className="inline-flex items-center justify-center gap-1 rounded-lg border border-[#e5e7eb] px-2 py-1.5 text-xs font-medium text-[#374151] hover:border-[#0066ff] hover:text-[#0066ff] focus:outline-none focus:ring-2 focus:ring-[#0066ff]"
+                      aria-label={`Preview ${file.name}`}
+                    >
+                      <ExternalLink className="h-3.5 w-3.5" />
+                      Preview
+                    </a>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (!isAdmin) {
+                          void trackUserActivity({
+                            eventType: "file_download",
+                            page: `/subjects/${id}`,
+                            label: file.name,
+                            entityType: "file",
+                            entityId: file.id,
+                            metadata: {
+                              fileType: file.file_type,
+                              subjectId: file.subject_id,
+                              subjectCode: subject.code,
+                            },
+                          });
+                        }
+                        void downloadFile(file);
+                      }}
+                      disabled={downloadingFileId === file.id}
+                      className="inline-flex items-center justify-center gap-1 rounded-lg bg-[#0066ff] px-2 py-1.5 text-xs font-medium text-white hover:bg-[#0052cc] disabled:cursor-wait disabled:opacity-60 focus:outline-none focus:ring-2 focus:ring-[#0066ff]"
+                      aria-label={`Download ${file.name}`}
+                    >
+                      <Download className="h-3.5 w-3.5" />
+                      {downloadingFileId === file.id
+                        ? "Downloading..."
+                        : "Download"}
+                    </button>
                   </div>
-                  <Download className="h-4 w-4 text-gray-500 group-hover:text-[#6b7280] shrink-0 transition-colors" />
-                </a>
+                </div>
               ))}
             </div>
           )}

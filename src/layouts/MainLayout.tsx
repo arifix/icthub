@@ -8,11 +8,15 @@ const MainLayout: React.FC = () => {
   usePageTracking();
   return (
     <div className="flex flex-col min-h-screen bg-[#f9fafb]">
-      <Navbar />
+      <div className="print:hidden">
+        <Navbar />
+      </div>
       <main className="flex-grow">
         <Outlet />
       </main>
-      <Footer />
+      <div className="print:hidden">
+        <Footer />
+      </div>
     </div>
   );
 };

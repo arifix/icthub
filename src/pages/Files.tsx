@@ -4,6 +4,7 @@ import {
   Search,
   ChevronDown,
   Download,
+  ExternalLink,
   BookOpen,
   Globe,
 } from "lucide-react";
@@ -11,6 +12,7 @@ import { supabase } from "../lib/supabase";
 import { Database } from "../types/supabase";
 import { trackUserActivity } from "../hooks/usePageTracking";
 import { useAuth } from "../context/AuthContext";
+import { toast } from "react-hot-toast";
 
 type FileData = Database["public"]["Tables"]["files"]["Row"] & {
   subjects?: { title: string; code: string } | null;
@@ -25,6 +27,9 @@ const FilesPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedType, setSelectedType] = useState<string>("");
   const [selectedSubject, setSelectedSubject] = useState<number | "">("");
+  const [downloadingFileId, setDownloadingFileId] = useState<number | null>(
+    null,
+  );
 
   useEffect(() => {
     const fetchData = async () => {
@@ -89,6 +94,45 @@ const FilesPage: React.FC = () => {
       xlsx: "bg-green-100 text-green-700",
     };
     return map[type.toLowerCase()] || "bg-gray-100 text-gray-700";
+  };
+
+  const downloadFile = async (file: FileData) => {
+    setDownloadingFileId(file.id);
+    try {
+      const fileUrl = new URL(file.file_path, window.location.origin);
+      const storageMarker = "/object/public/icthub-files/";
+      const markerIndex = fileUrl.pathname.indexOf(storageMarker);
+      let fileBlob: Blob;
+
+      if (markerIndex >= 0) {
+        const storagePath = decodeURIComponent(
+          fileUrl.pathname.slice(markerIndex + storageMarker.length),
+        );
+        const { data, error } = await supabase.storage
+          .from("icthub-files")
+          .download(storagePath);
+        if (error) throw error;
+        fileBlob = data;
+      } else {
+        const response = await fetch(file.file_path);
+        if (!response.ok) throw new Error("Unable to download file");
+        fileBlob = await response.blob();
+      }
+
+      const objectUrl = URL.createObjectURL(fileBlob);
+      const downloadLink = document.createElement("a");
+      downloadLink.href = objectUrl;
+      downloadLink.download = file.name;
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      downloadLink.remove();
+      URL.revokeObjectURL(objectUrl);
+    } catch (error) {
+      console.error("Error downloading file:", error);
+      toast.error("Unable to download this file. Please try again.");
+    } finally {
+      setDownloadingFileId(null);
+    }
   };
 
   return (
@@ -181,66 +225,125 @@ const FilesPage: React.FC = () => {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {filteredFiles.map((file) => (
-              <a
+              <div
                 key={file.id}
-                href={file.file_path}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() =>
-                  !isAdmin
-                    ? void trackUserActivity({
-                        eventType: "file_open",
-                        page: "/files",
-                        label: file.name,
-                        entityType: "file",
-                        entityId: file.id,
-                        metadata: {
-                          fileType: file.file_type,
-                          subjectId: file.subject_id,
-                          subjectCode: file.subjects?.code ?? null,
-                        },
-                      })
-                    : undefined
-                }
                 className="group bg-white rounded-xl border border-[#e5e7eb] hover:border-[#d1d5db] hover:shadow-md transition-all duration-200 p-4"
               >
-                <div className="flex items-start gap-3 mb-4">
-                  <div className="w-10 h-10 bg-[#f3f4f6] group-hover:bg-[#e5e7eb] rounded-xl flex items-center justify-center shrink-0 transition-colors">
-                    <File className="h-5 w-5 text-[#374151]" />
+                <a
+                  href={file.file_path}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() =>
+                    !isAdmin
+                      ? void trackUserActivity({
+                          eventType: "file_open",
+                          page: "/files",
+                          label: file.name,
+                          entityType: "file",
+                          entityId: file.id,
+                          metadata: {
+                            fileType: file.file_type,
+                            subjectId: file.subject_id,
+                            subjectCode: file.subjects?.code ?? null,
+                          },
+                        })
+                      : undefined
+                  }
+                  className="block"
+                >
+                  <div className="flex items-start gap-3 mb-4">
+                    <div className="w-10 h-10 bg-[#f3f4f6] group-hover:bg-[#e5e7eb] rounded-xl flex items-center justify-center shrink-0 transition-colors">
+                      <File className="h-5 w-5 text-[#374151]" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-[14px] font-semibold text-black group-hover:text-[#374151] transition-colors line-clamp-2 leading-tight">
+                        {file.name}
+                      </p>
+                    </div>
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-[14px] font-semibold text-black group-hover:text-[#374151] transition-colors line-clamp-2 leading-tight">
-                      {file.name}
-                    </p>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <span
+                        className={`text-xs font-bold px-1.5 py-0.5 rounded uppercase ${getTypeBadgeColor(file.file_type)}`}
+                      >
+                        {file.file_type}
+                      </span>
+                      <span className="text-xs text-gray-500">
+                        {formatFileSize(file.size)}
+                      </span>
+                    </div>
                   </div>
+                  {file.subjects ? (
+                    <div className="mt-4 pt-2 border-t border-[#e5e7eb] flex items-center gap-2 text-sm text-[#6b7280]">
+                      <BookOpen className="h-3 w-3 text-gray-500 shrink-0" />
+                      <span className="truncate">
+                        {file.subjects.title} ({file.subjects.code})
+                      </span>
+                    </div>
+                  ) : (
+                    <div className="mt-4 pt-2 border-t border-[#e5e7eb] flex items-center gap-2 text-sm text-[#6b7280]">
+                      <Globe className="h-3 w-3 text-gray-500 shrink-0" />
+                      <span className="truncate">General File</span>
+                    </div>
+                  )}
+                </a>
+                <div className="mt-4 grid grid-cols-2 gap-2">
+                  <a
+                    href={file.file_path}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() =>
+                      !isAdmin
+                        ? void trackUserActivity({
+                            eventType: "file_open",
+                            page: "/files",
+                            label: file.name,
+                            entityType: "file",
+                            entityId: file.id,
+                            metadata: {
+                              fileType: file.file_type,
+                              subjectId: file.subject_id,
+                              subjectCode: file.subjects?.code ?? null,
+                            },
+                          })
+                        : undefined
+                    }
+                    className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-[#e5e7eb] px-2 py-2 text-sm font-medium text-[#374151] hover:border-[#0066ff] hover:text-[#0066ff] focus:outline-none focus:ring-2 focus:ring-[#0066ff]"
+                    aria-label={`Preview ${file.name}`}
+                  >
+                    <ExternalLink className="h-4 w-4" />
+                    Preview
+                  </a>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (!isAdmin) {
+                        void trackUserActivity({
+                          eventType: "file_download",
+                          page: "/files",
+                          label: file.name,
+                          entityType: "file",
+                          entityId: file.id,
+                          metadata: {
+                            fileType: file.file_type,
+                            subjectId: file.subject_id,
+                            subjectCode: file.subjects?.code ?? null,
+                          },
+                        });
+                      }
+                      void downloadFile(file);
+                    }}
+                    disabled={downloadingFileId === file.id}
+                    className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-[#0066ff] px-2 py-2 text-sm font-medium text-white hover:bg-[#0052cc] disabled:cursor-wait disabled:opacity-60 focus:outline-none focus:ring-2 focus:ring-[#0066ff]"
+                    aria-label={`Download ${file.name}`}
+                  >
+                    <Download className="h-4 w-4" />
+                    {downloadingFileId === file.id
+                      ? "Downloading..."
+                      : "Download"}
+                  </button>
                 </div>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <span
-                      className={`text-xs font-bold px-1.5 py-0.5 rounded uppercase ${getTypeBadgeColor(file.file_type)}`}
-                    >
-                      {file.file_type}
-                    </span>
-                    <span className="text-xs text-gray-500">
-                      {formatFileSize(file.size)}
-                    </span>
-                  </div>
-                  <Download className="h-4 w-4 text-gray-500 group-hover:text-[#6b7280] transition-colors" />
-                </div>
-                {file.subjects ? (
-                  <div className="mt-4 pt-2 border-t border-[#e5e7eb] flex items-center gap-2 text-sm text-[#6b7280]">
-                    <BookOpen className="h-3 w-3 text-gray-500 shrink-0" />
-                    <span className="truncate">
-                      {file.subjects.title} ({file.subjects.code})
-                    </span>
-                  </div>
-                ) : (
-                  <div className="mt-4 pt-2 border-t border-[#e5e7eb] flex items-center gap-2 text-sm text-[#6b7280]">
-                    <Globe className="h-3 w-3 text-gray-500 shrink-0" />
-                    <span className="truncate">General File</span>
-                  </div>
-                )}
-              </a>
+              </div>
             ))}
           </div>
         )}

@@ -293,3 +293,22 @@
     color: var(--fg-subtle);
   }
 }
+
+@media print {
+  body {
+    background: #ffffff;
+  }
+
+  .print\:hidden {
+    display: none !important;
+  }
+
+  .prose,
+  .prose * {
+    color: #000000 !important;
+  }
+
+  main {
+    min-height: 0 !important;
+  }
+}

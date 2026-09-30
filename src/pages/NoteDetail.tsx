@@ -11,10 +11,14 @@ import {
   Reply,
   Send,
   User,
+  Share2,
+  Printer,
+  Check,
 } from "lucide-react";
 import { supabase } from "../lib/supabase";
 import { Database } from "../types/supabase";
 import { getStoredStudentName } from "../utils/portalStudent";
+import { useAuth } from "../context/AuthContext";
 
 type Note = Database["public"]["Tables"]["notes"]["Row"];
 type Subject = Database["public"]["Tables"]["subjects"]["Row"];
@@ -35,21 +39,24 @@ const formatCommentTime = (iso: string) => {
 
 const NoteDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const { isAdmin, user } = useAuth();
   const [note, setNote] = useState<Note | null>(null);
   const [subject, setSubject] = useState<Subject | null>(null);
   const [loading, setLoading] = useState(true);
   const [comments, setComments] = useState<Comment[]>([]);
   const [replyingTo, setReplyingTo] = useState<number | null>(null);
-  const [authorName, setAuthorName] = useState(
-    () => getStoredStudentName() ?? "",
+  const [authorName, setAuthorName] = useState(() =>
+    isAdmin ? "admin" : (getStoredStudentName() ?? ""),
   );
   const [newComment, setNewComment] = useState("");
   const [replyTexts, setReplyTexts] = useState<Record<number, string>>({});
   const [submitting, setSubmitting] = useState(false);
+  const [commentError, setCommentError] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
-    setAuthorName(getStoredStudentName() ?? "");
-  }, []);
+    setAuthorName(isAdmin ? "admin" : (getStoredStudentName() ?? ""));
+  }, [isAdmin]);
 
   useEffect(() => {
     if (!id) return;
@@ -58,7 +65,13 @@ const NoteDetailPage: React.FC = () => {
       .select("*")
       .eq("note_id", id)
       .order("created_at", { ascending: true })
-      .then(({ data }) => setComments((data as Comment[]) ?? []));
+      .then(({ data, error }) => {
+        if (error) {
+          setCommentError("Comments could not be loaded.");
+          return;
+        }
+        setComments((data as Comment[]) ?? []);
+      });
   }, [id]);
 
   const submitComment = async (
@@ -70,28 +83,53 @@ const NoteDetailPage: React.FC = () => {
     const trimName = name.trim();
     if (!trimText || !trimName || !id) return;
     setSubmitting(true);
-    const { data, error } = await supabase
-      .from("note_comments")
-      .insert({
-        note_id: Number(id),
-        parent_id: parentId,
-        author_name: trimName,
-        content: trimText,
-      })
-      .select()
-      .single();
-    if (!error && data) {
+    setCommentError(null);
+    try {
+      const { data, error } = await supabase
+        .from("note_comments")
+        .insert({
+          note_id: Number(id),
+          parent_id: parentId,
+          user_id: isAdmin ? user?.id : null,
+          author_name: trimName,
+          content: trimText,
+        })
+        .select()
+        .single();
+      if (error) throw error;
+
       setComments((prev) => [...prev, data as Comment]);
       if (parentId === null) setNewComment("");
       else setReplyTexts((prev) => ({ ...prev, [parentId]: "" }));
       setReplyingTo(null);
+    } catch (error) {
+      console.error("Error posting comment:", error);
+      setCommentError("Comment could not be posted. Please try again.");
+    } finally {
+      setSubmitting(false);
     }
-    setSubmitting(false);
   };
 
   const rootComments = comments.filter((c) => c.parent_id === null);
   const getReplies = (pid: number) =>
     comments.filter((c) => c.parent_id === pid);
+
+  const shareNote = async () => {
+    const shareData = {
+      title: note?.title ?? "ICTHub note",
+      url: window.location.href,
+    };
+    try {
+      if (navigator.share) await navigator.share(shareData);
+      else await navigator.clipboard.writeText(shareData.url);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2000);
+    } catch (error) {
+      if ((error as DOMException).name !== "AbortError") {
+        console.error("Unable to share note:", error);
+      }
+    }
+  };
 
   useEffect(() => {
     const fetchNoteData = async () => {
@@ -199,6 +237,28 @@ const NoteDetailPage: React.FC = () => {
               )}{" "}
               min read
             </span>
+            <div className="print:hidden flex items-center gap-2 ml-auto">
+              <button
+                type="button"
+                onClick={() => void shareNote()}
+                className="inline-flex items-center gap-1.5 rounded-lg border border-[#e5e7eb] px-3 py-1.5 text-sm font-medium text-[#374151] hover:border-[#0066ff] hover:text-[#0066ff] focus:outline-none focus:ring-2 focus:ring-[#0066ff]"
+              >
+                {copied ? (
+                  <Check className="h-3.5 w-3.5" />
+                ) : (
+                  <Share2 className="h-3.5 w-3.5" />
+                )}
+                {copied ? "Copied" : "Share"}
+              </button>
+              <button
+                type="button"
+                onClick={() => window.print()}
+                className="inline-flex items-center gap-1.5 rounded-lg border border-[#e5e7eb] px-3 py-1.5 text-sm font-medium text-[#374151] hover:border-[#0066ff] hover:text-[#0066ff] focus:outline-none focus:ring-2 focus:ring-[#0066ff]"
+              >
+                <Printer className="h-3.5 w-3.5" />
+                Print
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -229,7 +289,7 @@ const NoteDetailPage: React.FC = () => {
         </div>
 
         {/* Comments */}
-        <div className="bg-white rounded-xl border border-[#e5e7eb] mb-8">
+        <div className="print:hidden bg-white rounded-xl border border-[#e5e7eb] mb-8">
           <div className="bg-[#f9fafb] border-b border-[#e5e7eb] px-6 py-4 flex items-center gap-2">
             <MessageSquare className="h-4 w-4 text-[#374151]" />
             <span className="text-sm font-bold text-black">Comments</span>
@@ -376,6 +436,11 @@ const NoteDetailPage: React.FC = () => {
             <p className="text-xs font-semibold text-[#6b7280] uppercase tracking-wide mb-3">
               Add a comment
             </p>
+            {commentError && (
+              <p className="mb-3 text-sm text-red-600" role="alert">
+                {commentError}
+              </p>
+            )}
             <div className="space-y-2">
               <div className="relative">
                 <User className="absolute left-3 top-2.5 h-4 w-4 text-gray-500" />
@@ -411,7 +476,7 @@ const NoteDetailPage: React.FC = () => {
         {/* Footer nav */}
         <Link
           to="/notes"
-          className="inline-flex items-center gap-2 text-sm text-[#6b7280] hover:text-black transition-colors font-medium"
+          className="print:hidden inline-flex items-center gap-2 text-sm text-[#6b7280] hover:text-black transition-colors font-medium"
         >
           <ArrowLeft className="h-4 w-4" />
           Back to Notes
