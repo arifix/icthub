@@ -15,6 +15,7 @@ import { supabase } from "../../lib/supabase";
 import { Database } from "../../types/supabase";
 import { toast } from "react-hot-toast";
 import { isPastDate } from "../../utils/helper";
+import { useAdminConfirm } from "../../components/AdminConfirm";
 
 type Event = Database["public"]["Tables"]["events"]["Row"] & {
   subjects?: { title: string; code: string } | null;
@@ -24,6 +25,7 @@ type Event = Database["public"]["Tables"]["events"]["Row"] & {
 type Semester = Database["public"]["Tables"]["semesters"]["Row"];
 
 const AdminCalendar: React.FC = () => {
+  const confirm = useAdminConfirm();
   const [events, setEvents] = useState<Event[]>([]);
   const [semesters, setSemesters] = useState<Semester[]>([]);
   const [currentMonth, setCurrentMonth] = useState(new Date());
@@ -80,7 +82,7 @@ const AdminCalendar: React.FC = () => {
   };
 
   const handleDelete = async (id: number) => {
-    if (window.confirm("Are you sure you want to delete this event?")) {
+    if (await confirm({ title: "Delete event?", message: "This event will be permanently removed from the academic calendar.", confirmLabel: "Delete event" })) {
       try {
         setIsDeleting(true);
         const { error } = await supabase.from("events").delete().eq("id", id);

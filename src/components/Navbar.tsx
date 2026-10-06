@@ -28,7 +28,7 @@ const NAV_ITEMS = [
   { to: "/notes", label: "Notes", icon: FileText },
   { to: "/calendar", label: "Calendar", icon: Calendar },
   { to: "/files", label: "Files", icon: FolderOpen },
-  //{ to: "/archive", label: "Archive", icon: Archive },
+  { to: "/archive", label: "Archive", icon: Archive },
   { to: "/information", label: "Information", icon: Info },
   //{ to: "/club", label: "IICT Club", icon: Users },
 ];
@@ -60,11 +60,11 @@ const Navbar: React.FC = () => {
   const isAuthenticated = isPortalUser || isAdmin;
 
   return (
-    <header className="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-50 border-b border-gray-200/50">
+    <header className="portal-header bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-gray-200/50">
       <div className="container mx-auto px-3 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-20 items-center">
+        <div className="flex justify-between h-[76px] items-center">
           {/* Logo */}
-          <Link to="/" className="flex flex-col">
+          <Link to="/" className="portal-brand flex flex-col" aria-label="ICTHub home">
             <img
               src={icthub}
               alt="ICTHub Logo"

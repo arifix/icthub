@@ -4,6 +4,7 @@ import { BookOpen, Edit, Plus, Search, Trash, ChevronDown } from "lucide-react";
 import { supabase } from "../../lib/supabase";
 import { Database } from "../../types/supabase";
 import { toast } from "react-hot-toast";
+import { useAdminConfirm } from "../../components/AdminConfirm";
 
 type Subject = Database["public"]["Tables"]["subjects"]["Row"] & {
   semesters?: { name: string } | null;
@@ -11,6 +12,7 @@ type Subject = Database["public"]["Tables"]["subjects"]["Row"] & {
 type Semester = Database["public"]["Tables"]["semesters"]["Row"];
 
 const AdminSubjects: React.FC = () => {
+  const confirm = useAdminConfirm();
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [semesters, setSemesters] = useState<Semester[]>([]);
   const [loading, setLoading] = useState(true);
@@ -66,11 +68,7 @@ const AdminSubjects: React.FC = () => {
   };
 
   const handleDelete = async (id: number) => {
-    if (
-      window.confirm(
-        "Are you sure you want to delete this subject? This will also delete all notes and files associated with it.",
-      )
-    ) {
+    if (await confirm({ title: "Delete subject?", message: "Deleting this subject will also remove its associated notes and files.", confirmLabel: "Delete subject" })) {
       try {
         setIsDeleting(true);
         const { error } = await supabase.from("subjects").delete().eq("id", id);

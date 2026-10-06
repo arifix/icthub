@@ -12,6 +12,7 @@ import {
 import { supabase } from "../../lib/supabase";
 import { Database } from "../../types/supabase";
 import { toast } from "react-hot-toast";
+import { useAdminConfirm } from "../../components/AdminConfirm";
 
 type Note = Database["public"]["Tables"]["notes"]["Row"] & {
   subjects: { title: string; code: string };
@@ -20,6 +21,7 @@ type Note = Database["public"]["Tables"]["notes"]["Row"] & {
 type Semester = Database["public"]["Tables"]["semesters"]["Row"];
 
 const AdminNotes: React.FC = () => {
+  const confirm = useAdminConfirm();
   const [notes, setNotes] = useState<Note[]>([]);
   const [semesters, setSemesters] = useState<Semester[]>([]);
   const [loading, setLoading] = useState(true);
@@ -86,7 +88,7 @@ const AdminNotes: React.FC = () => {
   };
 
   const handleDelete = async (id: number) => {
-    if (window.confirm("Are you sure you want to delete this note?")) {
+    if (await confirm({ title: "Delete note?", message: "This note will be permanently removed from the portal.", confirmLabel: "Delete note" })) {
       try {
         setIsDeleting(true);
         const { error } = await supabase.from("notes").delete().eq("id", id);

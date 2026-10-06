@@ -15,6 +15,7 @@ import {
 import { supabase } from "../../lib/supabase";
 import { Database } from "../../types/supabase";
 import { toast } from "react-hot-toast";
+import { useAdminConfirm } from "../../components/AdminConfirm";
 
 type FileData = Database["public"]["Tables"]["files"]["Row"] & {
   subjects?: { title: string; code: string } | null;
@@ -24,6 +25,7 @@ type FileData = Database["public"]["Tables"]["files"]["Row"] & {
 type Semester = Database["public"]["Tables"]["semesters"]["Row"];
 
 const AdminFiles: React.FC = () => {
+  const confirm = useAdminConfirm();
   const [files, setFiles] = useState<FileData[]>([]);
   const [semesters, setSemesters] = useState<Semester[]>([]);
   const [loading, setLoading] = useState(true);
@@ -81,7 +83,7 @@ const AdminFiles: React.FC = () => {
   };
 
   const handleDelete = async (id: number) => {
-    if (window.confirm("Are you sure you want to delete this file?")) {
+    if (await confirm({ title: "Delete file?", message: "This file will be removed from the resource library and storage.", confirmLabel: "Delete file" })) {
       try {
         setIsDeleting(true);
 

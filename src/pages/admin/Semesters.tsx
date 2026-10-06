@@ -12,10 +12,12 @@ import {
 import { supabase } from "../../lib/supabase";
 import { Database } from "../../types/supabase";
 import { toast } from "react-hot-toast";
+import { useAdminConfirm } from "../../components/AdminConfirm";
 
 type Semester = Database["public"]["Tables"]["semesters"]["Row"];
 
 const AdminSemesters: React.FC = () => {
+  const confirm = useAdminConfirm();
   const [semesters, setSemesters] = useState<Semester[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
@@ -46,11 +48,7 @@ const AdminSemesters: React.FC = () => {
   };
 
   const handleSetCurrent = async (id: number) => {
-    if (
-      window.confirm(
-        "Are you sure you want to set this as the current semester?",
-      )
-    ) {
+    if (await confirm({ title: "Set current semester?", message: "This semester will become the active term shown throughout the student portal.", confirmLabel: "Set as current", tone: "primary" })) {
       try {
         setIsUpdating(true);
         // Note: Due to TypeScript constraints, use the semester edit form to set is_current
@@ -79,11 +77,7 @@ const AdminSemesters: React.FC = () => {
       return;
     }
 
-    if (
-      window.confirm(
-        "Are you sure you want to delete this semester? This will affect all related content.",
-      )
-    ) {
+    if (await confirm({ title: "Delete semester?", message: "This will permanently remove the semester and may affect its related content.", confirmLabel: "Delete semester" })) {
       try {
         setIsDeleting(true);
         const { error } = await supabase

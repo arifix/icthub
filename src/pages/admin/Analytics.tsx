@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Activity,
   Globe,
@@ -11,6 +11,10 @@ import {
   MapPin,
   Clock,
   FileText,
+  Search,
+  RefreshCw,
+  Download,
+  CalendarDays,
 } from "lucide-react";
 import { supabase } from "../../lib/supabase";
 
@@ -68,12 +72,26 @@ const startOfDay = (d = new Date()) => {
   return t;
 };
 
+type Range = "today" | "week" | "month" | "year" | "all" | "custom";
+
+const uniqueValues = (visits: Visit[], key: "page" | "event_type" | "country" | "city" | "referrer" | "entity_type") =>
+  [...new Set(visits.map((visit) => visit[key]).filter((value): value is string => Boolean(value)))].sort();
+
 const AdminAnalytics: React.FC = () => {
   const [visits, setVisits] = useState<Visit[]>([]);
   const [loading, setLoading] = useState(true);
-  const [range, setRange] = useState<"today" | "week" | "month" | "all">(
-    "today",
-  );
+  const [range, setRange] = useState<Range>("today");
+  const [from, setFrom] = useState("");
+  const [to, setTo] = useState("");
+  const [search, setSearch] = useState("");
+  const [pageFilter, setPageFilter] = useState("");
+  const [eventFilter, setEventFilter] = useState("");
+  const [countryFilter, setCountryFilter] = useState("");
+  const [cityFilter, setCityFilter] = useState("");
+  const [deviceFilter, setDeviceFilter] = useState("");
+  const [referrerFilter, setReferrerFilter] = useState("");
+  const [entityFilter, setEntityFilter] = useState("");
+  const [entityIdFilter, setEntityIdFilter] = useState("");
 
   const fetchVisits = useCallback(async () => {
     setLoading(true);
@@ -83,16 +101,21 @@ const AdminAnalytics: React.FC = () => {
         .select("*")
         .order("created_at", { ascending: false });
 
-      if (range !== "all") {
+      if (range === "custom") {
+        if (from) query = query.gte("created_at", new Date(`${from}T00:00:00`).toISOString());
+        if (to) query = query.lte("created_at", new Date(`${to}T23:59:59.999`).toISOString());
+      } else if (range !== "all") {
         const now = new Date();
         let from: Date;
         if (range === "today") from = startOfDay(now);
         else if (range === "week") {
           from = new Date(now);
           from.setDate(now.getDate() - 7);
-        } else {
+        } else if (range === "month") {
           from = new Date(now);
           from.setDate(now.getDate() - 30);
+        } else {
+          from = new Date(now.getFullYear(), 0, 1);
         }
         query = query.gte("created_at", from.toISOString());
       }
@@ -105,28 +128,63 @@ const AdminAnalytics: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  }, [range]);
+  }, [from, range, to]);
 
   useEffect(() => {
     document.title = "Analytics — ICTHub Admin";
     void fetchVisits();
   }, [fetchVisits]);
 
+  const filteredVisits = useMemo(() => {
+    const term = search.trim().toLowerCase();
+    return visits.filter((visit) => {
+      const mobile = isMobile(visit.user_agent);
+      const haystack = [visit.page, visit.event_type, visit.event_label, visit.entity_id, visit.city, visit.country, visit.referrer, visit.ip_address, visit.student_name]
+        .filter(Boolean).join(" ").toLowerCase();
+      return (!pageFilter || visit.page === pageFilter)
+        && (!eventFilter || (visit.event_type || "page_view") === eventFilter)
+        && (!countryFilter || visit.country === countryFilter)
+        && (!cityFilter || visit.city === cityFilter)
+        && (!deviceFilter || (deviceFilter === "mobile" ? mobile : !mobile))
+        && (!referrerFilter || (referrerFilter === "direct" ? !visit.referrer : visit.referrer === referrerFilter))
+        && (!entityFilter || visit.entity_type === entityFilter)
+        && (!entityIdFilter || visit.entity_id?.toLowerCase().includes(entityIdFilter.trim().toLowerCase()))
+        && (!term || haystack.includes(term));
+    });
+  }, [cityFilter, countryFilter, deviceFilter, entityFilter, entityIdFilter, eventFilter, pageFilter, referrerFilter, search, visits]);
+
   // Aggregations
-  const todayVisits = visits.filter(
+  const todayVisits = filteredVisits.filter(
     (v) => new Date(v.created_at) >= startOfDay(),
   ).length;
 
   const uniqueSessions = new Set(
-    visits.map((v) => v.session_id).filter(Boolean),
+    filteredVisits.map((v) => v.session_id).filter(Boolean),
   ).size;
-  const uniqueIPs = new Set(visits.map((v) => v.ip_address).filter(Boolean))
+  const uniqueIPs = new Set(filteredVisits.map((v) => v.ip_address).filter(Boolean))
     .size;
 
-  const mobileCount = visits.filter((v) => isMobile(v.user_agent)).length;
-  const desktopCount = visits.length - mobileCount;
+  const mobileCount = filteredVisits.filter((v) => isMobile(v.user_agent)).length;
+  const desktopCount = filteredVisits.length - mobileCount;
+  const pageViews = filteredVisits.filter((v) => (v.event_type || "page_view") === "page_view").length;
+  const actionCount = filteredVisits.filter((v) => !["page_view", "search"].includes(v.event_type || "page_view")).length;
+  const sessionsById = new Map<string, Visit[]>();
+  filteredVisits.forEach((visit) => {
+    const key = visit.session_id || `visit-${visit.id}`;
+    sessionsById.set(key, [...(sessionsById.get(key) || []), visit]);
+  });
+  const engagedSessions = [...sessionsById.values()].filter((session) => session.some((visit) => !["page_view"].includes(visit.event_type || "page_view"))).length;
+  const engagementRate = sessionsById.size ? Math.round((engagedSessions / sessionsById.size) * 100) : 0;
+  const sessionDepth = sessionsById.size ? (pageViews / sessionsById.size).toFixed(1) : "0.0";
+  const durations = [...sessionsById.values()].map((session) => {
+    const times = session.map((visit) => +new Date(visit.created_at));
+    return Math.max(...times) - Math.min(...times);
+  });
+  const averageDuration = durations.length ? Math.round(durations.reduce((sum, duration) => sum + duration, 0) / durations.length / 1000) : 0;
+  const bounceCount = [...sessionsById.values()].filter((session) => session.filter((visit) => (visit.event_type || "page_view") === "page_view").length <= 1).length;
+  const bounceRate = sessionsById.size ? Math.round((bounceCount / sessionsById.size) * 100) : 0;
 
-  const pageCounts = visits.reduce<Record<string, number>>((acc, v) => {
+  const pageCounts = filteredVisits.filter((v) => (v.event_type || "page_view") === "page_view").reduce<Record<string, number>>((acc, v) => {
     const label = getPageLabel(v.page);
     acc[label] = (acc[label] || 0) + 1;
     return acc;
@@ -135,7 +193,7 @@ const AdminAnalytics: React.FC = () => {
     .sort((a, b) => b[1] - a[1])
     .slice(0, 8);
 
-  const eventCounts = visits.reduce<Record<string, number>>((acc, v) => {
+  const eventCounts = filteredVisits.reduce<Record<string, number>>((acc, v) => {
     const eventType = v.event_type || "page_view";
     acc[eventType] = (acc[eventType] || 0) + 1;
     return acc;
@@ -144,7 +202,7 @@ const AdminAnalytics: React.FC = () => {
     .sort((a, b) => b[1] - a[1])
     .slice(0, 8);
 
-  const countryCounts = visits.reduce<Record<string, number>>((acc, v) => {
+  const countryCounts = filteredVisits.reduce<Record<string, number>>((acc, v) => {
     const c = v.country || "Unknown";
     acc[c] = (acc[c] || 0) + 1;
     return acc;
@@ -152,13 +210,19 @@ const AdminAnalytics: React.FC = () => {
   const topCountries = Object.entries(countryCounts)
     .sort((a, b) => b[1] - a[1])
     .slice(0, 8);
+  const referrerCounts = filteredVisits.reduce<Record<string, number>>((acc, v) => {
+    const label = v.referrer ? (() => { try { return new URL(v.referrer).hostname; } catch { return v.referrer as string; } })() : "Direct";
+    acc[label] = (acc[label] || 0) + 1;
+    return acc;
+  }, {});
+  const topReferrers = Object.entries(referrerCounts).sort((a, b) => b[1] - a[1]).slice(0, 8);
 
   const maxPageCount = topPages[0]?.[1] || 1;
   const maxCountryCount = topCountries[0]?.[1] || 1;
 
   // Group visits by session for user journey view
   const sessionJourneys = Object.entries(
-    visits.reduce<Record<string, Visit[]>>((acc, v) => {
+    filteredVisits.reduce<Record<string, Visit[]>>((acc, v) => {
       const key = v.session_id ?? `_${v.id}`;
       (acc[key] = acc[key] || []).push(v);
       return acc;
@@ -177,6 +241,22 @@ const AdminAnalytics: React.FC = () => {
     )
     .slice(0, 25);
 
+  const clearFilters = () => {
+    setSearch(""); setPageFilter(""); setEventFilter(""); setCountryFilter("");
+    setCityFilter(""); setDeviceFilter(""); setReferrerFilter(""); setEntityFilter(""); setEntityIdFilter("");
+    setFrom(""); setTo(""); setRange("today");
+  };
+
+  const exportCsv = () => {
+    const columns: (keyof Visit)[] = ["created_at", "session_id", "page", "event_type", "event_label", "entity_type", "entity_id", "student_name", "country", "city", "referrer", "ip_address", "user_agent"];
+    const escape = (value: unknown) => `"${String(value ?? "").replace(/"/g, '""')}"`;
+    const csv = [columns.join(","), ...filteredVisits.map((visit) => columns.map((key) => escape(visit[key])).join(","))].join("\n");
+    const url = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
+    const anchor = document.createElement("a");
+    anchor.href = url; anchor.download = `icthub-analytics-${new Date().toISOString().slice(0, 10)}.csv`;
+    anchor.click(); URL.revokeObjectURL(url);
+  };
+
   const formatTime = (iso: string) => {
     const d = new Date(iso);
     return d.toLocaleDateString(undefined, {
@@ -189,7 +269,7 @@ const AdminAnalytics: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#f9fafb]">
+    <div className="admin-analytics min-h-screen bg-[#f4f6f4]">
       {/* Header */}
       <div className="bg-white border-b border-[#e5e7eb] px-6 py-7">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -201,8 +281,8 @@ const AdminAnalytics: React.FC = () => {
               Overview of user activity and engagement on the portal
             </p>
           </div>
-          <div className="flex gap-2">
-            {(["today", "week", "month", "all"] as const).map((r) => (
+          <div className="flex flex-wrap gap-2">
+            {(["today", "week", "month", "year", "all", "custom"] as const).map((r) => (
               <button
                 key={r}
                 onClick={() => setRange(r)}
@@ -218,14 +298,44 @@ const AdminAnalytics: React.FC = () => {
                     ? "Today"
                     : r === "week"
                       ? "7 days"
-                      : "30 days"}
+                      : r === "month" ? "30 days" : r === "year" ? "This year" : "Custom"}
               </button>
             ))}
+            <button onClick={() => void fetchVisits()} className="inline-flex items-center gap-2 rounded-lg border border-[#e5e7eb] bg-white px-3 py-1.5 text-sm font-medium text-[#374151] hover:bg-[#f9fafb]" aria-label="Refresh analytics">
+              <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} /> Refresh
+            </button>
+            <button onClick={exportCsv} disabled={!filteredVisits.length} className="inline-flex items-center gap-2 rounded-lg bg-[#176b5b] px-3 py-1.5 text-sm font-semibold text-white hover:bg-[#105548] disabled:opacity-50">
+              <Download className="h-4 w-4" /> Export CSV
+            </button>
           </div>
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-6 py-8 space-y-8">
+        <section className="rounded-2xl border border-[#e1eae4] bg-white p-5 shadow-sm">
+          <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <h2 className="text-sm font-bold text-[#172522]">Filter activity</h2>
+              <p className="mt-1 text-xs text-[#75827d]">Filters apply to the latest 2,000 matching records loaded from Supabase.</p>
+            </div>
+            <button onClick={clearFilters} className="text-sm font-semibold text-[#176b5b] hover:text-[#105548]">Clear filters</button>
+          </div>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
+            <label className="relative block sm:col-span-2 xl:col-span-1"><span className="mb-1 block text-xs font-semibold text-[#75827d]">Search</span><Search className="absolute left-3 top-[34px] h-4 w-4 text-[#8a9690]" /><input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Page, event, visitor…" className="input-field pl-9" /></label>
+            <label className="block"><span className="mb-1 block text-xs font-semibold text-[#75827d]">Page</span><select value={pageFilter} onChange={(e) => setPageFilter(e.target.value)} className="input-field"><option value="">All pages</option>{uniqueValues(visits, "page").map((value) => <option key={value} value={value}>{getPageLabel(value)}</option>)}</select></label>
+            <label className="block"><span className="mb-1 block text-xs font-semibold text-[#75827d]">Event</span><select value={eventFilter} onChange={(e) => setEventFilter(e.target.value)} className="input-field"><option value="">All events</option>{uniqueValues(visits, "event_type").map((value) => <option key={value} value={value}>{value}</option>)}</select></label>
+            <label className="block"><span className="mb-1 block text-xs font-semibold text-[#75827d]">Device</span><select value={deviceFilter} onChange={(e) => setDeviceFilter(e.target.value)} className="input-field"><option value="">All devices</option><option value="mobile">Mobile</option><option value="desktop">Desktop</option></select></label>
+            <label className="block"><span className="mb-1 block text-xs font-semibold text-[#75827d]">Country</span><select value={countryFilter} onChange={(e) => setCountryFilter(e.target.value)} className="input-field"><option value="">All countries</option>{uniqueValues(visits, "country").map((value) => <option key={value} value={value}>{value}</option>)}</select></label>
+            <label className="block"><span className="mb-1 block text-xs font-semibold text-[#75827d]">City</span><select value={cityFilter} onChange={(e) => setCityFilter(e.target.value)} className="input-field"><option value="">All cities</option>{uniqueValues(visits, "city").map((value) => <option key={value} value={value}>{value}</option>)}</select></label>
+            <label className="block"><span className="mb-1 block text-xs font-semibold text-[#75827d]">Referrer</span><select value={referrerFilter} onChange={(e) => setReferrerFilter(e.target.value)} className="input-field"><option value="">All sources</option><option value="direct">Direct / unknown</option>{uniqueValues(visits, "referrer").map((value) => <option key={value} value={value}>{value}</option>)}</select></label>
+            <label className="block"><span className="mb-1 block text-xs font-semibold text-[#75827d]">Entity type</span><select value={entityFilter} onChange={(e) => setEntityFilter(e.target.value)} className="input-field"><option value="">All entities</option>{uniqueValues(visits, "entity_type").map((value) => <option key={value} value={value}>{value}</option>)}</select></label>
+            <label className="block"><span className="mb-1 block text-xs font-semibold text-[#75827d]">Entity ID</span><input value={entityIdFilter} onChange={(e) => setEntityIdFilter(e.target.value)} placeholder="Search entity ID" className="input-field" /></label>
+            {range === "custom" && <>
+              <label className="block"><span className="mb-1 block text-xs font-semibold text-[#75827d]">From</span><input type="date" value={from} onChange={(e) => setFrom(e.target.value)} className="input-field" /></label>
+              <label className="block"><span className="mb-1 block text-xs font-semibold text-[#75827d]">To</span><input type="date" value={to} onChange={(e) => setTo(e.target.value)} className="input-field" /></label>
+            </>}
+          </div>
+        </section>
         {loading ? (
           <div className="flex items-center justify-center py-24">
             <div className="animate-spin rounded-full h-8 w-8 border-2 border-black border-t-transparent" />
@@ -233,13 +343,13 @@ const AdminAnalytics: React.FC = () => {
         ) : (
           <>
             {/* Summary cards */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-4">
               {[
                 {
-                  label: "Total Page Views",
-                  value: visits.length,
+                  label: "Page Views",
+                  value: pageViews,
                   icon: Eye,
-                  sub: `${todayVisits} today`,
+                  sub: `${filteredVisits.length} tracked events`,
                 },
                 {
                   label: "Unique Sessions",
@@ -248,7 +358,7 @@ const AdminAnalytics: React.FC = () => {
                   sub: "browser sessions",
                 },
                 {
-                  label: "Unique IPs",
+                  label: "Unique Visitors",
                   value: uniqueIPs,
                   icon: Globe,
                   sub: "distinct visitors",
@@ -259,6 +369,11 @@ const AdminAnalytics: React.FC = () => {
                   icon: Smartphone,
                   sub: "device split",
                 },
+                { label: "Engagement", value: `${engagementRate}%`, icon: Activity, sub: "sessions with an action" },
+                { label: "Pages / Session", value: sessionDepth, icon: Navigation, sub: "average page views" },
+                { label: "Avg. Duration", value: averageDuration < 60 ? `${averageDuration}s` : `${Math.floor(averageDuration / 60)}m ${averageDuration % 60}s`, icon: Clock, sub: "time between activity" },
+                { label: "Single Page", value: `${bounceRate}%`, icon: Eye, sub: `${bounceCount} sessions` },
+                { label: "Tracked Actions", value: actionCount, icon: Activity, sub: `${eventCounts.search || 0} searches` },
               ].map(({ label, value, icon: Icon, sub }) => (
                 <div
                   key={label}
@@ -357,7 +472,12 @@ const AdminAnalytics: React.FC = () => {
               </div>
             </div>
 
+            <div className="flex flex-wrap items-center gap-2 text-xs text-[#75827d]">
+              <CalendarDays className="h-4 w-4" /> Showing {filteredVisits.length.toLocaleString()} of {visits.length.toLocaleString()} loaded records · {todayVisits.toLocaleString()} today
+            </div>
+
             {/* Top Countries */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div className="bg-white rounded-xl border border-[#e5e7eb]">
               <div className="bg-[#f9fafb] border-b border-[#e5e7eb] px-6 py-4 flex items-center gap-2">
                 <MapPin className="h-4 w-4 text-[#374151]" />
@@ -393,6 +513,21 @@ const AdminAnalytics: React.FC = () => {
                   ))
                 )}
               </div>
+            </div>
+            <div className="bg-white rounded-xl border border-[#e5e7eb]">
+              <div className="bg-[#f9fafb] border-b border-[#e5e7eb] px-6 py-4 flex items-center gap-2">
+                <Globe className="h-4 w-4 text-[#374151]" />
+                <span className="text-sm font-bold text-black">Top Referrers</span>
+              </div>
+              <div className="p-4 space-y-3">
+                {topReferrers.length === 0 ? <p className="text-sm text-gray-500 text-center py-4">No data</p> : topReferrers.map(([referrer, count]) => (
+                  <div key={referrer}>
+                    <div className="flex items-center justify-between mb-1"><span className="text-sm font-medium text-[#374151] truncate">{referrer}</span><span className="text-sm font-bold text-black ml-2 shrink-0">{count}</span></div>
+                    <div className="h-1.5 bg-[#f3f4f6] rounded-full overflow-hidden"><div className="h-full bg-black rounded-full" style={{ width: `${(count / (topReferrers[0]?.[1] || 1)) * 100}%` }} /></div>
+                  </div>
+                ))}
+              </div>
+            </div>
             </div>
 
             {/* User Session Journeys */}
@@ -486,8 +621,8 @@ const AdminAnalytics: React.FC = () => {
                                       →
                                     </span>
                                   )}
-                                  <span className="text-xs bg-[#f3f4f6] text-[#374151] px-2 py-0.5 rounded-full font-medium whitespace-nowrap">
-                                    {getPageLabel(p.page)}
+                                  <span className={`text-xs px-2 py-0.5 rounded-full font-medium whitespace-nowrap ${p.event_type && p.event_type !== "page_view" ? "bg-[#e8f3ef] text-[#176b5b]" : "bg-[#f3f4f6] text-[#374151]"}`}>
+                                    {p.event_type === "page_view" || !p.event_type ? getPageLabel(p.page) : `${p.event_label || p.event_type}`}
                                   </span>
                                 </React.Fragment>
                               ))}
@@ -519,7 +654,7 @@ const AdminAnalytics: React.FC = () => {
                   Recent Visits
                 </span>
                 <span className="ml-auto text-xs bg-[#f3f4f6] text-[#6b7280] font-semibold px-2 py-0.5 rounded-full">
-                  {visits.length} total
+                  {filteredVisits.length} total
                 </span>
               </div>
               <div className="overflow-x-auto">
@@ -544,7 +679,7 @@ const AdminAnalytics: React.FC = () => {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-[#e5e7eb]">
-                    {visits.slice(0, 30).map((v) => (
+                    {filteredVisits.slice(0, 30).map((v) => (
                       <tr key={v.id} className="hover:bg-[#f9fafb]">
                         <td className="px-5 py-3 text-[#6b7280] whitespace-nowrap">
                           <div className="flex items-center gap-1.5">
@@ -601,7 +736,7 @@ const AdminAnalytics: React.FC = () => {
                     ))}
                   </tbody>
                 </table>
-                {visits.length === 0 && (
+                {filteredVisits.length === 0 && (
                   <div className="text-center py-12 text-gray-500 text-sm">
                     No visits recorded yet
                   </div>

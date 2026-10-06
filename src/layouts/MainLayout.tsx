@@ -7,7 +7,7 @@ import { usePageTracking } from "../hooks/usePageTracking";
 const MainLayout: React.FC = () => {
   usePageTracking();
   return (
-    <div className="flex flex-col min-h-screen bg-[#f9fafb]">
+    <div className="portal-shell flex flex-col min-h-screen bg-[#f9fafb]">
       <div className="print:hidden">
         <Navbar />
       </div>

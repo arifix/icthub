@@ -57,27 +57,27 @@ const NoteCard: React.FC<{ note: Note }> = ({ note }) => (
   <Link
     key={note.id}
     to={`/notes/${note.id}`}
-    className="flex items-start gap-2 p-4 hover:bg-gray-50 transition-colors group"
+    className="home-note-row flex items-start gap-3 p-4 hover:bg-gray-50 transition-colors group"
   >
-    <div className="w-9 h-9 bg-[#f0f7ff] rounded-xl flex items-center justify-center shrink-0 mt-0.5 group-hover:bg-[#e6f2ff] transition-colors">
+    <div className="home-note-icon w-10 h-10 bg-[#f0f7ff] rounded-xl flex items-center justify-center shrink-0 mt-0.5 group-hover:bg-[#e6f2ff] transition-colors">
       <FileText className="h-5 w-5 text-[#0066ff]" />
     </div>
     <div className="flex-1 min-w-0">
       <div className="flex items-center gap-2 mb-2">
         {note.subjects?.title && (
-          <span className="text-xs font-semibold text-[#0066ff] bg-[#f0f7ff] px-2 py-0.5 rounded-full font-mono line-clamp-1">
+          <span className="home-note-subject text-xs font-semibold text-[#0066ff] bg-[#f0f7ff] px-2 py-0.5 rounded-full font-mono line-clamp-1">
             {note.subjects.title}
           </span>
         )}
-        <span className="text-xs text-gray-400 flex items-center gap-1">
+        <span className="home-note-date text-xs text-gray-400 flex items-center gap-1">
           <Clock className="h-3 w-3" />
-          {new Date(note.created_at).toLocaleDateString()}
+          {new Date(note.created_at).toLocaleDateString(undefined, { day: "numeric", month: "short" })}
         </span>
       </div>
-      <p className="text-sm font-semibold text-gray-900 group-hover:text-[#0066ff] transition-colors line-clamp-1 px-2">
+      <p className="text-sm font-semibold text-gray-900 group-hover:text-[#0066ff] transition-colors line-clamp-1">
         {note.title}
       </p>
-      <p className="text-xs text-gray-500 line-clamp-1 mt-1 px-2">
+      <p className="text-xs text-gray-500 line-clamp-2 mt-1">
         <span
           dangerouslySetInnerHTML={{
             __html: stripHtmlAndTruncate(note.content, 100),
@@ -90,16 +90,23 @@ const NoteCard: React.FC<{ note: Note }> = ({ note }) => (
 );
 
 const EventCard: React.FC<{ event: Event }> = ({ event }) => {
-  const date = new Date(event.date);
+  const date = new Date(`${event.date}T00:00:00`);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const daysUntil = Math.round((date.getTime() - today.getTime()) / 86400000);
+  const dateLabel = daysUntil === 0 ? "Today" : daysUntil === 1 ? "Tomorrow" : date.toLocaleDateString(undefined, { weekday: "short" });
   return (
-    <div key={event.id} className="flex items-start gap-3 p-4">
-      <div className="flex-shrink-0 bg-gradient-to-br from-amber-500 to-amber-600 text-white rounded-xl px-3 py-2 text-center min-w-[52px] shadow-sm">
-        <div className="text-[10px] font-semibold uppercase opacity-90">
+    <div key={event.id} className="home-event-row flex items-start gap-3 p-4">
+      <div className="home-event-date flex-shrink-0 text-center min-w-[58px]">
+        <div className="text-[10px] font-semibold uppercase">
+          {dateLabel}
+        </div>
+        <div className="text-xl font-bold leading-tight">{date.getDate()}</div>
+        <div className="text-[10px] font-medium uppercase">
           {date.toLocaleDateString(undefined, {
             month: "short",
           })}
         </div>
-        <div className="text-lg font-bold leading-tight">{date.getDate()}</div>
       </div>
       <div className="flex-1 min-w-0">
         <p className="text-sm font-semibold text-gray-900 line-clamp-1 mb-1">
@@ -118,13 +125,13 @@ const EventCard: React.FC<{ event: Event }> = ({ event }) => {
             <span>General</span>
           </div>
         )}
-        <p className="text-sm font-semibold text-gray-900 mb-1 mt-2">
+        {event.description && <p className="home-event-description text-xs text-gray-500 mb-1 mt-2 line-clamp-2">
           <span
             dangerouslySetInnerHTML={{
-              __html: event.description,
+              __html: stripHtmlAndTruncate(event.description, 150),
             }}
           />
-        </p>
+        </p>}
       </div>
     </div>
   );
@@ -177,7 +184,8 @@ const Home: React.FC = () => {
             .slice(0, 4) || [];
         setRecentNotes(currentNotes);
 
-        const today = new Date().toISOString().split("T")[0];
+        const now = new Date();
+        const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
         const { data: allEvents, error: eventsError } = await supabase
           .from("events")
           .select(
@@ -485,21 +493,19 @@ const Home: React.FC = () => {
         </div>
 
         {/* Notes & Events */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="home-feed-grid grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Recent Notes */}
-          <div>
-            <div className="flex items-center justify-between mb-4">
+          <div className="home-feed-panel home-notes-panel">
+            <div className="home-feed-heading flex items-center justify-between mb-4">
               <div>
-                <span className="section-label">Latest</span>
+                <span className="section-label">LATEST · STUDY MATERIAL</span>
                 <h2 className="text-xl font-bold text-gray-900">
                   Recent Notes
                 </h2>
+                <p className="home-feed-subtitle">Fresh notes from your current semester</p>
               </div>
-              <Link
-                to="/notes"
-                className="flex items-center text-[#0066ff] font-medium text-sm hover:text-[#0052cc] transition-colors"
-              >
-                View all <ArrowRight className="ml-1 h-4 w-4" />
+              <Link to="/notes" className="home-feed-link flex items-center font-medium text-sm">
+                All notes <ArrowRight className="ml-1 h-4 w-4" />
               </Link>
             </div>
             {loading ? (
@@ -507,19 +513,11 @@ const Home: React.FC = () => {
                 <div className="animate-spin rounded-full h-8 w-8 border-2 border-[#0066ff] border-t-transparent" />
               </div>
             ) : recentNotes.length > 0 ? (
-              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+              <div className="home-feed-card bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
                 <div className="divide-y divide-gray-50">
                   {recentNotes.map((note) => (
                     <NoteCard key={note.id} note={note} />
                   ))}
-                </div>
-                <div className="px-4 py-3 bg-gray-50 border-t border-gray-100">
-                  <Link
-                    to="/notes"
-                    className="text-sm text-[#0066ff] font-medium hover:text-[#0052cc] flex items-center gap-1"
-                  >
-                    Browse all notes <ArrowRight className="h-3.5 w-3.5" />
-                  </Link>
                 </div>
               </div>
             ) : (
@@ -531,17 +529,15 @@ const Home: React.FC = () => {
           </div>
 
           {/* Upcoming Events */}
-          <div>
-            <div className="flex items-center justify-between mb-4">
+          <div className="home-feed-panel home-events-panel">
+            <div className="home-feed-heading flex items-center justify-between mb-4">
               <div>
-                <span className="section-label">Upcoming</span>
+                <span className="section-label">UP NEXT · ACADEMIC CALENDAR</span>
                 <h2 className="text-xl font-bold text-gray-900">Events</h2>
+                <p className="home-feed-subtitle">Keep an eye on important dates</p>
               </div>
-              <Link
-                to="/calendar"
-                className="flex items-center text-amber-600 font-medium text-sm hover:text-amber-700 transition-colors"
-              >
-                View all <ArrowRight className="ml-1 h-4 w-4" />
+              <Link to="/calendar" className="home-feed-link flex items-center font-medium text-sm">
+                Calendar <ArrowRight className="ml-1 h-4 w-4" />
               </Link>
             </div>
             {loading ? (
@@ -549,19 +545,11 @@ const Home: React.FC = () => {
                 <div className="animate-spin rounded-full h-8 w-8 border-2 border-amber-600 border-t-transparent" />
               </div>
             ) : upcomingEvents.length > 0 ? (
-              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+              <div className="home-feed-card bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
                 <div className="divide-y divide-gray-50">
                   {upcomingEvents.map((event) => {
                     return <EventCard key={event.id} event={event} />;
                   })}
-                </div>
-                <div className="px-4 py-3 bg-gray-50 border-t border-gray-100">
-                  <Link
-                    to="/calendar"
-                    className="text-sm text-amber-600 font-medium hover:text-amber-700 flex items-center gap-1"
-                  >
-                    View full calendar <ArrowRight className="h-3.5 w-3.5" />
-                  </Link>
                 </div>
               </div>
             ) : (

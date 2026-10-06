@@ -57,8 +57,7 @@ const CalendarPage: React.FC = () => {
     for (let i = 0; i < firstDay; i++) days.push({ day: 0, date: null });
     for (let i = 1; i <= daysCount; i++) {
       const date = new Date(year, month, i);
-      const localDate = new Date(date.getTime() + 6 * 60 * 60 * 1000);
-      const dateString = localDate.toISOString().split("T")[0];
+      const dateString = `${year}-${String(month + 1).padStart(2, "0")}-${String(i).padStart(2, "0")}`;
       days.push({
         day: i,
         date,
@@ -80,12 +79,13 @@ const CalendarPage: React.FC = () => {
 
   const calendarDays = generateCalendarDays();
   const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-  const today = new Date().toISOString().split("T")[0];
+  const now = new Date();
+  const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
   const upcomingEvents = events.filter((e) => e.date >= today);
   const pastEvents = events.filter((e) => e.date < today);
 
   return (
-    <div className="min-h-screen bg-[#f9fafb]">
+    <div className="page-calendar min-h-screen bg-[#f9fafb]">
       {/* Page header */}
       <div className="bg-white border-b border-[#e5e7eb]">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-7">
@@ -199,7 +199,7 @@ const CalendarPage: React.FC = () => {
                                 day.events.slice(0, 2).map((event: Event) => (
                                   <div
                                     key={event.id}
-                                    className="text-[12px] bg-[#0066ff] text-white rounded px-1 py-0.5 truncate mb-0.5 font-medium"
+                                    className="calendar-event-chip text-[12px] bg-[#0066ff] text-white rounded px-1 py-0.5 truncate mb-0.5 font-medium"
                                     title={event.title}
                                   >
                                     {event.title}
@@ -246,7 +246,7 @@ const CalendarPage: React.FC = () => {
               ) : (
                 <div className="divide-y divide-[#e5e7eb] max-h-[600px] overflow-y-auto">
                   {upcomingEvents.map((event) => {
-                    const d = new Date(event.date);
+                    const d = new Date(`${event.date}T00:00:00`);
                     const isWeekend = d.getDay() === 5 || d.getDay() === 6;
                     return (
                       <div
@@ -324,7 +324,7 @@ const CalendarPage: React.FC = () => {
               ) : (
                 <div className="divide-y divide-[#e5e7eb] max-h-[600px] overflow-y-auto">
                   {pastEvents.map((event) => {
-                    const d = new Date(event.date);
+                    const d = new Date(`${event.date}T00:00:00`);
                     const isWeekend = d.getDay() === 5 || d.getDay() === 6;
                     return (
                       <div

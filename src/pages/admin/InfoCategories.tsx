@@ -4,10 +4,12 @@ import { Edit, FileText, Plus, Search, Trash, Info } from "lucide-react";
 import { supabase } from "../../lib/supabase";
 import { Database } from "../../types/supabase";
 import { toast } from "react-hot-toast";
+import { useAdminConfirm } from "../../components/AdminConfirm";
 
 type InfoCategory = Database["public"]["Tables"]["info_categories"]["Row"];
 
 const AdminInfoCategories: React.FC = () => {
+  const confirm = useAdminConfirm();
   const [categories, setCategories] = useState<InfoCategory[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
@@ -46,11 +48,7 @@ const AdminInfoCategories: React.FC = () => {
   };
 
   const handleDelete = async (id: number) => {
-    if (
-      !window.confirm(
-        "Are you sure you want to delete this category? This will also remove its notes.",
-      )
-    ) {
+    if (!(await confirm({ title: "Delete category?", message: "This will also permanently remove all notes in this category.", confirmLabel: "Delete category" }))) {
       return;
     }
 

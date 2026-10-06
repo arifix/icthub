@@ -4,11 +4,13 @@ import { Edit, FileText, Plus, Search, Trash, Info } from "lucide-react";
 import { supabase } from "../../lib/supabase";
 import { Database } from "../../types/supabase";
 import { toast } from "react-hot-toast";
+import { useAdminConfirm } from "../../components/AdminConfirm";
 
 type InfoNote = Database["public"]["Tables"]["info_notes"]["Row"];
 type InfoCategory = Database["public"]["Tables"]["info_categories"]["Row"];
 
 const AdminInfoNotes: React.FC = () => {
+  const confirm = useAdminConfirm();
   const [notes, setNotes] = useState<InfoNote[]>([]);
   const [categories, setCategories] = useState<InfoCategory[]>([]);
   const [loading, setLoading] = useState(true);
@@ -59,7 +61,7 @@ const AdminInfoNotes: React.FC = () => {
   };
 
   const handleDelete = async (id: number) => {
-    if (!window.confirm("Are you sure you want to delete this note?")) return;
+    if (!(await confirm({ title: "Delete information note?", message: "This information note will be permanently removed.", confirmLabel: "Delete note" }))) return;
 
     try {
       setIsDeleting(true);
