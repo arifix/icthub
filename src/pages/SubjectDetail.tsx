@@ -199,32 +199,60 @@ const SubjectDetailPage: React.FC = () => {
               <h1 className="text-2xl font-bold text-black tracking-tight">
                 {subject.title}
               </h1>
-              {subject.description && (
-                <p className="flex items-center gap-2 mt-4 text-sm text-[#374151] max-w-3xl leading-relaxed">
-                  <User className="h-3.5 w-3.5" />
-                  Teacher:{" "}
-                  <span className="font-semibold">{subject.description}</span>
-                </p>
-              )}
-              {subject.semester && (
-                <div className="flex items-center gap-2 mt-2 text-sm text-[#374151]">
-                  <Calendar className="h-3.5 w-3.5" />
-                  Semester:{" "}
-                  <span className="font-semibold">{subject.semester.name}</span>
+              {(subject.description ||
+                subject.semester ||
+                subject.additional_info) && (
+                <div className="mt-5 flex max-w-4xl flex-wrap items-stretch gap-3">
+                  {subject.description && (
+                    <section className="flex min-w-0 flex-1 basis-full items-start gap-3 rounded-2xl border border-[#d8e5dd] bg-white/75 p-4 shadow-sm sm:basis-[28rem] sm:p-5">
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#e8f3ee] text-[#176b5b]">
+                        <User className="h-5 w-5" aria-hidden="true" />
+                      </div>
+                      <div className="min-w-0">
+                        <h2 className="text-xs font-bold uppercase tracking-[0.12em] text-[#527267]">
+                          Instructor
+                        </h2>
+                        <p className="mt-1 whitespace-pre-line break-words text-sm font-medium leading-relaxed text-[#263a34] sm:text-base">
+                          {subject.description}
+                        </p>
+                      </div>
+                    </section>
+                  )}
+                  {subject.semester && (
+                    <div className="flex min-w-[11rem] items-center gap-3 rounded-2xl border border-[#d8e5dd] bg-white/60 px-4 py-3">
+                      <Calendar
+                        className="h-4 w-4 shrink-0 text-[#176b5b]"
+                        aria-hidden="true"
+                      />
+                      <div>
+                        <div className="text-[11px] font-bold uppercase tracking-[0.1em] text-[#71847c]">
+                          Semester
+                        </div>
+                        <div className="text-sm font-semibold text-[#263a34]">
+                          {subject.semester.name}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  {subject.additional_info && (
+                    <div className="flex min-w-0 items-center gap-3 rounded-2xl border border-[#d8e5dd] bg-white/60 px-4 py-3 text-[#374d45]">
+                      <Info
+                        className="h-4 w-4 shrink-0 text-[#176b5b]"
+                        aria-hidden="true"
+                      />
+                      <span className="break-words">
+                        {subject.additional_info}
+                      </span>
+                    </div>
+                  )}
                 </div>
-              )}
-              {subject.additional_info && (
-                <p className="flex items-center gap-2 mt-2 text-sm text-[#374151] max-w-3xl leading-relaxed">
-                  <Info className="h-3.5 w-3.5" />
-                  <span className="font-medium">{subject.additional_info}</span>
-                </p>
               )}
             </div>
           </div>
         </div>
       </div>
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 md:space-y-0">
         {/* Notes */}
         <div className="bg-white rounded-xl border border-[#e5e7eb] overflow-hidden">
           <div className="flex items-center justify-between px-6 py-4 border-b border-[#e5e7eb] bg-[#f9fafb]">
