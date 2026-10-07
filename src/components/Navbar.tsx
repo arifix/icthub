@@ -28,7 +28,7 @@ const NAV_ITEMS = [
   { to: "/notes", label: "Notes", icon: FileText },
   { to: "/calendar", label: "Calendar", icon: Calendar },
   { to: "/files", label: "Files", icon: FolderOpen },
-  { to: "/archive", label: "Archive", icon: Archive },
+  //{ to: "/archive", label: "Archive", icon: Archive },
   { to: "/information", label: "Information", icon: Info },
   //{ to: "/club", label: "IICT Club", icon: Users },
 ];

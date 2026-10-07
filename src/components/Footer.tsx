@@ -46,7 +46,7 @@ const Footer: React.FC = () => {
                 { to: "/notes", label: "Study Notes" },
                 { to: "/calendar", label: "Calendar" },
                 { to: "/files", label: "Files & Resources" },
-                { to: "/archive", label: "Archive" },
+                //{ to: "/archive", label: "Archive" },
                 { to: "/information", label: "Information" },
               ].map(({ to, label }) => (
                 <li key={to}>
@@ -101,7 +101,7 @@ const Footer: React.FC = () => {
           <div className="flex flex-col md:flex-row justify-between items-center space-y-3 md:space-y-0">
             <div className="flex flex-col items-center md:items-start text-sm text-gray-400">
               <span>&copy; {year} ICTHub</span>
-              <span>Last updated on: 2026-08-06</span>
+              <span>Last updated on: 2026-10-06</span>
             </div>
             <div className="text-center md:text-left text-sm text-gray-400">
               <span>Made by </span>
