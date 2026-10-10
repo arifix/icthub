@@ -71,7 +71,7 @@ const NotificationsPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-[800px] bg-[#f9fafb]">
+    <div className="page-notes min-h-[800px] bg-[#f9fafb]">
       {/* Page header */}
       <div className="bg-white border-b border-[#e5e7eb]">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-7">

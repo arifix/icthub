@@ -68,13 +68,13 @@ const Navbar: React.FC = () => {
             <img
               src={icthub}
               alt="ICTHub Logo"
-              className="w-[55px] hidden lg:block xl:hidden mr-2"
+              className="w-[55px] hidden lg:block xl:hidden mr-2 brightness-0"
             />
 
             <img
               src={logo}
               alt="ICTHub Logo"
-              className="w-[200px] lg:hidden xl:block"
+              className="w-[200px] lg:hidden xl:block brightness-0"
             />
             <p className="text-xs text-gray-600 leading-none -mt-1 ml-[72px] lg:hidden xl:block">
               M.Sc. Eng. in ICT Study Portal

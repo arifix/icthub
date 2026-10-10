@@ -267,7 +267,7 @@ const NoteDetailPage: React.FC = () => {
         {/* AI Summary */}
         {note.summary && (
           <div className="bg-white border border-[#e5e7eb] rounded-xl p-5 mb-6 flex items-start gap-4">
-            <div className="w-9 h-9 bg-black rounded-xl flex items-center justify-center shrink-0">
+            <div className="w-10 h-10 bg-black rounded-xl flex items-center justify-center shrink-0">
               <Sparkles className="h-4.5 w-4.5 text-white" />
             </div>
             <div>

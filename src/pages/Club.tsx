@@ -86,7 +86,7 @@ const Club: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#f9fafb]">
+    <div className="page-notes min-h-screen bg-[#f9fafb]">
       {/* Hero */}
       <section className="container mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-12">
         <div className="max-w-7xl mx-auto">

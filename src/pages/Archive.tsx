@@ -151,7 +151,7 @@ const ArchivePage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#f9fafb]">
+    <div className="page-notes min-h-screen bg-[#f9fafb]">
       <div className="bg-white border-b border-[#e5e7eb]">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-7">
           <h1 className="text-2xl sm:text-3xl font-bold text-black tracking-tight mb-1">

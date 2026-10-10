@@ -101,20 +101,19 @@ const Footer: React.FC = () => {
           <div className="flex flex-col md:flex-row justify-between items-center space-y-3 md:space-y-0">
             <div className="flex flex-col items-center md:items-start text-sm text-gray-400">
               <span>&copy; {year} ICTHub</span>
-              <span>Last updated on: 2026-10-06</span>
+              <span>Last updated on: 2026-10-10</span>
             </div>
             <div className="text-center md:text-left text-sm text-gray-400">
               <span>Made by </span>
               <a
                 href="https://www.arif-khan.net"
                 target="_blank"
-                rel="noopener noreferrer"
                 className="text-blue-400 hover:text-blue-300 transition-colors font-medium"
               >
                 Arif Khan
               </a>
               <br />
-              Built with React, TypeScript, TailwindCSS, Supabase &{" "}
+              Built with ReactJS, TypeScript, TailwindCSS, Supabase &{" "}
               <span className="animate-pulse">❤️</span>
             </div>
           </div>

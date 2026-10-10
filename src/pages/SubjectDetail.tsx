@@ -225,7 +225,7 @@ const SubjectDetailPage: React.FC = () => {
                         aria-hidden="true"
                       />
                       <div>
-                        <div className="text-[11px] font-bold uppercase tracking-[0.1em] text-[#71847c]">
+                        <div className="text-xs font-bold uppercase tracking-[0.1em] text-[#71847c]">
                           Semester
                         </div>
                         <div className="text-sm font-semibold text-[#263a34]">
@@ -240,7 +240,7 @@ const SubjectDetailPage: React.FC = () => {
                         className="h-4 w-4 shrink-0 text-[#176b5b]"
                         aria-hidden="true"
                       />
-                      <span className="break-words">
+                      <span className="break-words font-semibold">
                         {subject.additional_info}
                       </span>
                     </div>
