@@ -4,6 +4,7 @@ import { ArrowLeft, FileText, Save } from "lucide-react";
 import { supabase } from "../../lib/supabase";
 import { Database } from "../../types/supabase";
 import { toast } from "react-hot-toast";
+import { AdminFormSection, AdminPageHeader } from "../../components/AdminUI";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
@@ -186,39 +187,11 @@ const AdminNoteForm: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-[#f9fafb]">
-      {/* Header */}
-      <div className="bg-white border-b border-[#e5e7eb] px-6 py-7">
-        <div className="max-w-3xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-black tracking-tight">
-              {isEditing ? "Edit Note" : "New Note"}
-            </h1>
-            <p className="text-sm text-[#6b7280] mt-1">
-              {isEditing
-                ? "Update note content and information"
-                : "Create a study note for students"}
-            </p>
-          </div>
-          <button
-            onClick={() => navigate("/admin/notes")}
-            className="inline-flex items-center gap-2 px-3 py-2 text-sm text-[#374151] border border-[#e5e7eb] rounded-lg hover:bg-[#f9fafb] transition-colors"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Back to Notes
-          </button>
-        </div>
-      </div>
+      <AdminPageHeader title={isEditing ? "Edit Note" : "New Note"} description={isEditing ? "Update note content and information" : "Create a study note for students"} action={<button onClick={() => navigate("/admin/notes")} className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-600 hover:bg-slate-50"><ArrowLeft className="h-4 w-4" />Back to Notes</button>} />
 
-      <div className="max-w-3xl mx-auto px-6 py-8">
-        <div className="bg-white rounded-xl border border-[#e5e7eb]">
-          <div className="bg-[#f9fafb] border-b border-[#e5e7eb] px-6 py-4 flex items-center gap-2">
-            <FileText className="h-4 w-4 text-[#374151]" />
-            <span className="text-sm font-bold text-black">
-              Note Details
-            </span>
-          </div>
-
-          <form onSubmit={handleSubmit} className="p-6 space-y-5">
+      <div className="max-w-5xl mx-auto px-6 py-8">
+        <AdminFormSection title="Note details" description="Write the title, course context, and learning material for students." icon={FileText}>
+          <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div>
                 <label
@@ -326,7 +299,7 @@ const AdminNoteForm: React.FC = () => {
               </div>
             </div>
 
-            <div className="flex justify-end gap-3 pt-16 lg:pt-12">
+            <div className="admin-form-actions flex justify-end gap-3 pt-16 lg:pt-12">
               <button
                 type="button"
                 onClick={() => navigate("/admin/notes")}
@@ -353,7 +326,7 @@ const AdminNoteForm: React.FC = () => {
               </button>
             </div>
           </form>
-        </div>
+        </AdminFormSection>
       </div>
     </div>
   );

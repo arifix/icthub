@@ -16,6 +16,7 @@ import { Database } from "../../types/supabase";
 import { toast } from "react-hot-toast";
 import { isPastDate } from "../../utils/helper";
 import { useAdminConfirm } from "../../components/AdminConfirm";
+import { AdminPageHeader } from "../../components/AdminUI";
 
 type Event = Database["public"]["Tables"]["events"]["Row"] & {
   subjects?: { title: string; code: string } | null;
@@ -207,26 +208,7 @@ const AdminCalendar: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-[#f9fafb]">
-      {/* Header */}
-      <div className="bg-white border-b border-[#e5e7eb] px-6 py-7">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-black tracking-tight">
-              Calendar
-            </h1>
-            <p className="text-sm text-[#6b7280] mt-1">
-              Schedule and manage academic events
-            </p>
-          </div>
-          <Link
-            to="/admin/events/new"
-            className="inline-flex items-center gap-2 px-4 py-2 bg-black text-white rounded-lg text-sm font-medium hover:bg-[#374151] transition-colors"
-          >
-            <Plus className="h-4 w-4" />
-            New Event
-          </Link>
-        </div>
-      </div>
+      <AdminPageHeader title="Calendar" description="Schedule and manage academic events" action={<Link to="/admin/events/new" className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-700"><Plus className="h-4 w-4" />New Event</Link>} />
 
       <div className="max-w-7xl mx-auto px-6 py-8 space-y-6">
         {/* Semester Filter */}

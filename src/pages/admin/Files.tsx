@@ -16,6 +16,7 @@ import { supabase } from "../../lib/supabase";
 import { Database } from "../../types/supabase";
 import { toast } from "react-hot-toast";
 import { useAdminConfirm } from "../../components/AdminConfirm";
+import { AdminPageHeader, AdminPanel, AdminTable } from "../../components/AdminUI";
 
 type FileData = Database["public"]["Tables"]["files"]["Row"] & {
   subjects?: { title: string; code: string } | null;
@@ -148,26 +149,11 @@ const AdminFiles: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-[#f9fafb]">
-      {/* Header */}
-      <div className="bg-white border-b border-[#e5e7eb] px-6 py-7">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-black tracking-tight">
-              Files
-            </h1>
-            <p className="text-sm text-[#6b7280] mt-1">
-              Upload, organize, and manage study materials
-            </p>
-          </div>
-          <Link
-            to="/admin/files/new"
-            className="inline-flex items-center gap-2 px-4 py-2 bg-black text-white rounded-lg text-sm font-medium hover:bg-[#374151] transition-colors"
-          >
-            <Plus className="h-4 w-4" />
-            Upload File
-          </Link>
-        </div>
-      </div>
+      <AdminPageHeader
+        title="Files"
+        description="Upload, organize, and manage study materials"
+        action={<Link to="/admin/files/new" className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-700"><Plus className="h-4 w-4" />Upload File</Link>}
+      />
 
       <div className="max-w-7xl mx-auto px-6 py-8 space-y-6">
         {/* Filters */}
@@ -240,15 +226,7 @@ const AdminFiles: React.FC = () => {
             <div className="animate-spin rounded-full h-8 w-8 border-2 border-black border-t-transparent" />
           </div>
         ) : (
-          <div className="bg-white rounded-xl border border-[#e5e7eb]">
-            <div className="bg-[#f9fafb] border-b border-[#e5e7eb] px-6 py-4 flex items-center gap-2">
-              <File className="h-4 w-4 text-[#374151]" />
-              <span className="text-sm font-bold text-black">Files</span>
-              <span className="ml-auto text-xs bg-[#f3f4f6] text-[#6b7280] font-semibold px-2 py-0.5 rounded-full">
-                {filteredFiles.length}{" "}
-                {filteredFiles.length !== files.length && `/ ${files.length}`}
-              </span>
-            </div>
+          <AdminPanel title="Resource library" icon={File} count={`${filteredFiles.length}${filteredFiles.length !== files.length ? ` / ${files.length}` : ""}`}>
             {filteredFiles.length === 0 ? (
               <div className="text-center py-16">
                 <div className="bg-[#f3f4f6] p-3 rounded-xl w-fit mx-auto mb-4">
@@ -270,8 +248,8 @@ const AdminFiles: React.FC = () => {
                 )}
               </div>
             ) : (
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm">
+              <AdminTable label="Resource library">
+                <table className="w-full text-sm" aria-label="Resource library">
                   <thead>
                     <tr className="border-b border-[#e5e7eb]">
                       {[
@@ -285,6 +263,7 @@ const AdminFiles: React.FC = () => {
                       ].map((h) => (
                         <th
                           key={h}
+                          scope="col"
                           className="text-left px-5 py-3 text-xs font-semibold text-[#6b7280] uppercase tracking-wide"
                         >
                           {h}
@@ -338,12 +317,14 @@ const AdminFiles: React.FC = () => {
                               rel="noopener noreferrer"
                               className="p-1.5 text-[#374151] hover:text-black hover:bg-[#f3f4f6] rounded-lg"
                               title="Download"
+                              aria-label={`Download ${file.name}`}
                             >
                               <Download className="h-4 w-4" />
                             </a>
                             <Link
                               to={`/admin/files/${file.id}`}
                               className="p-1.5 text-[#374151] hover:text-black hover:bg-[#f3f4f6] rounded-lg"
+                              aria-label={`Edit ${file.name}`}
                             >
                               <Edit className="h-4 w-4" />
                             </Link>
@@ -351,6 +332,7 @@ const AdminFiles: React.FC = () => {
                               onClick={() => handleDelete(file.id)}
                               disabled={isDeleting}
                               className="p-1.5 text-[#6b7280] hover:text-red-600 hover:bg-red-50 rounded-lg disabled:opacity-50"
+                              aria-label={`Delete ${file.name}`}
                             >
                               <Trash className="h-4 w-4" />
                             </button>
@@ -360,9 +342,9 @@ const AdminFiles: React.FC = () => {
                     ))}
                   </tbody>
                 </table>
-              </div>
+              </AdminTable>
             )}
-          </div>
+          </AdminPanel>
         )}
       </div>
     </div>

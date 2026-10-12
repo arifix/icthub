@@ -104,28 +104,29 @@ const AdminSidebar: React.FC = () => {
     return false;
   };
 
-  const activeClass = `flex items-center gap-3 px-3 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-sm transition-all duration-200`;
-  const inactiveClass = `flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-600 hover:bg-gray-100 hover:text-blue-600 transition-all duration-200 group`;
+  const activeClass = `flex items-center gap-3 px-3 py-2.5 rounded-xl bg-blue-50 text-blue-700 transition-all duration-200 group`;
+  const inactiveClass = `flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-500 hover:bg-blue-50 hover:text-blue-700 transition-all duration-200 group`;
 
   return (
     <aside
-      className={`bg-white border-r border-gray-200 transition-all duration-300 ${
-        collapsed ? "w-16" : "w-60"
+      className={`admin-sidebar bg-white border-r border-slate-200 transition-all duration-300 ${
+        collapsed ? "w-[76px]" : "w-[252px]"
       } flex flex-col`}
     >
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-4 border-b border-gray-100">
+      <div className="flex items-center justify-between px-4 py-5 border-b border-slate-100 min-h-[86px]">
         {!collapsed && (
           <div className="flex items-center gap-1">
-            <img src={icthub} alt="ICTHub Logo" className="w-[50px]" />
+            <img src={icthub} alt="ICTHub Logo" className="w-[44px] h-[44px] object-contain" />
             <div>
-              <h1 className="font-bold text-gray-900">ICTHub</h1>
-              <p className="text-sm text-gray-500">Admin Panel</p>
+              <h1 className="font-bold text-slate-900 tracking-tight">ICTHub</h1>
+              <p className="text-xs text-slate-500">Admin workspace</p>
             </div>
           </div>
         )}
         <button
-          className={`p-1.5 text-gray-400 hover:text-blue-600 hover:bg-gray-100 rounded-lg transition-all duration-200`}
+          aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+          className={`p-1.5 text-slate-400 hover:text-blue-600 hover:bg-slate-100 rounded-lg transition-all duration-200`}
           onClick={toggleSidebar}
         >
           {collapsed ? <ChevronRight size={22} /> : <ChevronLeft size={22} />}
@@ -133,7 +134,8 @@ const AdminSidebar: React.FC = () => {
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 overflow-y-auto p-3 space-y-0.5">
+      <nav className="flex-1 overflow-y-auto px-3 py-5 space-y-1">
+        {!collapsed && <p className="px-3 pb-2 text-[10px] font-bold uppercase tracking-[0.16em] text-slate-400">Workspace</p>}
         {navigationItems.map((item) => {
           const isActive = isActiveRoute(item);
           return (
@@ -148,8 +150,8 @@ const AdminSidebar: React.FC = () => {
                   size={18}
                   className={
                     isActive
-                      ? "text-white"
-                      : "text-gray-400 group-hover:text-blue-600"
+                      ? "text-blue-600"
+                      : "text-slate-400 group-hover:text-blue-600"
                   }
                 />
               </div>
@@ -162,7 +164,7 @@ const AdminSidebar: React.FC = () => {
       </nav>
 
       {/* Footer Actions */}
-      <div className="p-3 border-t border-gray-100 space-y-0.5">
+      <div className="p-3 border-t border-slate-100 space-y-1">
         <Link
           to="/"
           className={`${inactiveClass} ${collapsed ? "justify-center" : ""}`}

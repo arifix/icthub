@@ -88,6 +88,76 @@
   }
 }
 
+/* Admin workspace visual system */
+.admin-layout {
+  background: #f5f8fd !important;
+  color: #243247;
+  font-size: 14px;
+}
+.admin-layout main {
+  min-width: 0;
+  background: #f5f8fd;
+}
+.admin-sidebar {
+  flex: 0 0 auto;
+  z-index: 20;
+}
+.admin-layout .min-h-screen {
+  min-height: 100%;
+  background: #f5f8fd !important;
+}
+.admin-layout [class*="bg-white border-b"] {
+  background: #fff !important;
+  border-color: #e6edf6 !important;
+}
+.admin-layout [class*="max-w-7xl mx-auto px-6 py-8"] {
+  padding-top: 1.75rem;
+  padding-bottom: 2rem;
+}
+.admin-layout [class*="rounded-xl border border-[#e5e7eb]"],
+.admin-layout [class*="rounded-xl border border-gray-200"],
+.admin-layout [class*="rounded-xl border border-slate-200"] {
+  border-color: #e5ebf3 !important;
+  border-radius: 16px !important;
+  box-shadow: 0 1px 2px rgba(25, 48, 85, 0.04);
+}
+.admin-layout input:not([type="checkbox"]):not([type="radio"]),
+.admin-layout textarea,
+.admin-layout select {
+  border-color: #dfe7f1;
+  border-radius: 10px;
+  background-color: #fff;
+  color: #263449;
+}
+.admin-layout input:focus,
+.admin-layout textarea:focus,
+.admin-layout select:focus {
+  outline: none;
+  border-color: #75a7ff;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, .12);
+}
+.admin-layout button:not([aria-label="Collapse sidebar"]):not([aria-label="Expand sidebar"]) {
+  transition: background-color .18s ease, border-color .18s ease, color .18s ease, box-shadow .18s ease;
+}
+.admin-layout table thead {
+  background: #f7f9fc;
+}
+.admin-layout table th {
+  color: #64748b;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+.admin-layout table tbody tr {
+  border-color: #edf1f6;
+}
+@media (max-width: 767px) {
+  .admin-layout main { width: calc(100vw - 76px); }
+  .admin-layout [class*="max-w-7xl mx-auto px-6"] { padding-left: 1rem; padding-right: 1rem; }
+  .admin-layout [class*="px-6 py-7"] { padding-left: 1rem; padding-right: 1rem; }
+}
+
 @layer base {
   :root {
     --primary: #0066ff;
@@ -589,4 +659,190 @@ main .bg-amber-50 { background-color: #fbf3e8 !important; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
+
+/* Final admin palette overrides: align the workspace with the public ICTHub blue. */
+body:has(.admin-layout), .admin-layout, .admin-layout main,
+.admin-layout main > div.min-h-screen { background: #f5f8fd !important; }
+.admin-layout > aside { box-shadow: none !important; }
+.admin-layout aside > div:first-child,
+.admin-layout aside > div:last-child { border-color: #edf1f6 !important; }
+.admin-layout aside nav a[aria-current="page"],
+.admin-layout aside nav a.bg-gradient-to-r { background: #eef5ff !important; color: #2563eb !important; box-shadow: none !important; }
+.admin-layout aside nav a[aria-current="page"] svg,
+.admin-layout aside nav a.bg-gradient-to-r svg { color: #2563eb !important; }
+.admin-layout aside nav a:not([aria-current="page"]):hover { background: #f3f7fd !important; }
+.admin-layout main > div.min-h-screen > .bg-white.border-b { box-shadow: none !important; border-color: #e6edf6 !important; }
+.admin-layout main > div.min-h-screen h1 { color: #1e293b !important; }
+.admin-layout main .rounded-xl.border,
+.admin-layout main .rounded-2xl.border { border-color: #e5ebf3 !important; border-radius: 16px !important; box-shadow: 0 1px 3px rgba(29, 55, 91, .045) !important; }
+.admin-layout main .rounded-xl.border > .bg-\[\#f9fafb\],
+.admin-layout main .rounded-2xl.border > .bg-\[\#f9fafb\] { background: #f7f9fc !important; border-color: #e8edf4 !important; }
+.admin-layout main input:not([type="checkbox"]):not([type="radio"]),
+.admin-layout main select, .admin-layout main textarea { border-color: #dfe7f1 !important; border-radius: 10px; }
+.admin-layout main input:not([type="checkbox"]):focus,
+.admin-layout main select:focus, .admin-layout main textarea:focus { border-color: #75a7ff !important; box-shadow: 0 0 0 3px rgba(37, 99, 235, .12) !important; }
+.admin-layout main input[type="checkbox"] { accent-color: #2563eb; }
+.admin-layout main form label { color: #475569; }
+.admin-layout main form .ql-toolbar { border-color: #dfe7f1; background: #f7f9fc; }
+.admin-layout main form .ql-container { border-color: #dfe7f1; }
+.admin-layout main .bg-\[\#0066ff\], .admin-layout main .bg-blue-600 { background: #2563eb !important; }
+.admin-layout main .text-\[\#0066ff\], .admin-layout main .text-blue-600 { color: #2563eb !important; }
+.admin-layout main .hover\:bg-\[\#0052cc\]:hover { background: #1d4ed8 !important; }
+.admin-layout main .bg-black { background: #1e293b !important; }
+.admin-layout main .text-black { color: #1e293b !important; }
+.admin-layout main table thead { background: #f7f9fc !important; }
+.admin-layout main table tbody tr:hover { background: #f8faff !important; }
+
+/* Content level treatment shared by every admin page */
+.admin-layout main > div.min-h-screen > .max-w-7xl,
+.admin-layout main > div.min-h-screen > .container {
+  width: 100%;
+  max-width: 1500px !important;
+  padding-inline: clamp(18px, 3vw, 42px) !important;
+  padding-top: 30px !important;
+  padding-bottom: 48px !important;
+}
+.admin-layout main > div.min-h-screen > .bg-white.border-b > div {
+  max-width: 1500px !important;
+  min-height: 96px;
+  padding: 18px clamp(18px, 3vw, 42px) !important;
+}
+.admin-layout main > div.min-h-screen > .bg-white.border-b > div.max-w-3xl {
+  max-width: 768px !important;
+  padding-inline: 0 !important;
+}
+.admin-layout main > div.min-h-screen > .bg-white.border-b h1 {
+  font-size: clamp(1.45rem, 2vw, 1.8rem);
+  line-height: 1.2;
+  font-weight: 750;
+  letter-spacing: -.035em;
+}
+.admin-layout main > div.min-h-screen > .bg-white.border-b p {
+  margin-top: 5px;
+  color: #718096 !important;
+  font-size: .875rem;
+}
+.admin-layout main .rounded-xl.border,
+.admin-layout main .rounded-2xl.border {
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(34, 58, 92, .035), 0 1px 2px rgba(34, 58, 92, .025) !important;
+  transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease;
+}
+.admin-layout main .rounded-xl.border:hover,
+.admin-layout main .rounded-2xl.border:hover {
+  border-color: #d6e2f1 !important;
+  box-shadow: 0 7px 20px rgba(34, 58, 92, .065) !important;
+}
+/* Dashboard and analytics stat tiles */
+.admin-layout main .grid > .bg-white.rounded-xl.border:has(> .flex.items-center.justify-between) {
+  min-height: 145px;
+  padding: 20px !important;
+}
+.admin-layout main .grid > .bg-white.rounded-xl.border:has(> .flex.items-center.justify-between) > .flex.items-center.justify-between > div {
+  border-radius: 11px;
+  background: #eef5ff !important;
+  padding: 9px !important;
+}
+.admin-layout main .grid > .bg-white.rounded-xl.border:has(> .flex.items-center.justify-between) > .flex.items-center.justify-between svg {
+  color: #3977e8 !important;
+}
+.admin-layout main .grid > .bg-white.rounded-xl.border:has(> .flex.items-center.justify-between) > p:nth-child(2) {
+  margin-top: 6px;
+  color: #202e43 !important;
+  font-size: 1.8rem;
+  letter-spacing: -.04em;
+  line-height: 1.1;
+}
+.admin-layout main .grid > .bg-white.rounded-xl.border:has(> .flex.items-center.justify-between) > .flex.items-center.gap-3 {
+  border-color: #edf1f6 !important;
+}
+/* Section headers and count badges */
+.admin-layout main .rounded-xl.border > .bg-\[\#f9fafb\],
+.admin-layout main .rounded-2xl.border > .bg-\[\#f9fafb\] {
+  min-height: 54px;
+  padding-inline: 20px !important;
+  color: #26364d;
+}
+.admin-layout main .rounded-xl.border > .bg-\[\#f9fafb\] svg,
+.admin-layout main .rounded-2xl.border > .bg-\[\#f9fafb\] svg {
+  color: #3977e8 !important;
+}
+.admin-layout main .rounded-xl.border > .bg-\[\#f9fafb\] > span,
+.admin-layout main .rounded-2xl.border > .bg-\[\#f9fafb\] > span {
+  color: #334155;
+}
+/* Filter and settings sections */
+.admin-layout main .rounded-xl.border.px-6.py-4,
+.admin-layout main .rounded-xl.border.flex {
+  background: #fff;
+}
+.admin-layout main input:not([type="checkbox"]):not([type="radio"]),
+.admin-layout main select,
+.admin-layout main textarea {
+  min-height: 42px;
+  padding-inline: 12px;
+  font-size: .875rem;
+  box-shadow: 0 1px 2px rgba(34, 58, 92, .025);
+}
+.admin-layout main textarea { min-height: 112px; padding-block: 10px; line-height: 1.6; }
+.admin-layout main input::placeholder,
+.admin-layout main textarea::placeholder { color: #9aa7b8; }
+.admin-layout main input.pl-9 { padding-left: 2.25rem; }
+.admin-layout main input.pr-10 { padding-right: 2.5rem; }
+.admin-layout main form label {
+  display: block;
+  margin-bottom: 7px;
+  color: #34445b !important;
+  font-size: .82rem;
+  font-weight: 650 !important;
+}
+.admin-layout main form [class*="text-xs text-[#6b7280]"],
+.admin-layout main form [class*="text-xs text-gray"] { line-height: 1.55; }
+.admin-layout main form button[type="submit"],
+.admin-layout main a.bg-black,
+.admin-layout main button.bg-black,
+.admin-layout main a.bg-\[\#0066ff\],
+.admin-layout main button.bg-\[\#0066ff\] {
+  min-height: 42px;
+  padding-inline: 17px;
+  border: 1px solid #2563eb;
+  border-radius: 10px;
+  background: #2563eb !important;
+  color: #fff !important;
+  font-weight: 650;
+  box-shadow: 0 2px 5px rgba(37, 99, 235, .14);
+}
+.admin-layout main a.bg-black:hover,
+.admin-layout main button.bg-black:hover,
+.admin-layout main form button[type="submit"]:hover { background: #1d4ed8 !important; }
+.admin-layout main form input[type="checkbox"] { width: 16px; height: 16px; }
+.admin-layout main .admin-form-actions { margin-top: 6px; padding-top: 20px; border-top: 1px solid #edf1f6; }
+/* Tables */
+.admin-layout main .overflow-x-auto { border-radius: 0 0 16px 16px; }
+.admin-layout main .admin-table-wrap:focus-visible { outline: 3px solid rgba(37, 99, 235, .32); outline-offset: -3px; }
+.admin-layout main table { border-collapse: separate; border-spacing: 0; }
+.admin-layout main table th { padding-top: 13px; padding-bottom: 13px; white-space: nowrap; }
+.admin-layout main table td { padding-top: 14px; padding-bottom: 14px; color: #58677c; }
+.admin-layout main table td:first-child { color: #27364b; }
+.admin-layout main table tbody tr:last-child td { border-bottom: 0; }
+.admin-layout main table tbody tr:hover { background: #f7faff !important; }
+.admin-layout main table td a,
+.admin-layout main table td button { display: inline-grid; place-items: center; min-width: 34px; min-height: 34px; border-radius: 9px; }
+/* Calendar, upload areas, and empty states */
+.admin-layout main .grid.grid-cols-7.gap-1 > div { border-color: #e8edf4 !important; border-radius: 10px !important; }
+.admin-layout main .grid.grid-cols-7.gap-1 > div.bg-\[\#0066ff\] { background: #2563eb !important; border-color: #2563eb !important; }
+.admin-layout main [class*="border-dashed"] { border-color: #d6e2f1 !important; background: #f9fbff; border-radius: 14px !important; }
+.admin-layout main [class*="border-dashed"]:hover { border-color: #8bb4fa !important; background: #f3f7ff; }
+.admin-layout main .text-center.py-16 > div:first-child { background: #eef5ff !important; border-radius: 14px !important; }
+.admin-layout main .animate-spin { border-color: #2563eb; border-top-color: transparent; }
+.admin-layout main .admin-confirm-dialog { border-color: #e5ebf3; }
+.admin-layout main .admin-confirm-submit.is-primary { background: #2563eb !important; }
+@media (max-width: 767px) {
+  .admin-layout main > div.min-h-screen > .max-w-7xl,
+  .admin-layout main > div.min-h-screen > .container { padding: 20px 16px 32px !important; }
+  .admin-layout main > div.min-h-screen > .bg-white.border-b > div { min-height: 82px; padding: 14px 16px !important; }
+  .admin-layout main > div.min-h-screen > .bg-white.border-b > div.max-w-3xl { padding-inline: 0 !important; }
+  .admin-layout main .rounded-xl.border.px-6.py-4 { padding-inline: 14px !important; }
+  .admin-layout main table td { padding-inline: 12px; }
 }

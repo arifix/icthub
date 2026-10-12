@@ -4,6 +4,7 @@ import { ArrowLeft, Info, Save } from "lucide-react";
 import { supabase } from "../../lib/supabase";
 import { Database } from "../../types/supabase";
 import { toast } from "react-hot-toast";
+import { AdminFormSection, AdminPageHeader } from "../../components/AdminUI";
 
 type InfoCategory = Database["public"]["Tables"]["info_categories"]["Row"];
 
@@ -107,36 +108,11 @@ const AdminInfoCategoryForm: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-[#f9fafb]">
-      <div className="bg-white border-b border-[#e5e7eb] px-6 py-7">
-        <div className="max-w-3xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-black tracking-tight">
-              {isEditing ? "Edit Info Category" : "New Info Category"}
-            </h1>
-            <p className="text-sm text-[#6b7280] mt-1">
-              Create a section for info notes like academic, rules, or tips
-            </p>
-          </div>
-          <button
-            onClick={() => navigate("/admin/info-categories")}
-            className="inline-flex items-center gap-2 px-3 py-2 text-sm text-[#374151] border border-[#e5e7eb] rounded-lg hover:bg-[#f9fafb] transition-colors"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Back to Categories
-          </button>
-        </div>
-      </div>
+      <AdminPageHeader title={isEditing ? "Edit Info Category" : "New Info Category"} description="Create a section for info notes like academic, rules, or tips" action={<button onClick={() => navigate("/admin/info-categories")} className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-600 hover:bg-slate-50"><ArrowLeft className="h-4 w-4" />Back to Categories</button>} />
 
-      <div className="max-w-3xl mx-auto px-6 py-8">
-        <div className="bg-white rounded-xl border border-[#e5e7eb]">
-          <div className="bg-[#f9fafb] border-b border-[#e5e7eb] px-6 py-4 flex items-center gap-2">
-            <Info className="h-4 w-4 text-[#374151]" />
-            <span className="text-sm font-bold text-black">
-              Category Details
-            </span>
-          </div>
-
-          <form onSubmit={handleSubmit} className="p-6 space-y-5">
+      <div className="max-w-5xl mx-auto px-6 py-8">
+        <AdminFormSection title="Category details" description="Create a clear section label and decide where it appears in the information hub." icon={Info}>
+          <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label
                 className="block text-xs font-semibold text-[#6b7280] uppercase tracking-wide mb-1.5"
@@ -209,7 +185,7 @@ const AdminInfoCategoryForm: React.FC = () => {
               </div>
             </div>
 
-            <div className="flex items-center justify-end gap-3 pt-2">
+            <div className="admin-form-actions flex items-center justify-end gap-3 pt-2">
               <button
                 type="button"
                 onClick={() => navigate("/admin/info-categories")}
@@ -231,7 +207,7 @@ const AdminInfoCategoryForm: React.FC = () => {
               </button>
             </div>
           </form>
-        </div>
+        </AdminFormSection>
       </div>
     </div>
   );

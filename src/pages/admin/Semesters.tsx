@@ -13,6 +13,7 @@ import { supabase } from "../../lib/supabase";
 import { Database } from "../../types/supabase";
 import { toast } from "react-hot-toast";
 import { useAdminConfirm } from "../../components/AdminConfirm";
+import { AdminPageHeader, AdminPanel, AdminTable } from "../../components/AdminUI";
 
 type Semester = Database["public"]["Tables"]["semesters"]["Row"];
 
@@ -113,25 +114,11 @@ const AdminSemesters: React.FC = () => {
   return (
     <div className="min-h-screen bg-[#f9fafb]">
       {/* Header */}
-      <div className="bg-white border-b border-[#e5e7eb] px-6 py-7">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-black tracking-tight">
-              Semesters
-            </h1>
-            <p className="text-sm text-[#6b7280] mt-1">
-              Manage academic semesters and set the active one
-            </p>
-          </div>
-          <Link
-            to="/admin/semesters/new"
-            className="inline-flex items-center gap-2 px-4 py-2 bg-black text-white rounded-lg text-sm font-medium hover:bg-[#374151] transition-colors"
-          >
-            <Plus className="h-4 w-4" />
-            New Semester
-          </Link>
-        </div>
-      </div>
+      <AdminPageHeader
+        title="Semesters"
+        description="Manage academic semesters and set the active one"
+        action={<Link to="/admin/semesters/new" className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-700"><Plus className="h-4 w-4" />New Semester</Link>}
+      />
 
       <div className="max-w-7xl mx-auto px-6 py-8 space-y-6">
         {/* Search */}
@@ -154,18 +141,7 @@ const AdminSemesters: React.FC = () => {
             <div className="animate-spin rounded-full h-8 w-8 border-2 border-black border-t-transparent" />
           </div>
         ) : (
-          <div className="bg-white rounded-xl border border-[#e5e7eb]">
-            <div className="bg-[#f9fafb] border-b border-[#e5e7eb] px-6 py-4 flex items-center gap-2">
-              <Calendar className="h-4 w-4 text-[#374151]" />
-              <span className="text-sm font-bold text-black">
-                Semesters
-              </span>
-              <span className="ml-auto text-xs bg-[#f3f4f6] text-[#6b7280] font-semibold px-2 py-0.5 rounded-full">
-                {filteredSemesters.length}{" "}
-                {filteredSemesters.length !== semesters.length &&
-                  `/ ${semesters.length}`}
-              </span>
-            </div>
+          <AdminPanel title="Semester directory" icon={Calendar} count={`${filteredSemesters.length}${filteredSemesters.length !== semesters.length ? ` / ${semesters.length}` : ""}`}>
             {filteredSemesters.length === 0 ? (
               <div className="text-center py-16">
                 <div className="bg-[#f3f4f6] p-3 rounded-xl w-fit mx-auto mb-4">
@@ -187,13 +163,14 @@ const AdminSemesters: React.FC = () => {
                 )}
               </div>
             ) : (
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm">
+              <AdminTable label="Semester directory">
+                <table className="w-full text-sm" aria-label="Semester directory">
                   <thead>
                     <tr className="border-b border-[#e5e7eb]">
                       {["Name", "Start", "End", "Status", ""].map((h) => (
                         <th
                           key={h}
+                          scope="col"
                           className="text-left px-5 py-3 text-xs font-semibold text-[#6b7280] uppercase tracking-wide"
                         >
                           {h}
@@ -236,6 +213,7 @@ const AdminSemesters: React.FC = () => {
                             <Link
                               to={`/admin/semesters/${semester.id}`}
                               className="p-1.5 text-[#374151] hover:text-black hover:bg-[#f3f4f6] rounded-lg"
+                              aria-label={`Edit ${semester.name}`}
                             >
                               <Edit className="h-4 w-4" />
                             </Link>
@@ -244,6 +222,7 @@ const AdminSemesters: React.FC = () => {
                                 onClick={() => handleDelete(semester.id)}
                                 disabled={isDeleting}
                                 className="p-1.5 text-[#6b7280] hover:text-red-600 hover:bg-red-50 rounded-lg disabled:opacity-50"
+                                aria-label={`Delete ${semester.name}`}
                               >
                                 <Trash className="h-4 w-4" />
                               </button>
@@ -254,9 +233,9 @@ const AdminSemesters: React.FC = () => {
                     ))}
                   </tbody>
                 </table>
-              </div>
+              </AdminTable>
             )}
-          </div>
+          </AdminPanel>
         )}
       </div>
     </div>

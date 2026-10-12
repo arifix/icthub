@@ -5,6 +5,7 @@ import { supabase } from "../../lib/supabase";
 import { Database } from "../../types/supabase";
 import { toast } from "react-hot-toast";
 import { useAdminConfirm } from "../../components/AdminConfirm";
+import { AdminPageHeader, AdminPanel } from "../../components/AdminUI";
 
 type InfoNote = Database["public"]["Tables"]["info_notes"]["Row"];
 type InfoCategory = Database["public"]["Tables"]["info_categories"]["Row"];
@@ -90,34 +91,11 @@ const AdminInfoNotes: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-[#f9fafb]">
-      <div className="bg-white border-b border-[#e5e7eb] px-6 py-7">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-black tracking-tight">
-              Information Notes
-            </h1>
-            <p className="text-sm text-[#6b7280] mt-1">
-              Create the short notes that appear inside each info category
-            </p>
-          </div>
-          <div className="flex gap-2">
-            <Link
-              to="/admin/info-categories/"
-              className="inline-flex items-center gap-2 px-4 py-2 bg-white border-black border rounded-lg text-sm font-medium hover:bg-black hover:text-white hover:border-black transition-colors"
-            >
-              <Info className="h-4 w-4" />
-              Info Categories
-            </Link>
-            <Link
-              to="/admin/info-notes/new"
-              className="inline-flex items-center gap-2 px-4 py-2 bg-black text-white rounded-lg text-sm font-medium hover:bg-[#374151] transition-colors"
-            >
-              <Plus className="h-4 w-4" />
-              New Info Note
-            </Link>
-          </div>
-        </div>
-      </div>
+      <AdminPageHeader
+        title="Information Notes"
+        description="Create the short notes that appear inside each info category"
+        action={<div className="flex flex-wrap gap-2"><Link to="/admin/info-categories/" className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-600 hover:bg-slate-50"><Info className="h-4 w-4" />Info Categories</Link><Link to="/admin/info-notes/new" className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-700"><Plus className="h-4 w-4" />New Info Note</Link></div>}
+      />
 
       <div className="max-w-7xl mx-auto px-6 py-8 space-y-6">
         <div className="bg-white rounded-xl border border-[#e5e7eb] px-6 py-4 flex flex-col sm:flex-row gap-3">
@@ -152,14 +130,7 @@ const AdminInfoNotes: React.FC = () => {
             <div className="animate-spin rounded-full h-8 w-8 border-2 border-black border-t-transparent" />
           </div>
         ) : (
-          <div className="bg-white rounded-xl border border-[#e5e7eb] overflow-hidden">
-            <div className="bg-[#f9fafb] border-b border-[#e5e7eb] px-6 py-4 flex items-center gap-2">
-              <Info className="h-4 w-4 text-[#374151]" />
-              <span className="text-sm font-bold text-black">Notes</span>
-              <span className="ml-auto text-xs bg-[#f3f4f6] text-[#6b7280] font-semibold px-2 py-0.5 rounded-full">
-                {filteredNotes.length}
-              </span>
-            </div>
+          <AdminPanel title="Information notes" icon={Info} count={filteredNotes.length}>
             {filteredNotes.length === 0 ? (
               <div className="text-center py-16 px-6">
                 <FileText className="h-8 w-8 text-gray-400 mx-auto mb-3" />
@@ -218,7 +189,7 @@ const AdminInfoNotes: React.FC = () => {
                 })}
               </div>
             )}
-          </div>
+          </AdminPanel>
         )}
       </div>
     </div>

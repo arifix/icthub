@@ -17,6 +17,7 @@ import {
   CalendarDays,
 } from "lucide-react";
 import { supabase } from "../../lib/supabase";
+import { AdminPageHeader, AdminTable } from "../../components/AdminUI";
 
 type Visit = {
   id: number;
@@ -270,26 +271,18 @@ const AdminAnalytics: React.FC = () => {
 
   return (
     <div className="admin-analytics min-h-screen bg-[#f4f6f4]">
-      {/* Header */}
-      <div className="bg-white border-b border-[#e5e7eb] px-6 py-7">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-black tracking-tight">
-              Analytics
-            </h1>
-            <p className="text-sm text-[#6b7280] mt-1">
-              Overview of user activity and engagement on the portal
-            </p>
-          </div>
-          <div className="flex flex-wrap gap-2">
+      <AdminPageHeader
+        title="Analytics"
+        description="Overview of user activity and engagement on the portal"
+        action={<div className="flex flex-wrap gap-2">
             {(["today", "week", "month", "year", "all", "custom"] as const).map((r) => (
               <button
                 key={r}
                 onClick={() => setRange(r)}
-                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+                className={`rounded-xl px-3 py-2 text-sm font-semibold transition-colors ${
                   range === r
-                    ? "bg-black text-white"
-                    : "bg-white border border-[#e5e7eb] text-[#374151] hover:bg-[#f9fafb]"
+                    ? "bg-blue-600 text-white shadow-sm"
+                    : "bg-white border border-slate-200 text-slate-600 hover:bg-slate-50"
                 }`}
               >
                 {r === "all"
@@ -301,15 +294,14 @@ const AdminAnalytics: React.FC = () => {
                       : r === "month" ? "30 days" : r === "year" ? "This year" : "Custom"}
               </button>
             ))}
-            <button onClick={() => void fetchVisits()} className="inline-flex items-center gap-2 rounded-lg border border-[#e5e7eb] bg-white px-3 py-1.5 text-sm font-medium text-[#374151] hover:bg-[#f9fafb]" aria-label="Refresh analytics">
+            <button onClick={() => void fetchVisits()} className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-50" aria-label="Refresh analytics">
               <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} /> Refresh
             </button>
-            <button onClick={exportCsv} disabled={!filteredVisits.length} className="inline-flex items-center gap-2 rounded-lg bg-[#176b5b] px-3 py-1.5 text-sm font-semibold text-white hover:bg-[#105548] disabled:opacity-50">
+            <button onClick={exportCsv} disabled={!filteredVisits.length} className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-3 py-2 text-sm font-semibold text-white hover:bg-blue-700 disabled:opacity-50">
               <Download className="h-4 w-4" /> Export CSV
             </button>
-          </div>
-        </div>
-      </div>
+          </div>}
+      />
 
       <div className="max-w-7xl mx-auto px-6 py-8 space-y-8">
         <section className="rounded-2xl border border-[#e1eae4] bg-white p-5 shadow-sm">
@@ -541,8 +533,8 @@ const AdminAnalytics: React.FC = () => {
                   {sessionJourneys.length} sessions
                 </span>
               </div>
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm">
+              <AdminTable label="User session journeys">
+                <table className="w-full text-sm" aria-label="User session journeys">
                   <thead>
                     <tr className="border-b border-[#e5e7eb]">
                       {[
@@ -555,6 +547,7 @@ const AdminAnalytics: React.FC = () => {
                       ].map((h) => (
                         <th
                           key={h}
+                          scope="col"
                           className="text-left px-5 py-3 text-xs font-semibold text-[#6b7280] uppercase tracking-wide"
                         >
                           {h}
@@ -643,7 +636,7 @@ const AdminAnalytics: React.FC = () => {
                     No sessions recorded yet
                   </div>
                 )}
-              </div>
+              </AdminTable>
             </div>
 
             {/* Recent visits table */}
@@ -657,8 +650,8 @@ const AdminAnalytics: React.FC = () => {
                   {filteredVisits.length} total
                 </span>
               </div>
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm">
+              <AdminTable label="Recent visits">
+                <table className="w-full text-sm" aria-label="Recent visits">
                   <thead>
                     <tr className="border-b border-[#e5e7eb]">
                       {[
@@ -671,6 +664,7 @@ const AdminAnalytics: React.FC = () => {
                       ].map((h) => (
                         <th
                           key={h}
+                          scope="col"
                           className="text-left px-5 py-3 text-xs font-semibold text-[#6b7280] uppercase tracking-wide"
                         >
                           {h}
@@ -741,7 +735,7 @@ const AdminAnalytics: React.FC = () => {
                     No visits recorded yet
                   </div>
                 )}
-              </div>
+              </AdminTable>
             </div>
           </>
         )}

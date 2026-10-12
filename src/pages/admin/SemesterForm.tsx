@@ -4,6 +4,7 @@ import { ArrowLeft, Calendar, Save } from "lucide-react";
 import { supabase } from "../../lib/supabase";
 import { Database } from "../../types/supabase";
 import { toast } from "react-hot-toast";
+import { AdminFormSection, AdminPageHeader } from "../../components/AdminUI";
 
 type Semester = Database["public"]["Tables"]["semesters"]["Row"];
 
@@ -125,38 +126,15 @@ const AdminSemesterForm: React.FC = () => {
   return (
     <div className="min-h-screen bg-[#f9fafb]">
       {/* Header */}
-      <div className="bg-white border-b border-[#e5e7eb] px-6 py-7">
-        <div className="max-w-3xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-black tracking-tight">
-              {isEditing ? "Edit Semester" : "New Semester"}
-            </h1>
-            <p className="text-sm text-[#6b7280] mt-1">
-              {isEditing
-                ? "Update semester information"
-                : "Create a new academic semester"}
-            </p>
-          </div>
-          <button
-            onClick={() => navigate("/admin/semesters")}
-            className="inline-flex items-center gap-2 px-3 py-2 text-sm text-[#374151] border border-[#e5e7eb] rounded-lg hover:bg-[#f9fafb] transition-colors"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Back to Semesters
-          </button>
-        </div>
-      </div>
+      <AdminPageHeader
+        title={isEditing ? "Edit Semester" : "New Semester"}
+        description={isEditing ? "Update semester information" : "Create a new academic semester"}
+        action={<button onClick={() => navigate("/admin/semesters")} className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-600 hover:bg-slate-50"><ArrowLeft className="h-4 w-4" />Back to Semesters</button>}
+      />
 
-      <div className="max-w-3xl mx-auto px-6 py-8">
-        <div className="bg-white rounded-xl border border-[#e5e7eb]">
-          <div className="bg-[#f9fafb] border-b border-[#e5e7eb] px-6 py-4 flex items-center gap-2">
-            <Calendar className="h-4 w-4 text-[#374151]" />
-            <span className="text-sm font-bold text-black">
-              Semester Details
-            </span>
-          </div>
-
-          <form onSubmit={handleSubmit} className="p-6 space-y-5">
+      <div className="max-w-5xl mx-auto px-6 py-8">
+        <AdminFormSection title="Semester details" description="Define the academic period and choose whether it is active in the student portal." icon={Calendar}>
+          <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label
                 htmlFor="name"
@@ -236,7 +214,7 @@ const AdminSemesterForm: React.FC = () => {
               </div>
             </div>
 
-            <div className="flex justify-end gap-3 pt-2">
+            <div className="admin-form-actions flex justify-end gap-3 pt-2">
               <button
                 type="button"
                 onClick={() => navigate("/admin/semesters")}
@@ -263,7 +241,7 @@ const AdminSemesterForm: React.FC = () => {
               </button>
             </div>
           </form>
-        </div>
+        </AdminFormSection>
       </div>
     </div>
   );

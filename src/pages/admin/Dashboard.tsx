@@ -5,12 +5,12 @@ import {
   File,
   FileText,
   Calendar,
-  Plus,
   ArrowRight,
   ChevronDown,
 } from "lucide-react";
 import { supabase } from "../../lib/supabase";
 import { Database } from "../../types/supabase";
+import { AdminPageHeader, AdminPanel, AdminStatTile } from "../../components/AdminUI";
 
 type Subject = Database["public"]["Tables"]["subjects"]["Row"] & {
   semesters?: { name: string } | null;
@@ -202,17 +202,7 @@ const AdminDashboard: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-[#f9fafb]">
-      {/* Header */}
-      <div className="bg-white border-b border-[#e5e7eb] px-6 py-7">
-        <div className="max-w-7xl mx-auto">
-          <h1 className="text-2xl sm:text-3xl font-bold text-black tracking-tight">
-            Dashboard
-          </h1>
-          <p className="text-sm text-[#6b7280] mt-1">
-            Overview of recent activities and statistics
-          </p>
-        </div>
-      </div>
+      <AdminPageHeader title="Dashboard" description="Overview of recent activities and statistics" />
 
       <div className="max-w-7xl mx-auto px-6 py-8 space-y-8">
         {loading ? (
@@ -223,38 +213,15 @@ const AdminDashboard: React.FC = () => {
           <>
             {/* Stats */}
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-              {statCards.map(({ title, count, icon: Icon, link, addLink }) => (
-                <div
+              {statCards.map(({ title, count, icon, link, addLink }) => (
+                <AdminStatTile
                   key={title}
-                  className="bg-white rounded-xl border border-[#e5e7eb] p-5"
-                >
-                  <div className="flex items-center justify-between mb-3">
-                    <p className="text-xs font-semibold text-[#6b7280] uppercase tracking-wide">
-                      {title}
-                    </p>
-                    <div className="bg-[#f3f4f6] p-1.5 rounded-lg">
-                      <Icon className="h-4 w-4 text-[#374151]" />
-                    </div>
-                  </div>
-                  <p className="text-2xl font-bold text-black">{count}</p>
-                  <div className="flex items-center gap-3 mt-3 pt-3 border-t border-[#f3f4f6]">
-                    <Link
-                      to={addLink}
-                      className="text-xs font-semibold text-[#374151] hover:text-black flex items-center gap-0.5"
-                    >
-                      <Plus className="h-3 w-3" />
-                      Add
-                    </Link>
-                    <span className="text-gray-500">·</span>
-                    <Link
-                      to={link}
-                      className="text-xs font-semibold text-[#374151] hover:text-black flex items-center gap-0.5"
-                    >
-                      View
-                      <ArrowRight className="h-3 w-3" />
-                    </Link>
-                  </div>
-                </div>
+                  title={title}
+                  value={count}
+                  icon={icon}
+                  href={link}
+                  addHref={addLink}
+                />
               ))}
             </div>
 
@@ -300,19 +267,12 @@ const AdminDashboard: React.FC = () => {
                 {/* Recent Subjects + Notes */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                   {/* Recent Subjects */}
-                  <div className="bg-white rounded-xl border border-[#e5e7eb]">
-                    <div className="bg-[#f9fafb] border-b border-[#e5e7eb] px-6 py-4 flex items-center gap-2">
-                      <BookOpen className="h-4 w-4 text-[#374151]" />
-                      <span className="text-sm font-bold text-black">
-                        Recent Subjects
-                      </span>
-                      <Link
+                  <AdminPanel title="Recent subjects" icon={BookOpen} actions={<Link
                         to="/admin/subjects"
-                        className="ml-auto text-xs text-[#6b7280] hover:text-black font-medium flex items-center gap-1"
+                        className="text-xs text-slate-500 hover:text-blue-700 font-semibold flex items-center gap-1"
                       >
                         View all <ArrowRight className="h-3 w-3" />
-                      </Link>
-                    </div>
+                      </Link>}>
                     <div className="divide-y divide-[#e5e7eb]">
                       {recentSubjects.length === 0 ? (
                         <div className="text-center py-10 text-sm text-gray-500">
@@ -346,22 +306,15 @@ const AdminDashboard: React.FC = () => {
                         ))
                       )}
                     </div>
-                  </div>
+                  </AdminPanel>
 
                   {/* Recent Notes */}
-                  <div className="bg-white rounded-xl border border-[#e5e7eb]">
-                    <div className="bg-[#f9fafb] border-b border-[#e5e7eb] px-6 py-4 flex items-center gap-2">
-                      <FileText className="h-4 w-4 text-[#374151]" />
-                      <span className="text-sm font-bold text-black">
-                        Recent Notes
-                      </span>
-                      <Link
+                  <AdminPanel title="Recent notes" icon={FileText} actions={<Link
                         to="/admin/notes"
-                        className="ml-auto text-xs text-[#6b7280] hover:text-black font-medium flex items-center gap-1"
+                        className="text-xs text-slate-500 hover:text-blue-700 font-semibold flex items-center gap-1"
                       >
                         View all <ArrowRight className="h-3 w-3" />
-                      </Link>
-                    </div>
+                      </Link>}>
                     <div className="divide-y divide-[#e5e7eb]">
                       {recentNotes.length === 0 ? (
                         <div className="text-center py-10 text-sm text-gray-500">
@@ -397,23 +350,16 @@ const AdminDashboard: React.FC = () => {
                         ))
                       )}
                     </div>
-                  </div>
+                  </AdminPanel>
                 </div>
 
                 {/* Upcoming Events */}
-                <div className="bg-white rounded-xl border border-[#e5e7eb]">
-                  <div className="bg-[#f9fafb] border-b border-[#e5e7eb] px-6 py-4 flex items-center gap-2">
-                    <Calendar className="h-4 w-4 text-[#374151]" />
-                    <span className="text-sm font-bold text-black">
-                      Upcoming Events
-                    </span>
-                    <Link
+                <AdminPanel title="Upcoming events" icon={Calendar} actions={<Link
                       to="/admin/calendar"
-                      className="ml-auto text-xs text-[#6b7280] hover:text-black font-medium flex items-center gap-1"
+                      className="text-xs text-slate-500 hover:text-blue-700 font-semibold flex items-center gap-1"
                     >
                       View calendar <ArrowRight className="h-3 w-3" />
-                    </Link>
-                  </div>
+                    </Link>}>
                   <div className="divide-y divide-[#e5e7eb]">
                     {upcomingEvents.length === 0 ? (
                       <div className="text-center py-10 text-sm text-gray-500">
@@ -463,7 +409,7 @@ const AdminDashboard: React.FC = () => {
                       ))
                     )}
                   </div>
-                </div>
+                </AdminPanel>
               </>
             ) : (
               <div className="bg-white rounded-xl border border-[#e5e7eb] p-12 text-center">

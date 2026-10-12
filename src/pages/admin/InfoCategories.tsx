@@ -5,6 +5,7 @@ import { supabase } from "../../lib/supabase";
 import { Database } from "../../types/supabase";
 import { toast } from "react-hot-toast";
 import { useAdminConfirm } from "../../components/AdminConfirm";
+import { AdminPageHeader, AdminPanel } from "../../components/AdminUI";
 
 type InfoCategory = Database["public"]["Tables"]["info_categories"]["Row"];
 
@@ -77,35 +78,11 @@ const AdminInfoCategories: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-[#f9fafb]">
-      <div className="bg-white border-b border-[#e5e7eb] px-6 py-7">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-black tracking-tight">
-              Information Categories
-            </h1>
-            <p className="text-sm text-[#6b7280] mt-1">
-              Create and organize the information sections shown on the public
-              page
-            </p>
-          </div>
-          <div className="flex gap-2">
-            <Link
-              to="/admin/info-notes"
-              className="inline-flex items-center gap-2 px-4 py-2 bg-white border-black border rounded-lg text-sm font-medium hover:bg-black hover:text-white hover:border-black transition-colors"
-            >
-              <Info className="h-4 w-4" />
-              Info Notes
-            </Link>
-            <Link
-              to="/admin/info-categories/new"
-              className="inline-flex items-center gap-2 px-4 py-2 bg-black text-white rounded-lg text-sm font-medium hover:bg-[#374151] transition-colors"
-            >
-              <Plus className="h-4 w-4" />
-              New Info Category
-            </Link>
-          </div>
-        </div>
-      </div>
+      <AdminPageHeader
+        title="Information Categories"
+        description="Create and organize the information sections shown on the public page"
+        action={<div className="flex flex-wrap gap-2"><Link to="/admin/info-notes" className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-600 hover:bg-slate-50"><Info className="h-4 w-4" />Info Notes</Link><Link to="/admin/info-categories/new" className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-700"><Plus className="h-4 w-4" />New Info Category</Link></div>}
+      />
 
       <div className="max-w-7xl mx-auto px-6 py-8 space-y-6">
         <div className="bg-white rounded-xl border border-[#e5e7eb] px-6 py-4">
@@ -126,14 +103,7 @@ const AdminInfoCategories: React.FC = () => {
             <div className="animate-spin rounded-full h-8 w-8 border-2 border-black border-t-transparent" />
           </div>
         ) : (
-          <div className="bg-white rounded-xl border border-[#e5e7eb] overflow-hidden">
-            <div className="bg-[#f9fafb] border-b border-[#e5e7eb] px-6 py-4 flex items-center gap-2">
-              <Info className="h-4 w-4 text-[#374151]" />
-              <span className="text-sm font-bold text-black">Categories</span>
-              <span className="ml-auto text-xs bg-[#f3f4f6] text-[#6b7280] font-semibold px-2 py-0.5 rounded-full">
-                {filteredCategories.length}
-              </span>
-            </div>
+          <AdminPanel title="Information categories" icon={Info} count={filteredCategories.length}>
             {filteredCategories.length === 0 ? (
               <div className="text-center py-16 px-6">
                 <FileText className="h-8 w-8 text-gray-400 mx-auto mb-3" />
@@ -187,7 +157,7 @@ const AdminInfoCategories: React.FC = () => {
                 ))}
               </div>
             )}
-          </div>
+          </AdminPanel>
         )}
       </div>
     </div>

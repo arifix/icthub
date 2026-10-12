@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { supabase } from "../../lib/supabase";
 import { toast } from "react-hot-toast";
 import { KeyRound, Save, Eye, EyeOff } from "lucide-react";
+import { AdminFormSection, AdminPageHeader } from "../../components/AdminUI";
 
 const AdminSettings: React.FC = () => {
   const [portalPassword, setPortalPassword] = useState("");
@@ -72,40 +73,20 @@ const AdminSettings: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-[#f9fafb]">
-      {/* Header */}
-      <div className="bg-white border-b border-[#e5e7eb] px-6 py-7">
-        <div className="max-w-7xl mx-auto">
-          <h1 className="text-2xl sm:text-3xl font-bold text-black tracking-tight">
-            Settings
-          </h1>
-          <p className="text-sm text-[#6b7280] mt-1">
-            Manage portal access and configuration
-          </p>
-        </div>
-      </div>
+      <AdminPageHeader title="Settings" description="Manage portal access and configuration" />
 
       <div className="max-w-7xl mx-auto px-6 py-8">
         {/* Portal Password Card */}
-        <div className="bg-white rounded-xl border border-[#e5e7eb] max-w-xl">
-          <div className="bg-[#f9fafb] border-b border-[#e5e7eb] px-6 py-4 flex items-center gap-2">
-            <KeyRound className="h-4 w-4 text-[#374151]" />
-            <span className="text-sm font-bold text-black">
-              Portal Access Password
-            </span>
-          </div>
-          <div className="p-6 space-y-5">
-            <p className="text-xs text-[#6b7280]">
-              Anyone with this password can view the study portal. Changing it
-              invalidates existing sessions.
-            </p>
-
+        <div className="max-w-2xl">
+          <AdminFormSection title="Portal access password" description="Anyone with this password can view the study portal. Changing it invalidates existing sessions." icon={KeyRound}>
             {/* Current password */}
             <div>
-              <label className="block text-xs font-semibold text-[#6b7280] uppercase tracking-wide mb-1.5">
+              <label htmlFor="currentPw" className="block text-xs font-semibold text-[#6b7280] uppercase tracking-wide mb-1.5">
                 Current Password
               </label>
               <div className="relative">
                 <input
+                  id="currentPw"
                   type={showCurrent ? "text" : "password"}
                   value={portalPassword}
                   readOnly
@@ -114,6 +95,7 @@ const AdminSettings: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setShowCurrent(!showCurrent)}
+                  aria-label={showCurrent ? "Hide current password" : "Show current password"}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-[#6b7280]"
                 >
                   {showCurrent ? (
@@ -125,7 +107,7 @@ const AdminSettings: React.FC = () => {
               </div>
             </div>
 
-            <form onSubmit={handleSave} className="space-y-4">
+            <form onSubmit={handleSave} className="space-y-4 mt-5">
               <div>
                 <label
                   htmlFor="newPw"
@@ -145,6 +127,7 @@ const AdminSettings: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setShowNew(!showNew)}
+                    aria-label={showNew ? "Hide new password" : "Show new password"}
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-[#6b7280]"
                   >
                     {showNew ? (
@@ -182,7 +165,7 @@ const AdminSettings: React.FC = () => {
                 {saving ? "Saving…" : "Update Password"}
               </button>
             </form>
-          </div>
+          </AdminFormSection>
         </div>
       </div>
     </div>
