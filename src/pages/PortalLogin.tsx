@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
-import { usePortalAccess } from "../context/PortalAccessContext";
 import { useAuth } from "../context/AuthContext";
 import { toast } from "react-hot-toast";
+import { FullPageLoader } from "../components/ui";
 import { Lock, User } from "lucide-react";
 import logo from "../assets/logo.png";
 
@@ -60,8 +60,7 @@ const PortalLogin: React.FC = () => {
   const [studentName, setStudentName] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const { signIn, isAuthenticated } = usePortalAccess();
-  const { isAdmin } = useAuth();
+  const { enterPortal, hasPortalAccess, isAdmin, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -69,9 +68,12 @@ const PortalLogin: React.FC = () => {
     document.title = "ICTHub — IICT, KUET";
   }, []);
 
+  // Only redirect back into the app (blocks //evil.com and \\evil.com).
+  const from = (location.state as { from?: string } | null)?.from;
   const redirectPath =
-    (location.state as { from?: string } | null)?.from || "/";
-  if (isAuthenticated) return <Navigate to={redirectPath} replace />;
+    typeof from === "string" && /^\/(?![/\\])/.test(from) && !from.startsWith("/login") ? from : "/";
+  if (authLoading) return <FullPageLoader />;
+  if (hasPortalAccess) return <Navigate to={redirectPath} replace />;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -81,17 +83,18 @@ const PortalLogin: React.FC = () => {
       return;
     }
 
-    if (!isValidStudentName(studentName.trim())) {
+    if (!isAdmin && !isValidStudentName(studentName.trim())) {
       toast.error("Please enter a valid name");
       return;
     }
 
     setLoading(true);
     try {
-      await signIn(password.trim(), studentName.trim());
+      await enterPortal(password, studentName.trim().replace(/\s+/g, " "));
       navigate(redirectPath, { replace: true });
-    } catch (err: any) {
-      toast.error(err.message || "Incorrect password");
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Incorrect password");
+      setPassword("");
     } finally {
       setLoading(false);
     }

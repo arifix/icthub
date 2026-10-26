@@ -1,16 +1,12 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Bell, FileText, File, Calendar } from "lucide-react";
-import { useNotifications } from "../hooks/useNotifications";
-import { Database } from "../types/supabase";
+import { Bell, FileText, File, Calendar, CheckCheck } from "lucide-react";
+import { useNotifications, type PortalNotification } from "../context/NotificationsContext";
 
-type Notification = Database["public"]["Tables"]["notifications"]["Row"] & {
-  subjects?: { title: string; code: string } | null;
-  semesters: { name: string };
-};
+type Notification = PortalNotification;
 
 const NotificationsPage: React.FC = () => {
-  const { notifications, loading, markAsRead } = useNotifications();
+  const { notifications, loading, markAsRead, markAllAsRead, isRead, unreadCount } = useNotifications();
 
   useEffect(() => {
     document.title = "Notifications — ICTHub";
@@ -74,14 +70,26 @@ const NotificationsPage: React.FC = () => {
     <div className="page-notes min-h-[800px] bg-[#f9fafb]">
       {/* Page header */}
       <div className="bg-white border-b border-[#e5e7eb]">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-7">
-          <h1 className="text-2xl sm:text-3xl font-bold text-black tracking-tight mb-1">
-            Notifications
-          </h1>
-          <p className="text-sm text-[#6b7280]">
-            Stay updated with the latest notes, files, and events for your
-            courses
-          </p>
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-7 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-bold text-black tracking-tight mb-1">
+              Notifications
+            </h1>
+            <p className="text-sm text-[#6b7280]">
+              Stay updated with the latest notes, files, and events for your
+              courses
+            </p>
+          </div>
+          {unreadCount > 0 && (
+            <button
+              type="button"
+              onClick={markAllAsRead}
+              className="inline-flex items-center gap-2 self-start sm:self-auto px-4 py-2 rounded-xl border border-[#e5e7eb] bg-white text-sm font-medium text-[#374151] hover:border-[#0066ff] hover:text-[#0066ff] transition-colors"
+            >
+              <CheckCheck className="h-4 w-4" />
+              Mark all as read ({unreadCount})
+            </button>
+          )}
         </div>
       </div>
 
@@ -102,22 +110,22 @@ const NotificationsPage: React.FC = () => {
           </div>
         ) : (
           <div className="space-y-2">
-            {(notifications as Notification[]).map((notification) => (
+            {notifications.map((notification) => (
               <Link
                 key={notification.id}
                 to={getNotificationLink(notification)}
                 onClick={() => {
-                  if (!notification.is_read) markAsRead(notification.id);
+                  if (!isRead(notification)) markAsRead(notification.id);
                 }}
                 className={`flex items-start gap-4 p-4 rounded-2xl border transition-all duration-200 hover:shadow-sm ${
-                  !notification.is_read
+                  !isRead(notification)
                     ? "bg-[#f0f7ff] border-[#f0f7ff] hover:border-[#e6f2ff]"
                     : "bg-white border-gray-100 hover:border-gray-200"
                 }`}
               >
                 <div
                   className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${
-                    !notification.is_read ? "bg-[#e6f2ff]" : "bg-gray-100"
+                    !isRead(notification) ? "bg-[#e6f2ff]" : "bg-gray-100"
                   }`}
                 >
                   {getNotificationIcon(notification.type)}
@@ -132,7 +140,7 @@ const NotificationsPage: React.FC = () => {
                     >
                       {typeLabel[notification.type] || notification.type}
                     </span>
-                    {!notification.is_read && (
+                    {!isRead(notification) && (
                       <span className="w-2 h-2 rounded-full bg-black shrink-0" />
                     )}
                   </div>
@@ -140,8 +148,8 @@ const NotificationsPage: React.FC = () => {
                     {notification.title}
                   </p>
                   <p className="text-sm text-gray-500 mt-0.5 line-clamp-1">
-                    {notification.message} @ {notification.semesters.name}{" "}
-                    Semester
+                    {notification.message}
+                    {notification.semesters && ` @ ${notification.semesters.name} Semester`}
                   </p>
                 </div>
                 <div className="text-sm text-gray-500 shrink-0 text-right">

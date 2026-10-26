@@ -8,7 +8,6 @@ import {
   Code2,
   BookOpen,
   Network,
-  ArrowRight,
   Calendar,
   Award,
   Target,
@@ -327,12 +326,14 @@ const Club: React.FC = () => {
               </div>
 
               <div className="grid grid-cols-2 gap-3">
-                {[
-                  ["Faculty Mentors", UserRoundCheck],
-                  ["Research Groups", FlaskConical],
-                  ["Student Projects", Code2],
-                  ["Academic Events", Calendar],
-                ].map(([label, Icon]: any) => (
+                {(
+                  [
+                    ["Faculty Mentors", UserRoundCheck],
+                    ["Research Groups", FlaskConical],
+                    ["Student Projects", Code2],
+                    ["Academic Events", Calendar],
+                  ] as const
+                ).map(([label, Icon]) => (
                   <div
                     key={label}
                     className="bg-white/10 border border-white/10 rounded-2xl p-4"

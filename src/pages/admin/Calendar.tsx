@@ -12,15 +12,15 @@ import {
   Globe,
 } from "lucide-react";
 import { supabase } from "../../lib/supabase";
+import { localISODate } from "../../lib/format";
 import { Database } from "../../types/supabase";
 import { toast } from "react-hot-toast";
-import { isPastDate } from "../../utils/helper";
 import { useAdminConfirm } from "../../components/AdminConfirm";
 import { AdminPageHeader } from "../../components/AdminUI";
 
 type Event = Database["public"]["Tables"]["events"]["Row"] & {
   subjects?: { title: string; code: string } | null;
-  semesters: { name: string };
+  semesters: { name: string } | null;
 };
 
 type Semester = Database["public"]["Tables"]["semesters"]["Row"];
@@ -127,9 +127,7 @@ const AdminCalendar: React.FC = () => {
     for (let i = 1; i <= daysCount; i++) {
       const date = new Date(year, month, i);
 
-      const gmtOffset = 6 * 60 * 60 * 1000; // GMT+6 in milliseconds
-      const localDate = new Date(date.getTime() + gmtOffset);
-      const dateString = localDate.toISOString().split("T")[0];
+      const dateString = localISODate(date);
 
       const dayEvents = filteredEvents.filter(
         (event) => event.date === dateString,
@@ -162,14 +160,6 @@ const AdminCalendar: React.FC = () => {
     setCurrentMonth(new Date());
   };
 
-  const formatDate = (dateString: string) => {
-    const options: Intl.DateTimeFormatOptions = {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    };
-    return new Date(dateString).toLocaleDateString(undefined, options);
-  };
 
   const isToday = (date: Date) => {
     const today = new Date();
@@ -296,7 +286,7 @@ const AdminCalendar: React.FC = () => {
               </div>
               <div className="grid grid-cols-7 gap-1">
                 {calendarDays.map((day, index) => {
-                  const pastDate = day.date && isPastDate(day.date);
+                  const pastDate = day.date && localISODate(day.date) < localISODate();
 
                   return (
                     <div

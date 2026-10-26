@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { supabase } from "../../lib/supabase";
 import { AdminPageHeader, AdminTable } from "../../components/AdminUI";
+import type { Json } from "../../types/supabase";
 
 type Visit = {
   id: number;
@@ -27,7 +28,7 @@ type Visit = {
   event_label: string | null;
   entity_type: string | null;
   entity_id: string | null;
-  metadata: Record<string, unknown> | null;
+  metadata: Json | null;
   ip_address: string | null;
   country: string | null;
   city: string | null;

@@ -27,7 +27,7 @@ const SubjectsPage: React.FC = () => {
 
         const currentSubjects =
           data?.filter(
-            (subject: any) => subject.semester?.is_current === true,
+            (subject) => subject.semester?.is_current === true,
           ) || [];
 
         setSubjects(currentSubjects);

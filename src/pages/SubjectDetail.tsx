@@ -13,6 +13,8 @@ import {
   Info,
 } from "lucide-react";
 import { supabase } from "../lib/supabase";
+import { downloadFile as downloadStoredFile, openFile } from "../lib/files";
+import { sanitizeHtml } from "../lib/sanitize";
 import { Database } from "../types/supabase";
 import { trackUserActivity } from "../hooks/usePageTracking";
 import { useAuth } from "../context/AuthContext";
@@ -46,7 +48,7 @@ const SubjectDetailPage: React.FC = () => {
         const { data: subjectData, error: subjectError } = await supabase
           .from("subjects")
           .select(`*, semester:semesters(id, name, is_current)`)
-          .eq("id", id)
+          .eq("id", Number(id))
           .eq("is_active", true)
           .single();
 
@@ -54,7 +56,7 @@ const SubjectDetailPage: React.FC = () => {
           const { data: basicSubject, error: basicError } = await supabase
             .from("subjects")
             .select("*")
-            .eq("id", id)
+            .eq("id", Number(id))
             .eq("is_active", true)
             .single();
           if (basicError || !basicSubject) {
@@ -78,17 +80,17 @@ const SubjectDetailPage: React.FC = () => {
           supabase
             .from("notes")
             .select("*")
-            .eq("subject_id", id)
+            .eq("subject_id", Number(id))
             .order("created_at", { ascending: false }),
           supabase
             .from("events")
             .select("*")
-            .eq("subject_id", id)
+            .eq("subject_id", Number(id))
             .order("date", { ascending: false }),
           supabase
             .from("files")
             .select("*")
-            .eq("subject_id", id)
+            .eq("subject_id", Number(id))
             .order("created_at", { ascending: false }),
         ]);
         setNotes(notesRes.data || []);
@@ -119,34 +121,7 @@ const SubjectDetailPage: React.FC = () => {
   const downloadFile = async (file: FileData) => {
     setDownloadingFileId(file.id);
     try {
-      const fileUrl = new URL(file.file_path, window.location.origin);
-      const storageMarker = "/object/public/icthub-files/";
-      const markerIndex = fileUrl.pathname.indexOf(storageMarker);
-      let fileBlob: Blob;
-
-      if (markerIndex >= 0) {
-        const storagePath = decodeURIComponent(
-          fileUrl.pathname.slice(markerIndex + storageMarker.length),
-        );
-        const { data, error } = await supabase.storage
-          .from("icthub-files")
-          .download(storagePath);
-        if (error) throw error;
-        fileBlob = data;
-      } else {
-        const response = await fetch(file.file_path);
-        if (!response.ok) throw new Error("Unable to download file");
-        fileBlob = await response.blob();
-      }
-
-      const objectUrl = URL.createObjectURL(fileBlob);
-      const downloadLink = document.createElement("a");
-      downloadLink.href = objectUrl;
-      downloadLink.download = file.name;
-      document.body.appendChild(downloadLink);
-      downloadLink.click();
-      downloadLink.remove();
-      URL.revokeObjectURL(objectUrl);
+      await downloadStoredFile(file);
     } catch (error) {
       console.error("Error downloading file:", error);
       toast.error("Unable to download this file. Please try again.");
@@ -292,7 +267,7 @@ const SubjectDetailPage: React.FC = () => {
                           entityId: note.id,
                           metadata: {
                             subjectId: note.subject_id,
-                            subjectCode: note.subjects?.code ?? null,
+                            subjectCode: subject.code,
                           },
                         })
                       : undefined
@@ -366,7 +341,7 @@ const SubjectDetailPage: React.FC = () => {
                       </p>
                       <div
                         className="text-sm text-gray-600 mt-1"
-                        dangerouslySetInnerHTML={{ __html: event.description }}
+                        dangerouslySetInnerHTML={{ __html: sanitizeHtml(event.description) }}
                       />
                     </div>
                   </div>
@@ -430,11 +405,11 @@ const SubjectDetailPage: React.FC = () => {
                   </div>
                   <div className="mt-3 grid grid-cols-2 gap-2">
                     <a
-                      href={file.file_path}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={() =>
-                        !isAdmin
+                      href="#"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        void openFile(file).catch(() => toast.error("Unable to open this file. Please try again."));
+                        void (!isAdmin
                           ? void trackUserActivity({
                               eventType: "file_open",
                               page: `/subjects/${id}`,
@@ -446,9 +421,8 @@ const SubjectDetailPage: React.FC = () => {
                                 subjectId: file.subject_id,
                                 subjectCode: subject.code,
                               },
-                            })
-                          : undefined
-                      }
+                            }) : undefined);
+                      }}
                       className="inline-flex items-center justify-center gap-1 rounded-lg border border-[#e5e7eb] px-2 py-1.5 text-xs font-medium text-[#374151] hover:border-[#0066ff] hover:text-[#0066ff] focus:outline-none focus:ring-2 focus:ring-[#0066ff]"
                       aria-label={`Preview ${file.name}`}
                     >

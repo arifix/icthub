@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
+import { downloadICS } from "../lib/ics";
 import {
   Calendar,
   ChevronLeft,
@@ -6,8 +8,10 @@ import {
   BookOpen,
   Globe,
   CalendarXIcon,
+  CalendarPlus,
 } from "lucide-react";
 import { supabase } from "../lib/supabase";
+import { sanitizeHtml } from "../lib/sanitize";
 import { Database } from "../types/supabase";
 
 type Event = Database["public"]["Tables"]["events"]["Row"] & {
@@ -16,7 +20,12 @@ type Event = Database["public"]["Tables"]["events"]["Row"] & {
 
 const CalendarPage: React.FC = () => {
   const [events, setEvents] = useState<Event[]>([]);
-  const [currentMonth, setCurrentMonth] = useState(new Date());
+  const [params] = useSearchParams();
+  const [currentMonth, setCurrentMonth] = useState(() => {
+    // Links like /calendar?date=2026-10-27 open on that month.
+    const linked = params.get("date");
+    return linked && /^\d{4}-\d{2}-\d{2}$/.test(linked) ? new Date(`${linked}T00:00:00`) : new Date();
+  });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -53,7 +62,7 @@ const CalendarPage: React.FC = () => {
     const month = currentMonth.getMonth();
     const daysCount = daysInMonth(year, month);
     const firstDay = firstDayOfMonth(year, month);
-    const days: any[] = [];
+    const days: { day: number; date: Date | null; dateString?: string; events?: Event[] }[] = [];
     for (let i = 0; i < firstDay; i++) days.push({ day: 0, date: null });
     for (let i = 1; i <= daysCount; i++) {
       const date = new Date(year, month, i);
@@ -88,13 +97,35 @@ const CalendarPage: React.FC = () => {
     <div className="page-calendar min-h-screen bg-[#f9fafb]">
       {/* Page header */}
       <div className="bg-white border-b border-[#e5e7eb]">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-7">
-          <h1 className="text-2xl sm:text-3xl font-bold text-black tracking-tight mb-1">
-            Academic Calendar
-          </h1>
-          <p className="text-sm text-[#6b7280]">
-            Events, schedules and important dates
-          </p>
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-7 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-bold text-black tracking-tight mb-1">
+              Academic Calendar
+            </h1>
+            <p className="text-sm text-[#6b7280]">
+              Events, schedules and important dates
+            </p>
+          </div>
+          {upcomingEvents.length > 0 && (
+            <button
+              type="button"
+              onClick={() =>
+                downloadICS(
+                  upcomingEvents.map((e) => ({
+                    ...e,
+                    subjectLabel: e.subjects ? `${e.subjects.code} — ${e.subjects.title}` : "General",
+                  })),
+                  "icthub-calendar",
+                  "ICTHub",
+                )
+              }
+              className="inline-flex items-center gap-2 self-start sm:self-auto px-4 py-2 rounded-xl border border-[#e5e7eb] bg-white text-sm font-medium text-[#374151] hover:border-[#0066ff] hover:text-[#0066ff] transition-colors"
+              title="Download upcoming events for Google Calendar, Apple Calendar or Outlook"
+            >
+              <CalendarPlus className="h-4 w-4" />
+              Add to my calendar
+            </button>
+          )}
         </div>
       </div>
 
@@ -290,9 +321,7 @@ const CalendarPage: React.FC = () => {
                           </span>
                           <p className="text-sm font-semibold text-gray-900 mb-1 mt-2">
                             <span
-                              dangerouslySetInnerHTML={{
-                                __html: event.description,
-                              }}
+                              dangerouslySetInnerHTML={{ __html: sanitizeHtml(event.description) }}
                             />
                           </p>
                         </div>
@@ -368,9 +397,7 @@ const CalendarPage: React.FC = () => {
                           </span>
                           <p className="text-sm font-semibold text-gray-900 mb-1 mt-2">
                             <span
-                              dangerouslySetInnerHTML={{
-                                __html: event.description,
-                              }}
+                              dangerouslySetInnerHTML={{ __html: sanitizeHtml(event.description) }}
                             />
                           </p>
                         </div>

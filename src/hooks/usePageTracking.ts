@@ -2,12 +2,14 @@ import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { supabase } from "../lib/supabase";
 import { useAuth } from "../context/AuthContext";
-import type { Database } from "../types/supabase";
-import { getStoredStudentName } from "../utils/portalStudent";
+import { readJSON, writeJSON } from "../lib/storage";
+import type { Database, Json } from "../types/supabase";
+
+type VisitInsert = Database["public"]["Tables"]["page_visits"]["Insert"];
 
 const GEO_CACHE_KEY = "ict_geo";
 const SESSION_ID_KEY = "ict_sid";
-const TRACKING_QUEUE_KEY = "ict_tracking_queue";
+const QUEUE_KEY = "ict_tracking_queue";
 
 type ActivityEvent = {
   eventType: string;
@@ -15,168 +17,97 @@ type ActivityEvent = {
   label?: string | null;
   entityType?: string | null;
   entityId?: string | number | null;
-  metadata?: Record<string, unknown> | null;
+  metadata?: Record<string, Json> | null;
 };
 
-const getOrCreateSessionId = (): string => {
-  let sid = sessionStorage.getItem(SESSION_ID_KEY);
-  if (!sid) {
-    sid = crypto.randomUUID();
-    sessionStorage.setItem(SESSION_ID_KEY, sid);
-  }
-  return sid;
-};
-
-// Cache geo lookup for the whole session — only one API call per visit
-const getGeoData = async (): Promise<{
-  ip: string;
-  country: string;
-  city: string;
-} | null> => {
-  const cached = sessionStorage.getItem(GEO_CACHE_KEY);
-  if (cached) return JSON.parse(cached);
+const sessionId = (): string => {
   try {
-    const res = await fetch("https://ipwho.is/");
-    if (!res.ok) return null;
-    const data = await res.json();
-    if (!data.success) return null;
-    const geo = {
-      ip: data.ip ?? "",
-      country: data.country ?? "",
-      city: data.city ?? "",
-    };
-    sessionStorage.setItem(GEO_CACHE_KEY, JSON.stringify(geo));
-    return geo;
+    let sid = sessionStorage.getItem(SESSION_ID_KEY);
+    if (!sid) {
+      sid = crypto.randomUUID();
+      sessionStorage.setItem(SESSION_ID_KEY, sid);
+    }
+    return sid;
   } catch {
-    return null;
+    return "unknown";
   }
 };
 
-const savePendingActivity = (payload: Record<string, unknown>) => {
-  try {
-    const raw = window.localStorage.getItem(TRACKING_QUEUE_KEY);
-    const queue = raw ? JSON.parse(raw) : [];
-    if (!Array.isArray(queue)) return;
-    queue.push(payload);
-    window.localStorage.setItem(
-      TRACKING_QUEUE_KEY,
-      JSON.stringify(queue.slice(-100)),
-    );
-  } catch (error) {
-    console.warn("Unable to save pending analytics activity:", error);
-  }
-};
+type Geo = { ip: string; country: string; city: string };
 
-const flushPendingActivities = async () => {
-  try {
-    const raw = window.localStorage.getItem(TRACKING_QUEUE_KEY);
-    if (!raw) return;
-
-    const queue = JSON.parse(raw);
-    if (!Array.isArray(queue) || queue.length === 0) return;
-
-    const remaining: Record<string, unknown>[] = [];
-    for (const item of queue) {
-      try {
-        const { error } = await supabase
-          .from("page_visits")
-          .insert([item as never]);
-        if (error) {
-          remaining.push(item);
-          break;
-        }
-      } catch {
-        remaining.push(item);
-        break;
-      }
+// One geo lookup per browser session.
+let geoPromise: Promise<Geo | null> | null = null;
+const geo = (): Promise<Geo | null> => {
+  geoPromise ??= (async () => {
+    try {
+      const cached = sessionStorage.getItem(GEO_CACHE_KEY);
+      if (cached) return JSON.parse(cached) as Geo;
+      const res = await fetch("https://ipwho.is/?fields=success,ip,country,city");
+      if (!res.ok) return null;
+      const data = await res.json();
+      if (!data.success) return null;
+      const value = { ip: String(data.ip ?? ""), country: String(data.country ?? ""), city: String(data.city ?? "") };
+      sessionStorage.setItem(GEO_CACHE_KEY, JSON.stringify(value));
+      return value;
+    } catch {
+      return null;
     }
-
-    window.localStorage.setItem(
-      TRACKING_QUEUE_KEY,
-      JSON.stringify(remaining.slice(-100)),
-    );
-  } catch (error) {
-    console.warn("Unable to flush pending analytics activity:", error);
-  }
+  })();
+  return geoPromise;
 };
 
+const enqueue = (payload: VisitInsert) => {
+  const queue = readJSON<VisitInsert[]>(QUEUE_KEY, [], Array.isArray);
+  writeJSON(QUEUE_KEY, [...queue, payload].slice(-50));
+};
+
+let flushing = false;
+const flushQueue = async () => {
+  if (flushing) return;
+  const queue = readJSON<VisitInsert[]>(QUEUE_KEY, [], Array.isArray);
+  if (!queue.length) return;
+  flushing = true;
+  const { error } = await supabase.from("page_visits").insert(queue);
+  if (!error) writeJSON(QUEUE_KEY, []);
+  flushing = false;
+};
+
+/** Records a student activity. Identity (user, student name) is attached server-side. */
 export const trackUserActivity = async (event: ActivityEvent) => {
-  try {
-    const sessionId = getOrCreateSessionId();
-    const geo = await getGeoData();
-    const studentName = getStoredStudentName();
-
-    const payload = {
-      page: event.page ?? window.location.pathname,
-      event_type: event.eventType,
-      event_label: event.label ?? null,
-      entity_type: event.entityType ?? null,
-      entity_id: event.entityId ? String(event.entityId) : null,
-      metadata: (event.metadata ??
-        {}) as Database["public"]["Tables"]["page_visits"]["Row"]["metadata"],
-      ip_address: geo?.ip || null,
-      country: geo?.country || null,
-      city: geo?.city || null,
-      user_agent: navigator.userAgent,
-      referrer: document.referrer || null,
-      session_id: sessionId,
-      student_name: studentName,
-    };
-
-    const fallbackPayload = {
-      page: payload.page,
-      ip_address: payload.ip_address,
-      country: payload.country,
-      city: payload.city,
-      user_agent: payload.user_agent,
-      referrer: payload.referrer,
-      session_id: payload.session_id,
-      student_name: payload.student_name,
-    };
-
-    const { error } = await supabase
-      .from("page_visits")
-      .insert([payload as never]);
-    if (error) {
-      const fallbackResult = await supabase
-        .from("page_visits")
-        .insert([fallbackPayload as never]);
-      if (fallbackResult.error) {
-        throw fallbackResult.error;
-      }
-    }
-  } catch (error) {
-    console.error("Failed to track user activity:", error);
-    savePendingActivity({
-      page: event.page ?? window.location.pathname,
-      event_type: event.eventType,
-      event_label: event.label ?? null,
-      entity_type: event.entityType ?? null,
-      entity_id: event.entityId ? String(event.entityId) : null,
-      metadata: event.metadata ?? {},
-      ip_address: null,
-      country: null,
-      city: null,
-      user_agent: navigator.userAgent,
-      referrer: document.referrer || null,
-      session_id: getOrCreateSessionId(),
-      student_name: getStoredStudentName(),
-    });
-  }
+  const location = await geo();
+  const payload: VisitInsert = {
+    page: event.page ?? window.location.pathname,
+    event_type: event.eventType,
+    event_label: event.label ?? null,
+    entity_type: event.entityType ?? null,
+    entity_id: event.entityId != null ? String(event.entityId) : null,
+    metadata: event.metadata ?? {},
+    ip_address: location?.ip || null,
+    country: location?.country || null,
+    city: location?.city || null,
+    user_agent: navigator.userAgent,
+    referrer: document.referrer || null,
+    session_id: sessionId(),
+  };
+  const { error } = await supabase.from("page_visits").insert(payload);
+  if (error) enqueue(payload);
 };
 
 export const usePageTracking = () => {
-  const { isAdmin } = useAuth();
-  const location = useLocation();
+  const { isAdmin, hasPortalAccess } = useAuth();
+  const { pathname } = useLocation();
 
   useEffect(() => {
-    void flushPendingActivities();
+    if (isAdmin || !hasPortalAccess) return;
+    void flushQueue();
+    void trackUserActivity({ eventType: "page_view", page: pathname });
+  }, [isAdmin, hasPortalAccess, pathname]);
+};
 
-    if (!isAdmin) {
-      void trackUserActivity({
-        eventType: "page_view",
-        page: location.pathname,
-      });
-    }
-  }, [isAdmin, location.pathname]);
+/** Tracks only for students; admins browsing the portal are not counted. */
+export const useTrack = () => {
+  const { isAdmin } = useAuth();
+  return (event: ActivityEvent) => {
+    if (!isAdmin) void trackUserActivity(event);
+  };
 };

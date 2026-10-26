@@ -7,7 +7,6 @@ import {
   Search,
   Trash,
   CheckCircle,
-  Clock,
 } from "lucide-react";
 import { supabase } from "../../lib/supabase";
 import { Database } from "../../types/supabase";

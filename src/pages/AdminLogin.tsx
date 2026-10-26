@@ -1,20 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { toast } from "react-hot-toast";
 import { Lock, Mail } from "lucide-react";
 import logo from "../assets/logo.png";
+import { FullPageLoader } from "../components/ui";
 
 const AdminLogin: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const { signIn, isAdmin } = useAuth();
+  const { signIn, isAdmin, loading: authLoading } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     document.title = "Admin Login — ICTHub";
   }, []);
-  if (isAdmin) return <Navigate to="/admin/dashboard" />;
+  if (authLoading) return <FullPageLoader />;
+  if (isAdmin) return <Navigate to="/admin/dashboard" replace />;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,9 +27,11 @@ const AdminLogin: React.FC = () => {
     }
     setLoading(true);
     try {
-      await signIn(email, password);
-    } catch (err: any) {
-      toast.error(err.message || "Invalid credentials");
+      await signIn(email.trim(), password);
+      navigate("/admin/dashboard", { replace: true });
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Invalid credentials");
+      setPassword("");
     } finally {
       setLoading(false);
     }

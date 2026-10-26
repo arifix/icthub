@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ArrowLeft, FileText, Save } from "lucide-react";
 import { supabase } from "../../lib/supabase";
+import { sanitizeHtml } from "../../lib/sanitize";
 import { Database } from "../../types/supabase";
 import { toast } from "react-hot-toast";
 import { AdminFormSection, AdminPageHeader } from "../../components/AdminUI";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
+import ReactQuill from "react-quill-new";
+import "react-quill-new/dist/quill.snow.css";
 
 type Note = Database["public"]["Tables"]["notes"]["Row"];
 type Subject = Database["public"]["Tables"]["subjects"]["Row"];
@@ -40,7 +41,7 @@ const AdminNoteForm: React.FC = () => {
       const { data, error } = await supabase
         .from("notes")
         .select("*")
-        .eq("id", id!)
+        .eq("id", Number(id))
         .single();
 
       if (error) throw error;
@@ -76,8 +77,7 @@ const AdminNoteForm: React.FC = () => {
       // Filter for current semester subjects only
       const currentSemesterSubjects =
         data?.filter(
-          (subject: Subject & { semester?: { is_current: boolean } }) =>
-            subject.semester?.is_current === true,
+          (subject) => subject.semester?.is_current === true,
         ) || [];
 
       setSubjects(currentSemesterSubjects);
@@ -117,39 +117,41 @@ const AdminNoteForm: React.FC = () => {
     try {
       setSaving(true);
 
-      const { data: semesterData, error: semesterError } = await supabase
-        .from("semesters")
-        .select("*")
-        .eq("is_current", true)
+      // A note belongs to its subject's semester (editing an old note must not move it).
+      const { data: subjectData, error: subjectError } = await supabase
+        .from("subjects")
+        .select("semester_id")
+        .eq("id", note.subject_id)
         .single();
-      if (semesterError) throw semesterError;
-      const semesterId = semesterData?.id;
+      if (subjectError) throw subjectError;
+      const semesterId = subjectData?.semester_id;
       if (!semesterId) {
-        toast.error("No active semester found. Please set one up first.");
+        toast.error("The selected subject isn't assigned to a semester.");
         return;
       }
+      const content = sanitizeHtml(note.content);
 
       if (isEditing) {
         const { error } = await supabase
           .from("notes")
           .update({
             title: note.title,
-            content: note.content,
+            content,
             subject_id: note.subject_id,
             summary: note.summary,
             semester_id: semesterId,
           })
-          .eq("id", id!);
+          .eq("id", Number(id));
 
         if (error) throw error;
         toast.success("Note updated successfully");
       } else {
-        const { data: newNote, error } = await supabase
+        const { error } = await supabase
           .from("notes")
           .insert([
             {
               title: note.title,
-              content: note.content,
+              content,
               subject_id: note.subject_id,
               summary: note.summary,
               semester_id: semesterId,
@@ -261,7 +263,7 @@ const AdminNoteForm: React.FC = () => {
               <textarea
                 id="summary"
                 name="summary"
-                value={note.summary}
+                value={note.summary ?? ""}
                 onChange={handleChange}
                 rows={3}
                 placeholder="Brief summary displayed to students (optional)"

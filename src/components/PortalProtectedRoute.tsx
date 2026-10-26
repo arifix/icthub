@@ -1,29 +1,16 @@
 import React from "react";
 import { Navigate, useLocation } from "react-router-dom";
-import { usePortalAccess } from "../context/PortalAccessContext";
+import { useAuth } from "../context/AuthContext";
+import { FullPageLoader } from "./ui";
 
-const PortalProtectedRoute: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
-  const { isAuthenticated, loading } = usePortalAccess();
+const PortalProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { hasPortalAccess, loading } = useAuth();
   const location = useLocation();
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center h-screen bg-white">
-        <div className="animate-spin rounded-full h-8 w-8 border-2 border-[#0066ff] border-t-transparent" />
-      </div>
-    );
-  }
+  if (loading) return <FullPageLoader />;
 
-  if (!isAuthenticated) {
-    return (
-      <Navigate
-        to="/login"
-        replace
-        state={{ from: `${location.pathname}${location.search}` }}
-      />
-    );
+  if (!hasPortalAccess) {
+    return <Navigate to="/login" replace state={{ from: `${location.pathname}${location.search}` }} />;
   }
 
   return <>{children}</>;

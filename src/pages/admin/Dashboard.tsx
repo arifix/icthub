@@ -9,6 +9,7 @@ import {
   ChevronDown,
 } from "lucide-react";
 import { supabase } from "../../lib/supabase";
+import { localISODate } from "../../lib/format";
 import { Database } from "../../types/supabase";
 import { AdminPageHeader, AdminPanel, AdminStatTile } from "../../components/AdminUI";
 
@@ -111,7 +112,7 @@ const AdminDashboard: React.FC = () => {
           semesters:semester_id (name)
         `,
         )
-        .eq("semester_id", selectedSemester)
+        .eq("semester_id", Number(selectedSemester))
         .order("created_at", { ascending: false })
         .limit(5);
 
@@ -127,14 +128,14 @@ const AdminDashboard: React.FC = () => {
           semesters:semester_id (name)
         `,
         )
-        .eq("semester_id", selectedSemester)
+        .eq("semester_id", Number(selectedSemester))
         .order("created_at", { ascending: false })
         .limit(5);
 
       setRecentNotes(notes || []);
 
       // Fetch upcoming events for selected semester
-      const today = new Date().toISOString().split("T")[0];
+      const today = localISODate();
       const { data: events } = await supabase
         .from("events")
         .select(
@@ -144,7 +145,7 @@ const AdminDashboard: React.FC = () => {
           semesters:semester_id (name)
         `,
         )
-        .eq("semester_id", selectedSemester)
+        .eq("semester_id", Number(selectedSemester))
         .gte("date", today)
         .order("date", { ascending: true })
         .limit(5);

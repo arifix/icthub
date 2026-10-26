@@ -34,7 +34,7 @@ const AdminSemesterForm: React.FC = () => {
       const { data, error } = await supabase
         .from("semesters")
         .select("*")
-        .eq("id", id!)
+        .eq("id", Number(id))
         .single();
 
       if (error) throw error;
@@ -88,7 +88,7 @@ const AdminSemesterForm: React.FC = () => {
             end_date: semester.end_date,
             is_current: semester.is_current,
           })
-          .eq("id", id!);
+          .eq("id", Number(id));
 
         if (error) throw error;
         toast.success("Semester updated successfully");

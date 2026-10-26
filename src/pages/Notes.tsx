@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 import { supabase } from "../lib/supabase";
 import { Database } from "../types/supabase";
-import { stripHtmlAndTruncate } from "../utils/helper.js";
+import { stripHtmlAndTruncate } from "../utils/helper";
 import { trackUserActivity } from "../hooks/usePageTracking";
 import { useAuth } from "../context/AuthContext";
 
@@ -58,7 +58,7 @@ const NotesPage: React.FC = () => {
         const { data: notesData, error: notesError } = await supabase
           .from("notes")
           .select(
-            `*, subjects:subject_id (title, code), semester:semesters!inner(id, name, is_current)`,
+            `*, subjects:subject_id (title, code), semester:semesters!inner(id, name, is_current), note_comments(count)`,
           )
           .eq("is_active", true)
           .eq("semester.is_current", true)
@@ -66,19 +66,13 @@ const NotesPage: React.FC = () => {
 
         if (notesError) throw notesError;
 
-        let notesWithCommentCount: Note[] = [];
-        if (notesData) {
-          notesWithCommentCount = await Promise.all(
-            notesData.map(async (note: Note) => {
-              const { count } = await supabase
-                .from("note_comments")
-                .select("id", { count: "exact", head: true })
-                .eq("note_id", note.id);
-              return { ...note, comment_count: count || 0 } as Note;
-            }),
-          );
-        }
-        setNotes(notesWithCommentCount);
+        // One query: comment counts come embedded instead of one request per note.
+        setNotes(
+          (notesData ?? []).map(({ note_comments, ...note }) => ({
+            ...note,
+            comment_count: note_comments[0]?.count ?? 0,
+          })) as Note[],
+        );
 
         const { data: subjectsData } = await supabase
           .from("subjects")
@@ -244,11 +238,7 @@ const NotesPage: React.FC = () => {
                     </h2>
 
                     <p className="text-sm text-[#6b7280] line-clamp-3 flex-1 mb-4">
-                      <span
-                        dangerouslySetInnerHTML={{
-                          __html: stripHtmlAndTruncate(note.content, 150),
-                        }}
-                      />
+                      <span>{stripHtmlAndTruncate(note.content, 150)}</span>
                     </p>
 
                     <div className="border-t border-[#e5e7eb] pt-3 flex items-center justify-between">

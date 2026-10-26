@@ -52,7 +52,7 @@ const AdminInfoNoteForm: React.FC = () => {
       const { data, error } = await supabase
         .from("info_notes")
         .select("*")
-        .eq("id", id!)
+        .eq("id", Number(id))
         .single();
       if (error) throw error;
       setNote(
@@ -111,7 +111,7 @@ const AdminInfoNoteForm: React.FC = () => {
         const { error } = await supabase
           .from("info_notes")
           .update(payload)
-          .eq("id", id!);
+          .eq("id", Number(id));
         if (error) throw error;
         toast.success("Note updated successfully");
       } else {

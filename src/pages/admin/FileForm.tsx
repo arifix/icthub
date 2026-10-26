@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ArrowLeft, File, Save, Upload, AlertCircle } from "lucide-react";
-import { supabase } from "../../lib/supabase";
+import { STORAGE_BUCKET, errorMessage, supabase } from "../../lib/supabase";
+import { MAX_UPLOAD_BYTES, buildStorageKey, fileExtension, storageKeyOf } from "../../lib/files";
 import { Database } from "../../types/supabase";
 import { toast } from "react-hot-toast";
 import { AdminFormSection, AdminPageHeader } from "../../components/AdminUI";
@@ -43,7 +44,7 @@ const AdminFileForm: React.FC = () => {
       const { data, error } = await supabase
         .from("files")
         .select("*")
-        .eq("id", id!)
+        .eq("id", Number(id))
         .single();
 
       if (error) throw error;
@@ -96,7 +97,7 @@ const AdminFileForm: React.FC = () => {
       // Filter for current semester subjects only
       const currentSemesterSubjects =
         allSubjects?.filter(
-          (subject: any) => subject.semester?.is_current === true,
+          (subject) => subject.semester?.is_current === true,
         ) || [];
 
       setSubjects(currentSemesterSubjects);
@@ -140,11 +141,14 @@ const AdminFileForm: React.FC = () => {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const selectedFileObject = e.target.files[0];
+      if (selectedFileObject.size > MAX_UPLOAD_BYTES) {
+        toast.error("File is larger than the 50 MB limit");
+        e.target.value = "";
+        return;
+      }
       setSelectedFile(selectedFileObject);
 
-      // Extract file extension
-      const fileExt =
-        selectedFileObject.name.split(".").pop()?.toLowerCase() || "";
+      const fileExt = fileExtension(selectedFileObject.name);
 
       setFile((prev) => ({
         ...prev,
@@ -170,63 +174,51 @@ const AdminFileForm: React.FC = () => {
 
     try {
       setSaving(true);
-      let filePath = file.file_path;
+      let filePath = file.file_path ?? "";
+      let storagePath = file.storage_path ?? null;
+      const previousKey = isEditing && selectedFile ? storageKeyOf({ file_path: filePath, storage_path: storagePath }) : null;
 
       if (selectedFile) {
-        const { data, error } = await supabase.storage
-          .from("icthub-files")
-          .upload(`${Date.now()}_icthub_arif_${selectedFile.name}`, selectedFile);
+        const key = buildStorageKey(selectedFile.name);
+        const { error } = await supabase.storage
+          .from(STORAGE_BUCKET)
+          .upload(key, selectedFile, { contentType: selectedFile.type || undefined, upsert: false });
         if (error) throw error;
-        filePath =
-          "https://fxercuesfbcpizrggehw.supabase.co/storage/v1/object/public/icthub-files/" +
-          data.path;
+        filePath = key;
+        storagePath = key;
       }
 
-      if (isEditing) {
-        const { error } = await supabase
-          .from("files")
-          .update({
-            name: file.name,
-            subject_id: file.subject_id,
-            semester_id: file.semester_id,
-            file_path: filePath,
-            file_type: file.file_type,
-            size: file.size,
-          })
-          .eq("id", id!);
+      const payload = {
+        name: file.name.trim(),
+        subject_id: file.subject_id ?? null,
+        semester_id: file.semester_id,
+        file_path: filePath,
+        storage_path: storagePath,
+        file_type: file.file_type ?? "",
+        size: file.size ?? 0,
+      };
 
+      if (isEditing) {
+        const { error } = await supabase.from("files").update(payload).eq("id", Number(id));
         if (error) throw error;
+        // Replaced the upload: clean up the old object.
+        if (previousKey && previousKey !== storagePath) {
+          await supabase.storage.from(STORAGE_BUCKET).remove([previousKey]);
+        }
         toast.success("File updated successfully");
       } else {
-        const { data: newFile, error } = await supabase
-          .from("files")
-          .insert([
-            {
-              name: file.name,
-              subject_id: file.subject_id,
-              semester_id: file.semester_id,
-              file_path: filePath,
-              file_type: file.file_type,
-              size: file.size,
-            },
-          ])
-          .select(
-            `
-          *,
-          subjects:subject_id (title, code),
-          semesters:semester_id (name)
-        `,
-          )
-          .single();
-
-        if (error) throw error;
+        const { error } = await supabase.from("files").insert(payload);
+        if (error) {
+          if (storagePath) await supabase.storage.from(STORAGE_BUCKET).remove([storagePath]);
+          throw error;
+        }
         toast.success("File uploaded successfully");
       }
 
       navigate("/admin/files");
     } catch (error) {
       console.error("Error saving file:", error);
-      toast.error(`Failed to ${isEditing ? "update" : "upload"} file`);
+      toast.error(errorMessage(error, `Failed to ${isEditing ? "update" : "upload"} file`));
     } finally {
       setSaving(false);
     }

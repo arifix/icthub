@@ -8,10 +8,14 @@ import {
   ArrowRight,
   Clock,
   Globe,
+  History,
 } from "lucide-react";
+import { getRecentNotes } from "../lib/recent";
 import { supabase } from "../lib/supabase";
+import { sanitizeHtml } from "../lib/sanitize";
 import { Database } from "../types/supabase";
 import { stripHtmlAndTruncate, getUpcomingEventAlert } from "../utils/helper";
+import { localISODate } from "../lib/format";
 
 type Subject = Database["public"]["Tables"]["subjects"]["Row"] & {
   semester?: { name: string } | null;
@@ -78,11 +82,7 @@ const NoteCard: React.FC<{ note: Note }> = ({ note }) => (
         {note.title}
       </p>
       <p className="text-xs text-gray-500 line-clamp-2 mt-1">
-        <span
-          dangerouslySetInnerHTML={{
-            __html: stripHtmlAndTruncate(note.content, 100),
-          }}
-        />
+        <span>{stripHtmlAndTruncate(note.content, 100)}</span>
       </p>
     </div>
     <ArrowRight className="h-4 w-4 text-gray-300 group-hover:text-[#0066ff] shrink-0 mt-2 group-hover:translate-x-0.5 transition-transform" />
@@ -126,11 +126,7 @@ const EventCard: React.FC<{ event: Event }> = ({ event }) => {
           </div>
         )}
         {event.description && <p className="home-event-description text-xs text-gray-500 mb-1 mt-2 line-clamp-2">
-          <span
-            dangerouslySetInnerHTML={{
-              __html: stripHtmlAndTruncate(event.description, 150),
-            }}
-          />
+          <span>{stripHtmlAndTruncate(event.description, 150)}</span>
         </p>}
       </div>
     </div>
@@ -142,88 +138,60 @@ const Home: React.FC = () => {
   const [recentNotes, setRecentNotes] = useState<Note[]>([]);
   const [upcomingEvents, setUpcomingEvents] = useState<Event[]>([]);
   const [filesCount, setFilesCount] = useState(0);
+  const [notesCount, setNotesCount] = useState(0);
+  const [recentlyRead] = useState(() => getRecentNotes().slice(0, 3));
   const [loading, setLoading] = useState(true);
   const [totalEventsCount, setTotalEventsCount] = useState(0);
 
-  const eventAlert = getUpcomingEventAlert(upcomingEvents) || [];
+  const eventAlert = getUpcomingEventAlert(upcomingEvents);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
 
-        const { data: allSubjects, error: subjectsError } = await supabase
-          .from("subjects")
-          .select(`*, semester:semesters(id, name, is_current)`)
-          .eq("is_active", true)
-          .order("title", { ascending: true });
+        const { data: semester, error: semesterError } = await supabase
+          .from("semesters")
+          .select("id")
+          .eq("is_current", true)
+          .maybeSingle();
+        if (semesterError) throw semesterError;
+        if (!semester) return;
 
-        if (subjectsError) throw subjectsError;
+        const today = localISODate();
+        const [subjectsRes, notesRes, eventsRes, noteCount, fileCount, eventCount] = await Promise.all([
+          supabase
+            .from("subjects")
+            .select("*, semester:semesters(id, name, is_current)")
+            .eq("semester_id", semester.id)
+            .order("title", { ascending: true }),
+          supabase
+            .from("notes")
+            .select("*, subjects:subject_id (title, code)")
+            .eq("semester_id", semester.id)
+            .order("created_at", { ascending: false })
+            .limit(4),
+          supabase
+            .from("events")
+            .select("*, subjects:subject_id (title, code)")
+            .eq("semester_id", semester.id)
+            .gte("date", today)
+            .order("date", { ascending: true })
+            .limit(4),
+          supabase.from("notes").select("id", { count: "exact", head: true }).eq("semester_id", semester.id),
+          supabase.from("files").select("id", { count: "exact", head: true }).eq("semester_id", semester.id),
+          supabase.from("events").select("id", { count: "exact", head: true }).eq("semester_id", semester.id),
+        ]);
+        if (subjectsRes.error) throw subjectsRes.error;
+        if (notesRes.error) throw notesRes.error;
+        if (eventsRes.error) throw eventsRes.error;
 
-        const currentSubjects =
-          allSubjects?.filter(
-            (subject: any) => subject.semester?.is_current === true,
-          ) || [];
-        setRecentSubjects(currentSubjects);
-
-        const { data: allNotes, error: notesError } = await supabase
-          .from("notes")
-          .select(
-            `*, subjects:subject_id (title, code, is_active, semester:semesters(id, name, is_current))`,
-          )
-          .eq("is_active", true)
-          .order("created_at", { ascending: false });
-
-        if (notesError) throw notesError;
-
-        const currentNotes =
-          allNotes
-            ?.filter(
-              (note: any) => note.subjects?.semester?.is_current === true,
-            )
-            .slice(0, 4) || [];
-        setRecentNotes(currentNotes);
-
-        const now = new Date();
-        const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
-        const { data: allEvents, error: eventsError } = await supabase
-          .from("events")
-          .select(
-            `*, subjects:subject_id (title, code, semester:semesters(id, name, is_current))`,
-          )
-          .eq("is_active", true)
-          .gte("date", today)
-          .order("date", { ascending: true });
-
-        if (eventsError) throw eventsError;
-
-        const currentEvents =
-          allEvents
-            ?.filter(
-              (event: any) =>
-                !event.subjects ||
-                event.subjects?.semester?.is_current === true,
-            )
-            .slice(0, 4) || [];
-        setUpcomingEvents(currentEvents);
-
-        const { count: eventsCount, error: countError } = await supabase
-          .from("events")
-          .select("*", { count: "exact", head: true })
-          .eq("is_active", true);
-
-        setTotalEventsCount(eventsCount ?? 0);
-        if (countError) throw countError;
-
-        const { data: allFiles, error: filesError } = await supabase
-          .from("files")
-          .select(`*, semester:semesters(id, is_current)`)
-          .eq("is_active", true);
-        if (filesError) throw filesError;
-        setFilesCount(
-          allFiles?.filter((f: any) => f.semester?.is_current === true)
-            .length ?? 0,
-        );
+        setRecentSubjects((subjectsRes.data ?? []) as Subject[]);
+        setRecentNotes((notesRes.data ?? []) as Note[]);
+        setUpcomingEvents((eventsRes.data ?? []) as Event[]);
+        setNotesCount(noteCount.count ?? 0);
+        setFilesCount(fileCount.count ?? 0);
+        setTotalEventsCount(eventCount.count ?? 0);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -263,7 +231,7 @@ const Home: React.FC = () => {
               },
               {
                 icon: FileText,
-                value: recentNotes.length,
+                value: notesCount,
                 label: "Notes",
                 color: "text-[#0066ff]",
               },
@@ -307,7 +275,7 @@ const Home: React.FC = () => {
             </div>
 
             <div className="flex w-full flex-col gap-3">
-              {eventAlert.map((events: any, index: number) => (
+              {eventAlert.map((events, index) => (
                 <div
                   key={index}
                   className="rounded-xl bg-white p-4 ring-1 ring-inset ring-red-200"
@@ -341,7 +309,7 @@ const Home: React.FC = () => {
                       </div>
 
                       <div className="mt-3 divide-y divide-red-200">
-                        {events.events.map((event: any, eventIndex: number) => (
+                        {events.events.map((event, eventIndex) => (
                           <div
                             key={event.id ?? eventIndex}
                             className="py-4 first:pt-0 last:pb-0"
@@ -369,9 +337,7 @@ const Home: React.FC = () => {
                             {event.description && (
                               <div
                                 className="prose prose-sm mt-3 max-w-none pl-3.5 text-gray-600 text-sm"
-                                dangerouslySetInnerHTML={{
-                                  __html: event.description,
-                                }}
+                                dangerouslySetInnerHTML={{ __html: sanitizeHtml(event.description) }}
                               />
                             )}
                           </div>
@@ -380,6 +346,37 @@ const Home: React.FC = () => {
                     </div>
                   </div>
                 </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Continue reading */}
+        {recentlyRead.length > 0 && (
+          <div>
+            <div className="mb-5">
+              <span className="section-label">Pick up where you left off</span>
+              <h2 className="text-xl font-bold text-gray-900">Continue Reading</h2>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              {recentlyRead.map((note) => (
+                <Link
+                  key={note.id}
+                  to={`/notes/${note.id}`}
+                  className="group flex items-start gap-3 bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 p-5"
+                >
+                  <div className="w-10 h-10 bg-[#f0f7ff] rounded-xl flex items-center justify-center shrink-0">
+                    <History className="h-5 w-5 text-[#0066ff]" />
+                  </div>
+                  <div className="min-w-0">
+                    {note.subject && (
+                      <span className="text-xs font-semibold text-[#0066ff]">{note.subject}</span>
+                    )}
+                    <p className="text-sm font-semibold text-gray-900 group-hover:text-[#0066ff] transition-colors line-clamp-2">
+                      {note.title}
+                    </p>
+                  </div>
+                </Link>
               ))}
             </div>
           </div>

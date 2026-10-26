@@ -39,7 +39,7 @@ const AdminSubjectForm: React.FC = () => {
       const { data, error } = await supabase
         .from("subjects")
         .select("*")
-        .eq("id", id!)
+        .eq("id", Number(id))
         .single();
 
       if (error) throw error;
@@ -109,7 +109,7 @@ const AdminSubjectForm: React.FC = () => {
             is_active: subject.is_active ?? true,
             semester_id: subject.semester_id ?? null,
           })
-          .eq("id", id!);
+          .eq("id", Number(id));
 
         if (error) throw error;
         toast.success("Subject updated successfully");
@@ -227,7 +227,7 @@ const AdminSubjectForm: React.FC = () => {
               <textarea
                 id="additional_info"
                 name="additional_info"
-                value={subject.additional_info}
+                value={subject.additional_info ?? ""}
                 onChange={handleChange}
                 rows={5}
                 placeholder="Enter additional information of the subject…"

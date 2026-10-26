@@ -14,10 +14,14 @@ import {
   Share2,
   Printer,
   Check,
+  Trash2,
 } from "lucide-react";
 import { supabase } from "../lib/supabase";
+import { sanitizeHtml } from "../lib/sanitize";
 import { Database } from "../types/supabase";
-import { getStoredStudentName } from "../utils/portalStudent";
+import { errorMessage } from "../lib/supabase";
+import { rememberNote } from "../lib/recent";
+import { toast } from "react-hot-toast";
 import { useAuth } from "../context/AuthContext";
 
 type Note = Database["public"]["Tables"]["notes"]["Row"];
@@ -39,15 +43,14 @@ const formatCommentTime = (iso: string) => {
 
 const NoteDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const { isAdmin, user } = useAuth();
+  const { isAdmin, user, studentName } = useAuth();
   const [note, setNote] = useState<Note | null>(null);
   const [subject, setSubject] = useState<Subject | null>(null);
   const [loading, setLoading] = useState(true);
   const [comments, setComments] = useState<Comment[]>([]);
   const [replyingTo, setReplyingTo] = useState<number | null>(null);
-  const [authorName, setAuthorName] = useState(() =>
-    isAdmin ? "admin" : (getStoredStudentName() ?? ""),
-  );
+  // Display only: the server stamps the real author on every comment.
+  const authorName = isAdmin ? "ICTHub Admin" : (studentName ?? "");
   const [newComment, setNewComment] = useState("");
   const [replyTexts, setReplyTexts] = useState<Record<number, string>>({});
   const [submitting, setSubmitting] = useState(false);
@@ -55,7 +58,6 @@ const NoteDetailPage: React.FC = () => {
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
-    setAuthorName(isAdmin ? "admin" : (getStoredStudentName() ?? ""));
   }, [isAdmin]);
 
   useEffect(() => {
@@ -63,7 +65,7 @@ const NoteDetailPage: React.FC = () => {
     supabase
       .from("note_comments")
       .select("*")
-      .eq("note_id", id)
+      .eq("note_id", Number(id))
       .order("created_at", { ascending: true })
       .then(({ data, error }) => {
         if (error) {
@@ -80,8 +82,7 @@ const NoteDetailPage: React.FC = () => {
     name: string,
   ) => {
     const trimText = text.trim();
-    const trimName = name.trim();
-    if (!trimText || !trimName || !id) return;
+    if (!trimText || !name.trim() || !id) return;
     setSubmitting(true);
     setCommentError(null);
     try {
@@ -90,8 +91,6 @@ const NoteDetailPage: React.FC = () => {
         .insert({
           note_id: Number(id),
           parent_id: parentId,
-          user_id: isAdmin ? user?.id : null,
-          author_name: trimName,
           content: trimText,
         })
         .select()
@@ -104,11 +103,38 @@ const NoteDetailPage: React.FC = () => {
       setReplyingTo(null);
     } catch (error) {
       console.error("Error posting comment:", error);
-      setCommentError("Comment could not be posted. Please try again.");
+      setCommentError(errorMessage(error, "Comment could not be posted. Please try again."));
     } finally {
       setSubmitting(false);
     }
   };
+
+  const deleteComment = async (comment: Comment) => {
+    if (!window.confirm("Delete this comment? Replies to it will also be removed.")) return;
+    const { error } = await supabase.from("note_comments").delete().eq("id", comment.id);
+    if (error) {
+      toast.error(errorMessage(error, "Couldn't delete the comment."));
+      return;
+    }
+    setComments((prev) => prev.filter((c) => c.id !== comment.id && c.parent_id !== comment.id));
+  };
+  const canDelete = (comment: Comment) => isAdmin || (!!user && comment.user_id === user.id);
+  const adminBadge = (comment: Comment) =>
+    comment.author_role === "admin" ? (
+      <span className="text-[10px] font-semibold uppercase tracking-wide bg-[#0066ff] text-white px-1.5 py-0.5 rounded">
+        Admin
+      </span>
+    ) : null;
+  const deleteButton = (comment: Comment) =>
+    canDelete(comment) ? (
+      <button
+        onClick={() => void deleteComment(comment)}
+        className="inline-flex items-center gap-1 mt-2 ml-3 text-xs text-[#6b7280] hover:text-red-600 transition-colors"
+      >
+        <Trash2 className="h-3 w-3" />
+        Delete
+      </button>
+    ) : null;
 
   const rootComments = comments.filter((c) => c.parent_id === null);
   const getReplies = (pid: number) =>
@@ -142,7 +168,7 @@ const NoteDetailPage: React.FC = () => {
         const { data: noteData, error: noteError } = await supabase
           .from("notes")
           .select("*")
-          .eq("id", id)
+          .eq("id", Number(id))
           .single();
 
         if (noteError) throw noteError;
@@ -159,6 +185,7 @@ const NoteDetailPage: React.FC = () => {
           if (subjectError) throw subjectError;
           setSubject(subjectData);
 
+          rememberNote({ id: noteData.id, title: noteData.title, subject: subjectData.code });
           document.title =
             noteData.title && subjectData.title
               ? `${noteData.title} - ${subjectData.title}`
@@ -284,7 +311,7 @@ const NoteDetailPage: React.FC = () => {
         {/* Note content */}
         <div className="bg-white rounded-xl border border-[#e5e7eb] p-6 sm:p-10 mb-8">
           <div className="prose prose-gray max-w-none prose-headings:font-bold prose-headings:text-black prose-p:text-[#374151] prose-p:leading-7 prose-a:text-black prose-a:underline prose-code:bg-[#f3f4f6] prose-code:px-1 prose-code:rounded">
-            <div dangerouslySetInnerHTML={{ __html: note.content }} />
+            <div className="rich-text" dangerouslySetInnerHTML={{ __html: sanitizeHtml(note.content) }} />
           </div>
         </div>
 
@@ -316,6 +343,7 @@ const NoteDetailPage: React.FC = () => {
                           <span className="text-sm font-semibold text-black">
                             {comment.author_name}
                           </span>
+                          {adminBadge(comment)}
                           <span className="text-xs text-gray-500">
                             {formatCommentTime(comment.created_at)}
                           </span>
@@ -341,6 +369,7 @@ const NoteDetailPage: React.FC = () => {
                             Reply
                           </button>
                         )}
+                        {deleteButton(comment)}
                       </div>
                     </div>
 
@@ -361,6 +390,7 @@ const NoteDetailPage: React.FC = () => {
                                 <span className="text-sm font-semibold text-black">
                                   {reply.author_name}
                                 </span>
+                                {adminBadge(reply)}
                                 <span className="text-xs text-gray-500">
                                   {formatCommentTime(reply.created_at)}
                                 </span>
@@ -368,6 +398,7 @@ const NoteDetailPage: React.FC = () => {
                               <p className="text-sm text-[#374151] leading-relaxed whitespace-pre-wrap">
                                 {reply.content}
                               </p>
+                              {deleteButton(reply)}
                             </div>
                           </div>
                         ))}
@@ -388,6 +419,7 @@ const NoteDetailPage: React.FC = () => {
                         </div>
                         <textarea
                           rows={2}
+                          maxLength={2000}
                           placeholder="Write a reply…"
                           value={replyTexts[comment.id] ?? ""}
                           onChange={(e) =>
@@ -454,6 +486,7 @@ const NoteDetailPage: React.FC = () => {
               </div>
               <textarea
                 rows={3}
+                maxLength={2000}
                 placeholder="Share your thoughts…"
                 value={newComment}
                 onChange={(e) => setNewComment(e.target.value)}

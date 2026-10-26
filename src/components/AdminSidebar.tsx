@@ -14,6 +14,7 @@ import {
   Settings,
   Activity,
   Info,
+  MessageSquare,
 } from "lucide-react";
 import icthub from "../assets/icthub.png";
 
@@ -66,7 +67,7 @@ const AdminSidebar: React.FC = () => {
       label: "Information",
       icon: Info,
       description: "Tips & Guidance",
-      matchPaths: ["/admin/info-notes/"],
+      matchPaths: ["/admin/info-notes/", "/admin/info-categories"],
     },
     {
       to: "/admin/calendar",
@@ -83,6 +84,12 @@ const AdminSidebar: React.FC = () => {
       matchPaths: ["/admin/files/"],
     },
     {
+      to: "/admin/comments",
+      label: "Comments",
+      icon: MessageSquare,
+      description: "Moderation",
+    },
+    {
       to: "/admin/analytics",
       label: "Analytics",
       icon: Activity,
@@ -92,7 +99,7 @@ const AdminSidebar: React.FC = () => {
       to: "/admin/settings",
       label: "Settings",
       icon: Settings,
-      description: "Portal Password",
+      description: "Portal Access",
     },
   ];
 

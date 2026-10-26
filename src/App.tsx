@@ -1,132 +1,124 @@
-import React from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import React, { Suspense, lazy } from "react";
+import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { useAuth } from "./context/AuthContext";
-
-// Layouts
 import MainLayout from "./layouts/MainLayout";
-import AdminLayout from "./layouts/AdminLayout";
-
-// Access control
 import PortalProtectedRoute from "./components/PortalProtectedRoute";
+import { FullPageLoader } from "./components/ui";
 
-// Public pages
-import Home from "./pages/Home";
-import AdminLogin from "./pages/AdminLogin";
-import PortalLogin from "./pages/PortalLogin";
-import SubjectsPage from "./pages/Subjects";
-import SubjectDetailPage from "./pages/SubjectDetail";
-import NotesPage from "./pages/Notes";
-import NoteDetailPage from "./pages/NoteDetail";
-import InformationPage from "./pages/Information";
-import CalendarPage from "./pages/Calendar";
-import FilesPage from "./pages/Files";
-import ArchivePage from "./pages/Archive";
-import NotificationsPage from "./pages/Notifications";
-import Club from "./pages/Club";
+// Portal
+const Home = lazy(() => import("./pages/Home"));
+const PortalLogin = lazy(() => import("./pages/PortalLogin"));
+const SubjectsPage = lazy(() => import("./pages/Subjects"));
+const SubjectDetailPage = lazy(() => import("./pages/SubjectDetail"));
+const NotesPage = lazy(() => import("./pages/Notes"));
+const NoteDetailPage = lazy(() => import("./pages/NoteDetail"));
+const InformationPage = lazy(() => import("./pages/Information"));
+const CalendarPage = lazy(() => import("./pages/Calendar"));
+const FilesPage = lazy(() => import("./pages/Files"));
+const ArchivePage = lazy(() => import("./pages/Archive"));
+const NotificationsPage = lazy(() => import("./pages/Notifications"));
+const Club = lazy(() => import("./pages/Club"));
+const NotFound = lazy(() => import("./pages/NotFound"));
 
-// Admin pages
-import AdminDashboard from "./pages/admin/Dashboard";
-import AdminSemesters from "./pages/admin/Semesters";
-import AdminSemesterForm from "./pages/admin/SemesterForm";
-import AdminSubjects from "./pages/admin/Subjects";
-import AdminSubjectForm from "./pages/admin/SubjectForm";
-import AdminNotes from "./pages/admin/Notes";
-import AdminNoteForm from "./pages/admin/NoteForm";
-import AdminInfoCategories from "./pages/admin/InfoCategories";
-import AdminInfoCategoryForm from "./pages/admin/InfoCategoryForm";
-import AdminInfoNotes from "./pages/admin/InfoNotes";
-import AdminInfoNoteForm from "./pages/admin/InfoNoteForm";
-import AdminCalendar from "./pages/admin/Calendar";
-import AdminEventForm from "./pages/admin/EventForm";
-import AdminFiles from "./pages/admin/Files";
-import AdminFileForm from "./pages/admin/FileForm";
-import AdminSettings from "./pages/admin/Settings";
-import AdminAnalytics from "./pages/admin/Analytics";
+// Admin
+const AdminLogin = lazy(() => import("./pages/AdminLogin"));
+const AdminLayout = lazy(() => import("./layouts/AdminLayout"));
+const AdminDashboard = lazy(() => import("./pages/admin/Dashboard"));
+const AdminSemesters = lazy(() => import("./pages/admin/Semesters"));
+const AdminSemesterForm = lazy(() => import("./pages/admin/SemesterForm"));
+const AdminSubjects = lazy(() => import("./pages/admin/Subjects"));
+const AdminSubjectForm = lazy(() => import("./pages/admin/SubjectForm"));
+const AdminNotes = lazy(() => import("./pages/admin/Notes"));
+const AdminNoteForm = lazy(() => import("./pages/admin/NoteForm"));
+const AdminInfoCategories = lazy(() => import("./pages/admin/InfoCategories"));
+const AdminInfoCategoryForm = lazy(() => import("./pages/admin/InfoCategoryForm"));
+const AdminInfoNotes = lazy(() => import("./pages/admin/InfoNotes"));
+const AdminInfoNoteForm = lazy(() => import("./pages/admin/InfoNoteForm"));
+const AdminCalendar = lazy(() => import("./pages/admin/Calendar"));
+const AdminEventForm = lazy(() => import("./pages/admin/EventForm"));
+const AdminFiles = lazy(() => import("./pages/admin/Files"));
+const AdminFileForm = lazy(() => import("./pages/admin/FileForm"));
+const AdminComments = lazy(() => import("./pages/admin/Comments"));
+const AdminSettings = lazy(() => import("./pages/admin/Settings"));
+const AdminAnalytics = lazy(() => import("./pages/admin/Analytics"));
 
-// Admin-only protected route
 const AdminRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { isAdmin, loading } = useAuth();
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center h-screen bg-white">
-        <div className="animate-spin rounded-full h-8 w-8 border-2 border-[#0066ff] border-t-transparent" />
-      </div>
-    );
-  }
-  if (!isAdmin) return <Navigate to="/admin/login" />;
+  const location = useLocation();
+  if (loading) return <FullPageLoader />;
+  if (!isAdmin) return <Navigate to="/admin/login" replace state={{ from: location.pathname }} />;
   return <>{children}</>;
 };
 
 function App() {
   return (
-    <Routes>
-      {/* Portal login */}
-      <Route path="/login" element={<PortalLogin />} />
+    <Suspense fallback={<FullPageLoader />}>
+      <Routes>
+        <Route path="/login" element={<PortalLogin />} />
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="/manage" element={<Navigate to="/admin/login" replace />} />
+        <Route path="/student-login" element={<Navigate to="/login" replace />} />
 
-      {/* Admin login */}
-      <Route path="/admin/login" element={<AdminLogin />} />
-      <Route path="/manage" element={<Navigate to="/admin/login" />} />
-      <Route path="/student-login" element={<Navigate to="/login" />} />
+        <Route
+          path="/"
+          element={
+            <PortalProtectedRoute>
+              <MainLayout />
+            </PortalProtectedRoute>
+          }
+        >
+          <Route index element={<Home />} />
+          <Route path="subjects" element={<SubjectsPage />} />
+          <Route path="subjects/:id" element={<SubjectDetailPage />} />
+          <Route path="notes" element={<NotesPage />} />
+          <Route path="notes/:id" element={<NoteDetailPage />} />
+          <Route path="information" element={<InformationPage />} />
+          <Route path="calendar" element={<CalendarPage />} />
+          <Route path="files" element={<FilesPage />} />
+          <Route path="archive" element={<ArchivePage />} />
+          <Route path="notifications" element={<NotificationsPage />} />
+          <Route path="club" element={<Club />} />
+          <Route path="*" element={<NotFound />} />
+        </Route>
 
-      {/* Portal-protected public routes */}
-      <Route
-        path="/"
-        element={
-          <PortalProtectedRoute>
-            <MainLayout />
-          </PortalProtectedRoute>
-        }
-      >
-        <Route index element={<Home />} />
-        <Route path="subjects" element={<SubjectsPage />} />
-        <Route path="subjects/:id" element={<SubjectDetailPage />} />
-        <Route path="notes" element={<NotesPage />} />
-        <Route path="notes/:id" element={<NoteDetailPage />} />
-        <Route path="information" element={<InformationPage />} />
-        <Route path="calendar" element={<CalendarPage />} />
-        <Route path="files" element={<FilesPage />} />
-        <Route path="archive" element={<ArchivePage />} />
-        <Route path="notifications" element={<NotificationsPage />} />
-        <Route path="/club" element={<Club />} />
-      </Route>
-
-      {/* Admin-only routes */}
-      <Route
-        path="/admin"
-        element={
-          <AdminRoute>
-            <AdminLayout />
-          </AdminRoute>
-        }
-      >
-        <Route path="dashboard" element={<AdminDashboard />} />
-        <Route path="semesters" element={<AdminSemesters />} />
-        <Route path="semesters/new" element={<AdminSemesterForm />} />
-        <Route path="semesters/:id" element={<AdminSemesterForm />} />
-        <Route path="subjects" element={<AdminSubjects />} />
-        <Route path="subjects/new" element={<AdminSubjectForm />} />
-        <Route path="subjects/:id" element={<AdminSubjectForm />} />
-        <Route path="notes" element={<AdminNotes />} />
-        <Route path="notes/new" element={<AdminNoteForm />} />
-        <Route path="notes/:id" element={<AdminNoteForm />} />
-        <Route path="info-categories" element={<AdminInfoCategories />} />
-        <Route path="info-categories/new" element={<AdminInfoCategoryForm />} />
-        <Route path="info-categories/:id" element={<AdminInfoCategoryForm />} />
-        <Route path="info-notes" element={<AdminInfoNotes />} />
-        <Route path="info-notes/new" element={<AdminInfoNoteForm />} />
-        <Route path="info-notes/:id" element={<AdminInfoNoteForm />} />
-        <Route path="calendar" element={<AdminCalendar />} />
-        <Route path="events/new" element={<AdminEventForm />} />
-        <Route path="events/:id" element={<AdminEventForm />} />
-        <Route path="files" element={<AdminFiles />} />
-        <Route path="files/new" element={<AdminFileForm />} />
-        <Route path="files/:id" element={<AdminFileForm />} />
-        <Route path="settings" element={<AdminSettings />} />
-        <Route path="analytics" element={<AdminAnalytics />} />
-      </Route>
-
-      <Route path="*" element={<Navigate to="/login" />} />
-    </Routes>
+        <Route
+          path="/admin"
+          element={
+            <AdminRoute>
+              <AdminLayout />
+            </AdminRoute>
+          }
+        >
+          <Route index element={<Navigate to="/admin/dashboard" replace />} />
+          <Route path="dashboard" element={<AdminDashboard />} />
+          <Route path="semesters" element={<AdminSemesters />} />
+          <Route path="semesters/new" element={<AdminSemesterForm />} />
+          <Route path="semesters/:id" element={<AdminSemesterForm />} />
+          <Route path="subjects" element={<AdminSubjects />} />
+          <Route path="subjects/new" element={<AdminSubjectForm />} />
+          <Route path="subjects/:id" element={<AdminSubjectForm />} />
+          <Route path="notes" element={<AdminNotes />} />
+          <Route path="notes/new" element={<AdminNoteForm />} />
+          <Route path="notes/:id" element={<AdminNoteForm />} />
+          <Route path="info-categories" element={<AdminInfoCategories />} />
+          <Route path="info-categories/new" element={<AdminInfoCategoryForm />} />
+          <Route path="info-categories/:id" element={<AdminInfoCategoryForm />} />
+          <Route path="info-notes" element={<AdminInfoNotes />} />
+          <Route path="info-notes/new" element={<AdminInfoNoteForm />} />
+          <Route path="info-notes/:id" element={<AdminInfoNoteForm />} />
+          <Route path="calendar" element={<AdminCalendar />} />
+          <Route path="events/new" element={<AdminEventForm />} />
+          <Route path="events/:id" element={<AdminEventForm />} />
+          <Route path="files" element={<AdminFiles />} />
+          <Route path="files/new" element={<AdminFileForm />} />
+          <Route path="files/:id" element={<AdminFileForm />} />
+          <Route path="comments" element={<AdminComments />} />
+          <Route path="settings" element={<AdminSettings />} />
+          <Route path="analytics" element={<AdminAnalytics />} />
+          <Route path="*" element={<Navigate to="/admin/dashboard" replace />} />
+        </Route>
+      </Routes>
+    </Suspense>
   );
 }
 

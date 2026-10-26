@@ -4,7 +4,6 @@ import {
   BookOpen,
   Edit,
   File,
-  FileText,
   Plus,
   Search,
   Trash,
@@ -12,7 +11,8 @@ import {
   ChevronDown,
   Globe,
 } from "lucide-react";
-import { supabase } from "../../lib/supabase";
+import { STORAGE_BUCKET, supabase } from "../../lib/supabase";
+import { openFile, storageKeyOf } from "../../lib/files";
 import { Database } from "../../types/supabase";
 import { toast } from "react-hot-toast";
 import { useAdminConfirm } from "../../components/AdminConfirm";
@@ -20,7 +20,7 @@ import { AdminPageHeader, AdminPanel, AdminTable } from "../../components/AdminU
 
 type FileData = Database["public"]["Tables"]["files"]["Row"] & {
   subjects?: { title: string; code: string } | null;
-  semesters: { name: string };
+  semesters: { name: string } | null;
 };
 
 type Semester = Database["public"]["Tables"]["semesters"]["Row"];
@@ -88,22 +88,19 @@ const AdminFiles: React.FC = () => {
       try {
         setIsDeleting(true);
 
-        // Get file path to delete from storage
-        const { data: fileData } = await supabase
-          .from("files")
-          .select("file_path")
-          .eq("id", id)
-          .single();
+        const file = files.find((f) => f.id === id);
+        const { error } = await supabase.from("files").delete().eq("id", id);
+        if (error) throw error;
 
-        if (fileData) {
-          // Delete from database
-          const { error } = await supabase.from("files").delete().eq("id", id);
-
-          if (error) throw error;
-
-          setFiles(files.filter((file) => file.id !== id));
-          toast.success("File deleted successfully");
+        // Remove the stored object too, so deleted files don't linger in the bucket.
+        const key = file ? storageKeyOf(file) : null;
+        if (key) {
+          const { error: storageError } = await supabase.storage.from(STORAGE_BUCKET).remove([key]);
+          if (storageError) toast.error("Record deleted, but the stored file could not be removed");
         }
+
+        setFiles((current) => current.filter((f) => f.id !== id));
+        toast.success("File deleted successfully");
       } catch (error) {
         console.error("Error deleting file:", error);
         toast.error("Failed to delete file");
@@ -135,10 +132,6 @@ const AdminFiles: React.FC = () => {
     else if (bytes < 1024 * 1024 * 1024)
       return (bytes / (1024 * 1024)).toFixed(1) + " MB";
     else return (bytes / (1024 * 1024 * 1024)).toFixed(1) + " GB";
-  };
-
-  const getFileIcon = (_fileType: string) => {
-    return <File className="h-6 w-6 text-white" />;
   };
 
   // Get unique file types
@@ -311,16 +304,15 @@ const AdminFiles: React.FC = () => {
                         </td>
                         <td className="px-5 py-3">
                           <div className="flex items-center gap-1 justify-end">
-                            <a
-                              href={file.file_path}
-                              target="_blank"
-                              rel="noopener noreferrer"
+                            <button
+                              type="button"
+                              onClick={() => openFile(file).catch(() => toast.error("Couldn't open this file"))}
                               className="p-1.5 text-[#374151] hover:text-black hover:bg-[#f3f4f6] rounded-lg"
-                              title="Download"
-                              aria-label={`Download ${file.name}`}
+                              title="Open"
+                              aria-label={`Open ${file.name}`}
                             >
                               <Download className="h-4 w-4" />
-                            </a>
+                            </button>
                             <Link
                               to={`/admin/files/${file.id}`}
                               className="p-1.5 text-[#374151] hover:text-black hover:bg-[#f3f4f6] rounded-lg"

@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { usePortalAccess } from "../context/PortalAccessContext";
+import { useNotifications } from "../context/NotificationsContext";
+import SearchPalette from "./SearchPalette";
 import {
   BookOpen,
   Calendar,
@@ -13,11 +14,10 @@ import {
   Settings,
   LogOut,
   FolderOpen,
-  Archive,
   Bell,
   Shield,
   ChevronDown,
-  Users,
+  Search,
 } from "lucide-react";
 import icthub from "../assets/icthub.png";
 import logo from "../assets/logo.png";
@@ -34,12 +34,26 @@ const NAV_ITEMS = [
 ];
 
 const Navbar: React.FC = () => {
-  const { isAdmin, signOut: adminSignOut } = useAuth();
-  const { isAuthenticated: isPortalUser, signOut: portalSignOut } =
-    usePortalAccess();
+  const { isAdmin, hasPortalAccess: isPortalUser, leavePortal, studentName } = useAuth();
+  const { unreadCount } = useNotifications();
   const [menuOpen, setMenuOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const profileRef = useRef<HTMLDivElement>(null);
+
+  // Ctrl/⌘ + K or "/" opens search.
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement;
+      const typing = target.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(target.tagName);
+      if ((e.key === "k" && (e.metaKey || e.ctrlKey)) || (e.key === "/" && !typing)) {
+        e.preventDefault();
+        setSearchOpen(true);
+      }
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, []);
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
@@ -51,8 +65,7 @@ const Navbar: React.FC = () => {
   }, []);
 
   const handleSignOut = () => {
-    if (isAdmin) adminSignOut();
-    else portalSignOut();
+    void leavePortal();
     setMenuOpen(false);
     setProfileOpen(false);
   };
@@ -104,19 +117,34 @@ const Navbar: React.FC = () => {
 
           {/* Desktop Right */}
           <div className="hidden lg:flex items-center space-x-2 pl-4 border-l border-gray-200">
+            <button
+              type="button"
+              onClick={() => setSearchOpen(true)}
+              className="p-2.5 rounded-xl text-gray-600 hover:bg-[#f0f7ff] hover:text-[#0066ff] transition-all duration-200"
+              title="Search (Ctrl+K)"
+              aria-label="Search"
+            >
+              <Search className="h-5 w-5" />
+            </button>
             {isAuthenticated && (
               <NavLink
                 to="/notifications"
                 className={({ isActive }) =>
-                  `p-2.5 rounded-xl transition-all duration-200 ${
+                  `relative p-2.5 rounded-xl transition-all duration-200 ${
                     isActive
                       ? "bg-[#f0f7ff] text-[#0066ff]"
                       : "text-gray-600 hover:bg-[#f0f7ff] hover:text-[#0066ff] bg-[#f0f7ff]"
                   }`
                 }
                 title="Notifications"
+                aria-label={unreadCount ? `Notifications, ${unreadCount} unread` : "Notifications"}
               >
                 <Bell className="h-5 w-5" />
+                {unreadCount > 0 && (
+                  <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 rounded-full bg-red-500 text-white text-[10px] font-bold leading-[18px] text-center ring-2 ring-white">
+                    {unreadCount > 9 ? "9+" : unreadCount}
+                  </span>
+                )}
               </NavLink>
             )}
 
@@ -135,7 +163,7 @@ const Navbar: React.FC = () => {
                   </div>
                   <div className="text-left hidden lg:block">
                     <div className="text-sm font-semibold text-gray-900">
-                      {isAdmin ? "Admin" : "Student"}
+                      {isAdmin ? "Admin" : studentName ?? "Student"}
                     </div>
                     <div className="text-xs text-gray-500">
                       {isAdmin ? "Administrator" : "IICT, KUET"}
@@ -172,11 +200,21 @@ const Navbar: React.FC = () => {
             )}
           </div>
 
-          {/* Mobile hamburger */}
+          {/* Mobile search + hamburger */}
+          <div className="lg:hidden flex items-center gap-1">
+          <button
+            type="button"
+            onClick={() => setSearchOpen(true)}
+            className="p-2.5 rounded-xl text-gray-600 hover:bg-gray-100 transition-colors"
+            aria-label="Search"
+          >
+            <Search className="h-5 w-5" />
+          </button>
           <button
             onClick={() => setMenuOpen(!menuOpen)}
             className="lg:hidden p-2.5 rounded-xl text-gray-600 hover:bg-gray-100 transition-colors"
             aria-label="Toggle menu"
+            aria-expanded={menuOpen}
           >
             {menuOpen ? (
               <X className="h-5 w-5" />
@@ -184,6 +222,7 @@ const Navbar: React.FC = () => {
               <Menu className="h-5 w-5" />
             )}
           </button>
+          </div>
         </div>
       </div>
 
@@ -223,6 +262,11 @@ const Navbar: React.FC = () => {
               >
                 <Bell className="h-4 w-4" />
                 <span>Notifications</span>
+                {unreadCount > 0 && (
+                  <span className="ml-auto min-w-[20px] h-5 px-1.5 rounded-full bg-red-500 text-white text-[11px] font-bold leading-5 text-center">
+                    {unreadCount > 9 ? "9+" : unreadCount}
+                  </span>
+                )}
               </NavLink>
               {isAdmin && (
                 <Link
@@ -245,6 +289,7 @@ const Navbar: React.FC = () => {
           )}
         </div>
       )}
+      <SearchPalette open={searchOpen} onClose={() => setSearchOpen(false)} />
     </header>
   );
 };

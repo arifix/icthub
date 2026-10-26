@@ -9,6 +9,7 @@ import {
   Globe,
 } from "lucide-react";
 import { supabase } from "../lib/supabase";
+import { downloadFile as downloadStoredFile, openFile } from "../lib/files";
 import { Database } from "../types/supabase";
 import { trackUserActivity } from "../hooks/usePageTracking";
 import { useAuth } from "../context/AuthContext";
@@ -24,7 +25,10 @@ const FilesPage: React.FC = () => {
   const [files, setFiles] = useState<FileData[]>([]);
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState("");
+  // Links from search/notifications (e.g. /files?q=Lecture%207) prefill the filter.
+  const [searchTerm, setSearchTerm] = useState(
+    () => new URLSearchParams(window.location.search).get("q") ?? "",
+  );
   const [selectedType, setSelectedType] = useState<string>("");
   const [selectedSubject, setSelectedSubject] = useState<number | "">("");
   const [downloadingFileId, setDownloadingFileId] = useState<number | null>(
@@ -99,34 +103,7 @@ const FilesPage: React.FC = () => {
   const downloadFile = async (file: FileData) => {
     setDownloadingFileId(file.id);
     try {
-      const fileUrl = new URL(file.file_path, window.location.origin);
-      const storageMarker = "/object/public/icthub-files/";
-      const markerIndex = fileUrl.pathname.indexOf(storageMarker);
-      let fileBlob: Blob;
-
-      if (markerIndex >= 0) {
-        const storagePath = decodeURIComponent(
-          fileUrl.pathname.slice(markerIndex + storageMarker.length),
-        );
-        const { data, error } = await supabase.storage
-          .from("icthub-files")
-          .download(storagePath);
-        if (error) throw error;
-        fileBlob = data;
-      } else {
-        const response = await fetch(file.file_path);
-        if (!response.ok) throw new Error("Unable to download file");
-        fileBlob = await response.blob();
-      }
-
-      const objectUrl = URL.createObjectURL(fileBlob);
-      const downloadLink = document.createElement("a");
-      downloadLink.href = objectUrl;
-      downloadLink.download = file.name;
-      document.body.appendChild(downloadLink);
-      downloadLink.click();
-      downloadLink.remove();
-      URL.revokeObjectURL(objectUrl);
+      await downloadStoredFile(file);
     } catch (error) {
       console.error("Error downloading file:", error);
       toast.error("Unable to download this file. Please try again.");
@@ -230,11 +207,11 @@ const FilesPage: React.FC = () => {
                 className="group bg-white rounded-xl border border-[#e5e7eb] hover:border-[#d1d5db] hover:shadow-md transition-all duration-200 p-4"
               >
                 <a
-                  href={file.file_path}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() =>
-                    !isAdmin
+                  href="#"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        void openFile(file).catch(() => toast.error("Unable to open this file. Please try again."));
+                        void (!isAdmin
                       ? void trackUserActivity({
                           eventType: "file_open",
                           page: "/files",
@@ -246,9 +223,8 @@ const FilesPage: React.FC = () => {
                             subjectId: file.subject_id,
                             subjectCode: file.subjects?.code ?? null,
                           },
-                        })
-                      : undefined
-                  }
+                        }) : undefined);
+                      }}
                   className="block"
                 >
                   <div className="flex items-start gap-3 mb-4">
@@ -289,11 +265,11 @@ const FilesPage: React.FC = () => {
                 </a>
                 <div className="mt-4 grid grid-cols-2 gap-2">
                   <a
-                    href={file.file_path}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={() =>
-                      !isAdmin
+                    href="#"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        void openFile(file).catch(() => toast.error("Unable to open this file. Please try again."));
+                        void (!isAdmin
                         ? void trackUserActivity({
                             eventType: "file_open",
                             page: "/files",
@@ -305,9 +281,8 @@ const FilesPage: React.FC = () => {
                               subjectId: file.subject_id,
                               subjectCode: file.subjects?.code ?? null,
                             },
-                          })
-                        : undefined
-                    }
+                          }) : undefined);
+                      }}
                     className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-[#e5e7eb] px-2 py-2 text-sm font-medium text-[#374151] hover:border-[#0066ff] hover:text-[#0066ff] focus:outline-none focus:ring-2 focus:ring-[#0066ff]"
                     aria-label={`Preview ${file.name}`}
                   >

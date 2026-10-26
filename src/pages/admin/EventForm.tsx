@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { ArrowLeft, Calendar, Save } from "lucide-react";
 import { supabase } from "../../lib/supabase";
+import { localISODate } from "../../lib/format";
+import { sanitizeHtml } from "../../lib/sanitize";
 import { Database } from "../../types/supabase";
 import { toast } from "react-hot-toast";
 import { AdminFormSection, AdminPageHeader } from "../../components/AdminUI";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
+import ReactQuill from "react-quill-new";
+import "react-quill-new/dist/quill.snow.css";
 
 type Event = Database["public"]["Tables"]["events"]["Row"];
 type Subject = Database["public"]["Tables"]["subjects"]["Row"];
@@ -25,7 +27,7 @@ const AdminEventForm: React.FC = () => {
   const [event, setEvent] = useState<Partial<Event>>({
     title: "",
     description: "",
-    date: dateFromURL || new Date().toISOString().split("T")[0],
+    date: dateFromURL || localISODate(),
     subject_id: null,
     semester_id: null,
   });
@@ -48,7 +50,7 @@ const AdminEventForm: React.FC = () => {
       const { data, error } = await supabase
         .from("events")
         .select("*")
-        .eq("id", id!)
+        .eq("id", Number(id))
         .single();
 
       if (error) throw error;
@@ -56,7 +58,7 @@ const AdminEventForm: React.FC = () => {
         data || {
           title: "",
           description: "",
-          date: new Date().toISOString().split("T")[0],
+          date: localISODate(),
           subject_id: null,
           semester_id: null,
         },
@@ -100,7 +102,7 @@ const AdminEventForm: React.FC = () => {
       // Filter for current semester subjects only
       const currentSemesterSubjects =
         allSubjects?.filter(
-          (subject: any) => subject.semester?.is_current === true,
+          (subject) => subject.semester?.is_current === true,
         ) || [];
 
       setSubjects(currentSemesterSubjects);
@@ -153,22 +155,22 @@ const AdminEventForm: React.FC = () => {
           .from("events")
           .update({
             title: event.title,
-            description: event.description,
+            description: event.description ? sanitizeHtml(event.description) : null,
             date: event.date,
             subject_id: event.subject_id,
             semester_id: event.semester_id,
           })
-          .eq("id", id!);
+          .eq("id", Number(id));
 
         if (error) throw error;
         toast.success("Event updated successfully");
       } else {
-        const { data: newEvent, error } = await supabase
+        const { error } = await supabase
           .from("events")
           .insert([
             {
               title: event.title,
-              description: event.description,
+              description: event.description ? sanitizeHtml(event.description) : null,
               date: event.date,
               subject_id: event.subject_id,
               semester_id: event.semester_id,
@@ -243,7 +245,7 @@ const AdminEventForm: React.FC = () => {
                   name="date"
                   value={event.date}
                   onChange={handleChange}
-                  min={new Date().toISOString().split("T")[0]}
+                  min={isEditing ? undefined : localISODate()}
                   required
                   className="w-full px-3 py-2.5 border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-black focus:border-black text-[#374151]"
                 />
@@ -307,7 +309,7 @@ const AdminEventForm: React.FC = () => {
               </label>
               <div className="border border-[#e5e7eb] rounded-xl overflow-hidden">
                 <ReactQuill
-                  value={event.description}
+                  value={event.description ?? ""}
                   onChange={(description) =>
                     setEvent((prev) => ({ ...prev, description }))
                   }
