@@ -223,7 +223,7 @@ const NotesPage: React.FC = () => {
                   }
                   className="flex h-full flex-col"
                 >
-                  <div className="p-6 flex flex-col flex-1">
+                  <div className="!p-6 flex flex-col flex-1">
                     <div className="flex items-center gap-1 mb-4">
                       <div className="inline-flex items-center justify-center w-9 h-9 bg-gray-100 rounded-xl">
                         <FileText className="h-4 w-4 text-[#0066ff]" />
