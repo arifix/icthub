@@ -125,6 +125,18 @@ type InfoNoteRow = {
   is_active: boolean;
 };
 
+export type ChatMessageKind = "message" | "suggestion" | "feedback";
+
+type ChatMessageRow = {
+  id: number;
+  created_at: string;
+  user_id: string | null;
+  author_name: string;
+  author_role: "student" | "admin";
+  kind: ChatMessageKind;
+  content: string;
+};
+
 type NoteCommentRow = {
   id: number;
   created_at: string;
@@ -283,6 +295,11 @@ export interface Database {
           Rel<"note_comments_note_id_fkey", "note_id", "notes">,
           Rel<"note_comments_parent_id_fkey", "parent_id", "note_comments">,
         ]
+      >;
+      chat_messages: Table<
+        ChatMessageRow,
+        // author fields are set server-side by a trigger
+        "id" | "created_at" | "user_id" | "author_name" | "author_role" | "kind"
       >;
       page_visits: Table<
         PageVisitRow,

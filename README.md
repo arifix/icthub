@@ -90,7 +90,7 @@ The platform provides a focused academic workspace for students and administrato
    VITE_SUPABASE_PUBLISHABLE_KEY=your_supabase_publishable_key
    ```
 
-4. Set up the database by running the files in `migrations/` in the Supabase SQL editor: first `complete_schema.sql`, then the `add_*.sql` files, then `allow_null_subject_on_files.sql`, and finally `2026_10_26_security_hardening.sql`.
+4. Set up the database by running the files in `migrations/` in the Supabase SQL editor: first `complete_schema.sql`, then the `add_*.sql` files, then `allow_null_subject_on_files.sql`, then `2026_10_26_security_hardening.sql`, and finally `2026_11_05_chat_messages.sql`.
 5. In Supabase → Authentication → Sign In / Providers, enable **anonymous sign-ins** and keep **"Allow new users to sign up"** enabled. That switch is global; turning it off also blocks anonymous sign-ins, so students can't log in. Leaving it on is safe: new accounts are not admins and see nothing without the portal password. CAPTCHA is optional.
 6. Make sure your admin account is in `public.admin_users` (the security migration seeds every existing non-anonymous user, so review that list):
 

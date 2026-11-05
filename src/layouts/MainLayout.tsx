@@ -2,6 +2,7 @@ import React, { Suspense } from "react";
 import { Outlet } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import ChatWidget from "../components/ChatWidget";
 import ErrorBoundary from "../components/ErrorBoundary";
 import { Spinner } from "../components/ui";
 import { usePageTracking } from "../hooks/usePageTracking";
@@ -36,6 +37,7 @@ const MainLayout: React.FC = () => {
         </main>
         <div className="print:hidden">
           <Footer />
+          <ChatWidget />
         </div>
       </div>
     </NotificationsProvider>
