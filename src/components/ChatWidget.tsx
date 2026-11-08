@@ -190,7 +190,7 @@ const ChatWidget: React.FC = () => {
       {open &&
         createPortal(
           <div
-            className="fixed inset-0 z-[70] flex items-end justify-end bg-slate-950/40 backdrop-blur-sm animate-fade-in print:hidden sm:p-5"
+            className="fixed inset-0 z-[70] flex items-end justify-end bg-slate-950/40 backdrop-blur-sm animate-fade-in print:hidden p-3 sm:p-5"
             onMouseDown={(e) => e.target === e.currentTarget && closeChat()}
           >
             <div
@@ -200,7 +200,7 @@ const ChatWidget: React.FC = () => {
               aria-labelledby="chat-title"
               tabIndex={-1}
               onKeyDown={onPanelKeyDown}
-              className="flex h-dvh w-full flex-col overflow-hidden bg-surface shadow-pop animate-rise-in focus:outline-none sm:h-[min(680px,calc(100dvh-2.5rem))] sm:max-w-md sm:rounded-2xl sm:border sm:border-line"
+              className="flex h-[min(560px,calc(100dvh-1.5rem))] w-full flex-col overflow-hidden rounded-2xl border border-line bg-surface shadow-pop animate-rise-in focus:outline-none sm:h-[min(680px,calc(100dvh-2.5rem))] sm:max-w-md"
             >
               <div className="flex items-start gap-3 border-b border-line px-4 py-3">
                 <div className="min-w-0 flex-1">
@@ -213,9 +213,9 @@ const ChatWidget: React.FC = () => {
                   type="button"
                   onClick={closeChat}
                   aria-label="Close chat"
-                  className="rounded-lg p-1.5 text-ink-subtle transition hover:bg-surface-2 hover:text-ink"
+                  className="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-line bg-surface-2 text-ink shadow-sm transition hover:border-red-200 hover:bg-red-50 hover:text-red-600 dark:hover:border-red-500/30 dark:hover:bg-red-500/15 dark:hover:text-red-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
                 >
-                  <X className="h-5 w-5" />
+                  <X className="h-5 w-5" strokeWidth={2.75} />
                 </button>
               </div>
 
