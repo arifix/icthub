@@ -105,7 +105,7 @@ const PortalLogin: React.FC = () => {
       {/* Branding */}
       <div className="mb-8 text-center">
         <div className="flex flex-col items-center">
-          <img src={logo} alt="ICTHub Logo" className="w-[200px]" />
+          <img src={logo} alt="ICTHub Logo" className="theme-logo w-[200px]" />
           <p className="text-xs text-gray-600 leading-none -mt-1 ml-[112px]">
             M.Sc. Eng. in ICT Study Portal
           </p>

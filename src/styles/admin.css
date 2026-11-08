@@ -337,3 +337,124 @@ body:has(.admin-layout), .admin-layout, .admin-layout main,
   .admin-layout main .rounded-xl.border.px-6.py-4 { padding-inline: 14px !important; }
   .admin-layout main table td { padding-inline: 12px; }
 }
+
+/* ── Dark theme (admin) ──────────────────────────────────────────
+   Mirrors the hex rules above; same selectors prefixed with html[data-theme="dark"]
+   so they always win. Generic utility remaps live in dark.css. */
+html[data-theme="dark"] body:has(.admin-layout),
+html[data-theme="dark"] .admin-layout,
+html[data-theme="dark"] .admin-layout main,
+html[data-theme="dark"] .admin-layout .min-h-screen,
+html[data-theme="dark"] .admin-layout main > div.min-h-screen,
+html[data-theme="dark"] .admin-analytics { background: rgb(var(--canvas)) !important; color: rgb(var(--ink-muted)); }
+html[data-theme="dark"] .admin-layout aside { background: rgb(var(--surface)) !important; border-color: rgb(var(--line)) !important; }
+html[data-theme="dark"] .admin-layout aside > div:first-child,
+html[data-theme="dark"] .admin-layout aside > div:last-child { border-color: rgb(var(--line)) !important; }
+html[data-theme="dark"] .admin-layout aside nav a[aria-current="page"],
+html[data-theme="dark"] .admin-layout aside nav a.bg-gradient-to-r { background: rgb(59 130 246 / 0.16) !important; color: #93b4fd !important; }
+html[data-theme="dark"] .admin-layout aside nav a[aria-current="page"] svg,
+html[data-theme="dark"] .admin-layout aside nav a.bg-gradient-to-r svg { color: #93b4fd !important; }
+html[data-theme="dark"] .admin-layout aside nav a:not([aria-current="page"]):hover,
+html[data-theme="dark"] .admin-layout aside .hover\:bg-blue-50:hover { background: rgb(var(--surface-2)) !important; }
+html[data-theme="dark"] .admin-layout aside .hover\:text-blue-700:hover,
+html[data-theme="dark"] .admin-layout aside .hover\:text-blue-600:hover,
+html[data-theme="dark"] .admin-layout aside .group:hover .group-hover\:text-blue-600 { color: #93b4fd !important; }
+
+/* Page header strip */
+html[data-theme="dark"] .admin-layout [class*="bg-white border-b"],
+html[data-theme="dark"] .admin-analytics > .bg-white,
+html[data-theme="dark"] .admin-layout main > div.min-h-screen > .bg-white.border-b { background: rgb(var(--surface)) !important; border-color: rgb(var(--line)) !important; }
+html[data-theme="dark"] .admin-layout main > div.min-h-screen h1 { color: rgb(var(--ink)) !important; }
+html[data-theme="dark"] .admin-layout main > div.min-h-screen > .bg-white.border-b p { color: rgb(var(--ink-subtle)) !important; }
+
+/* Cards and section headers */
+html[data-theme="dark"] .admin-layout [class*="rounded-xl border border-[#e5e7eb]"],
+html[data-theme="dark"] .admin-layout [class*="rounded-xl border border-gray-200"],
+html[data-theme="dark"] .admin-layout [class*="rounded-xl border border-slate-200"],
+html[data-theme="dark"] .admin-analytics .rounded-xl.border,
+html[data-theme="dark"] .admin-layout main .rounded-xl.border,
+html[data-theme="dark"] .admin-layout main .rounded-2xl.border { border-color: rgb(var(--line)) !important; box-shadow: none !important; }
+html[data-theme="dark"] .admin-layout main .rounded-xl.border:hover,
+html[data-theme="dark"] .admin-layout main .rounded-2xl.border:hover { border-color: rgb(var(--line-strong)) !important; box-shadow: 0 7px 20px rgb(0 0 0 / 0.3) !important; }
+html[data-theme="dark"] .admin-analytics .bg-\[\#f9fafb\],
+html[data-theme="dark"] .admin-layout main .rounded-xl.border > .bg-\[\#f9fafb\],
+html[data-theme="dark"] .admin-layout main .rounded-2xl.border > .bg-\[\#f9fafb\] { background: rgb(var(--surface-2)) !important; border-color: rgb(var(--line)) !important; color: rgb(var(--ink)); }
+html[data-theme="dark"] .admin-layout main .rounded-xl.border > .bg-\[\#f9fafb\] svg,
+html[data-theme="dark"] .admin-layout main .rounded-2xl.border > .bg-\[\#f9fafb\] svg { color: #93b4fd !important; }
+html[data-theme="dark"] .admin-layout main .rounded-xl.border > .bg-\[\#f9fafb\] > span,
+html[data-theme="dark"] .admin-layout main .rounded-2xl.border > .bg-\[\#f9fafb\] > span { color: rgb(var(--ink-muted)); }
+html[data-theme="dark"] .admin-layout main .rounded-xl.border.px-6.py-4,
+html[data-theme="dark"] .admin-layout main .rounded-xl.border.flex { background: rgb(var(--surface)); }
+
+/* Stat tiles */
+html[data-theme="dark"] .admin-layout main .grid > .bg-white.rounded-xl.border:has(> .flex.items-center.justify-between) > .flex.items-center.justify-between > div { background: rgb(59 130 246 / 0.16) !important; }
+html[data-theme="dark"] .admin-layout main .grid > .bg-white.rounded-xl.border:has(> .flex.items-center.justify-between) > .flex.items-center.justify-between svg { color: #93b4fd !important; }
+html[data-theme="dark"] .admin-layout main .grid > .bg-white.rounded-xl.border:has(> .flex.items-center.justify-between) > p:nth-child(2) { color: rgb(var(--ink)) !important; }
+html[data-theme="dark"] .admin-layout main .grid > .bg-white.rounded-xl.border:has(> .flex.items-center.justify-between) > .flex.items-center.gap-3 { border-color: rgb(var(--line)) !important; }
+
+/* Forms */
+html[data-theme="dark"] .admin-layout input:not([type="checkbox"]):not([type="radio"]),
+html[data-theme="dark"] .admin-layout textarea,
+html[data-theme="dark"] .admin-layout select,
+html[data-theme="dark"] .admin-layout main input:not([type="checkbox"]):not([type="radio"]),
+html[data-theme="dark"] .admin-layout main select,
+html[data-theme="dark"] .admin-layout main textarea { background-color: rgb(var(--surface)) !important; border-color: rgb(var(--line-strong)) !important; color: rgb(var(--ink)); box-shadow: none; }
+html[data-theme="dark"] .admin-layout main input:not([type="checkbox"]):focus,
+html[data-theme="dark"] .admin-layout main select:focus,
+html[data-theme="dark"] .admin-layout main textarea:focus { border-color: #5b8def !important; box-shadow: 0 0 0 3px rgb(59 130 246 / 0.25) !important; }
+html[data-theme="dark"] .admin-layout main input::placeholder,
+html[data-theme="dark"] .admin-layout main textarea::placeholder { color: rgb(var(--ink-subtle)); }
+html[data-theme="dark"] .admin-layout main form { color: rgb(var(--ink-muted)); }
+html[data-theme="dark"] .admin-layout main form label { color: rgb(var(--ink-muted)) !important; }
+html[data-theme="dark"] .admin-layout main form .ql-toolbar { border-color: rgb(var(--line-strong)); background: rgb(var(--surface-2)); }
+html[data-theme="dark"] .admin-layout main form .ql-container { border-color: rgb(var(--line-strong)); background: rgb(var(--surface)); }
+html[data-theme="dark"] .admin-layout main .admin-form-actions { border-color: rgb(var(--line)); }
+
+/* Accent text / dark blocks */
+html[data-theme="dark"] .admin-layout main .text-\[\#0066ff\],
+html[data-theme="dark"] .admin-layout main .text-blue-600 { color: #93b4fd !important; }
+html[data-theme="dark"] .admin-analytics .text-black,
+html[data-theme="dark"] .admin-layout main .text-black { color: rgb(var(--ink)) !important; }
+html[data-theme="dark"] .admin-layout main .bg-black { background: rgb(var(--surface-3)) !important; }
+html[data-theme="dark"] .admin-layout main .bg-\[\#0066ff\],
+html[data-theme="dark"] .admin-layout main .bg-blue-600,
+html[data-theme="dark"] .admin-layout main form button[type="submit"],
+html[data-theme="dark"] .admin-layout main a.bg-black,
+html[data-theme="dark"] .admin-layout main button.bg-black,
+html[data-theme="dark"] .admin-layout main a.bg-\[\#0066ff\],
+html[data-theme="dark"] .admin-layout main button.bg-\[\#0066ff\] { background: #2563eb !important; border-color: #2563eb; color: #fff !important; box-shadow: none; }
+html[data-theme="dark"] .admin-layout main a.bg-black:hover,
+html[data-theme="dark"] .admin-layout main button.bg-black:hover,
+html[data-theme="dark"] .admin-layout main form button[type="submit"]:hover,
+html[data-theme="dark"] .admin-layout main .hover\:bg-\[\#0052cc\]:hover { background: #3b82f6 !important; }
+
+/* Tables */
+html[data-theme="dark"] .admin-layout table thead,
+html[data-theme="dark"] .admin-layout main table thead { background: rgb(var(--surface-2)) !important; }
+html[data-theme="dark"] .admin-layout table th,
+html[data-theme="dark"] .admin-layout main table th { color: rgb(var(--ink-subtle)); }
+html[data-theme="dark"] .admin-layout table tbody tr,
+html[data-theme="dark"] .admin-layout main table tbody tr { border-color: rgb(var(--line)); }
+html[data-theme="dark"] .admin-layout main table tbody tr:hover { background: rgb(var(--surface-2)) !important; }
+html[data-theme="dark"] .admin-layout main table td { color: rgb(var(--ink-muted)); }
+html[data-theme="dark"] .admin-layout main table td:first-child { color: rgb(var(--ink)); }
+
+/* Calendar, uploads, empty states, spinners */
+html[data-theme="dark"] .admin-layout main .grid.grid-cols-7.gap-1 > div { border-color: rgb(var(--line)) !important; }
+html[data-theme="dark"] .admin-layout main [class*="border-dashed"] { border-color: rgb(var(--line-strong)) !important; background: rgb(var(--surface-2)); }
+html[data-theme="dark"] .admin-layout main [class*="border-dashed"]:hover { border-color: #5b8def !important; background: rgb(59 130 246 / 0.08); }
+html[data-theme="dark"] .admin-layout main .text-center.py-16 > div:first-child { background: rgb(59 130 246 / 0.16) !important; }
+html[data-theme="dark"] .admin-layout main .animate-spin { border-color: #93b4fd; border-top-color: transparent; }
+
+/* Confirm dialog */
+html[data-theme="dark"] .admin-confirm-dialog,
+html[data-theme="dark"] .admin-layout main .admin-confirm-dialog { background: rgb(var(--surface)); border-color: rgb(var(--line)); box-shadow: 0 24px 80px rgb(0 0 0 / 0.55); }
+html[data-theme="dark"] .admin-confirm-backdrop { background: rgb(0 0 0 / 0.6); }
+html[data-theme="dark"] .admin-confirm-dialog h2 { color: rgb(var(--ink)); }
+html[data-theme="dark"] .admin-confirm-dialog p { color: rgb(var(--ink-subtle)); }
+html[data-theme="dark"] .admin-confirm-close { color: rgb(var(--ink-subtle)); }
+html[data-theme="dark"] .admin-confirm-close:hover { color: rgb(var(--ink)); background: rgb(var(--surface-2)); }
+html[data-theme="dark"] .admin-confirm-icon.is-danger { color: #fca5a5; background: rgb(239 68 68 / 0.15); }
+html[data-theme="dark"] .admin-confirm-icon.is-primary { color: #93b4fd; background: rgb(59 130 246 / 0.16); }
+html[data-theme="dark"] .admin-confirm-cancel { border-color: rgb(var(--line-strong)) !important; color: rgb(var(--ink-muted)) !important; background: rgb(var(--surface)) !important; }
+html[data-theme="dark"] .admin-confirm-cancel:hover { background: rgb(var(--surface-2)) !important; }

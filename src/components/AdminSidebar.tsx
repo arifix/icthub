@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import ThemeToggle from "./ThemeToggle";
 import {
   BookOpen,
   Calendar,
@@ -186,6 +187,12 @@ const AdminSidebar: React.FC = () => {
           )}
         </Link>
 
+        <ThemeToggle
+          showLabel={!collapsed}
+          className={`w-full text-gray-600 hover:bg-gray-100 hover:text-blue-600 transition-all duration-200 flex items-center gap-3 px-3 py-2.5 rounded-xl [&>svg]:h-[18px] [&>svg]:w-[18px] ${
+            collapsed ? "justify-center" : ""
+          }`}
+        />
         <button
           onClick={handleSignOut}
           className={`w-full text-gray-600 hover:bg-gray-100 hover:text-blue-600 transition-all duration-200 flex items-center gap-3 px-3 py-2.5 rounded-xl ${

@@ -3,6 +3,7 @@ import { Link, NavLink } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useNotifications } from "../context/NotificationsContext";
 import SearchPalette from "./SearchPalette";
+import ThemeToggle from "./ThemeToggle";
 import {
   BookOpen,
   Calendar,
@@ -126,6 +127,7 @@ const Navbar: React.FC = () => {
             >
               <Search className="h-5 w-5" />
             </button>
+            <ThemeToggle className="p-2.5 rounded-xl text-gray-600 hover:bg-[#f0f7ff] hover:text-[#0066ff] transition-all duration-200" />
             {isAuthenticated && (
               <NavLink
                 to="/notifications"
@@ -210,6 +212,7 @@ const Navbar: React.FC = () => {
           >
             <Search className="h-5 w-5" />
           </button>
+          <ThemeToggle className="p-2.5 rounded-xl text-gray-600 hover:bg-gray-100 transition-colors" />
           <button
             onClick={() => setMenuOpen(!menuOpen)}
             className="lg:hidden p-2.5 rounded-xl text-gray-600 hover:bg-gray-100 transition-colors"

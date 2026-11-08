@@ -11,6 +11,17 @@
     <meta name="referrer" content="strict-origin-when-cross-origin" />
     <meta name="robots" content="noindex" />
     <meta name="theme-color" content="#176b5b" />
+    <meta name="color-scheme" content="light dark" />
+    <script>
+      // Apply the saved/device theme before first paint so dark-mode users never see a white flash.
+      (function () {
+        var pref = "system";
+        try { pref = localStorage.getItem("icthub:theme") || "system"; } catch (e) {}
+        var dark = pref === "dark" || (pref !== "light" && window.matchMedia("(prefers-color-scheme: dark)").matches);
+        document.documentElement.dataset.theme = dark ? "dark" : "light";
+        document.querySelector('meta[name="theme-color"]').content = dark ? "#0e1513" : "#176b5b";
+      })();
+    </script>
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-title" content="ICTHub" />
     <link rel="icon" type="image/png" href="/favicon.png" />

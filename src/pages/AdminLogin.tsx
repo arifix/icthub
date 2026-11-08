@@ -45,7 +45,7 @@ const AdminLogin: React.FC = () => {
           <img
             src={logo}
             alt="ICTHub Logo"
-            className="w-[200px]"
+            className="theme-logo w-[200px]"
           />
           <p className="text-xs text-gray-600 leading-none -mt-1 ml-[52px]">
             M.Sc. Eng. in ICT Study Portal

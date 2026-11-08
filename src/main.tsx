@@ -7,6 +7,7 @@ import { AuthProvider } from "./context/AuthContext";
 import ScrollToTop from "./components/ScrollToTop";
 import ErrorBoundary from "./components/ErrorBoundary";
 import "./index.css";
+import "./styles/dark.css";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -15,7 +16,16 @@ createRoot(document.getElementById("root")!).render(
         <ScrollToTop />
         <AuthProvider>
           <App />
-          <Toaster position="top-right" />
+          <Toaster
+            position="top-right"
+            toastOptions={{
+              style: {
+                background: "rgb(var(--surface))",
+                color: "rgb(var(--ink))",
+                border: "1px solid rgb(var(--line))",
+              },
+            }}
+          />
         </AuthProvider>
       </ErrorBoundary>
     </BrowserRouter>
