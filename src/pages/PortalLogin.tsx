@@ -3,7 +3,7 @@ import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { toast } from "react-hot-toast";
 import { FullPageLoader } from "../components/ui";
-import { Lock, User } from "lucide-react";
+import { Ban, Lock, User } from "lucide-react";
 import logo from "../assets/logo.png";
 
 const isValidStudentName = (studentName: string) => {
@@ -60,7 +60,7 @@ const PortalLogin: React.FC = () => {
   const [studentName, setStudentName] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const { enterPortal, hasPortalAccess, isAdmin, loading: authLoading } = useAuth();
+  const { enterPortal, hasPortalAccess, isAdmin, isBlocked, isNameBlocked, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -123,6 +123,23 @@ const PortalLogin: React.FC = () => {
             Portal Access
           </span>
         </div>
+
+        {isNameBlocked && !isBlocked && (
+          <div role="alert" className="mb-5 flex items-start gap-3 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-800">
+            <Ban className="mt-0.5 h-4 w-4 shrink-0" />
+            <p>The name you used has been blocked by the administrator. Please sign in again with your real name.</p>
+          </div>
+        )}
+
+        {isBlocked && (
+          <div role="alert" className="mb-5 flex items-start gap-3 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-800">
+            <Ban className="mt-0.5 h-4 w-4 shrink-0" />
+            <p>
+              Access from your network has been blocked by the administrator, usually because a fake or
+              inappropriate name was used. Contact the administrator if you think this is a mistake.
+            </p>
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {!isAdmin && (

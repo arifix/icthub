@@ -21,6 +21,10 @@ type AuthContextType = {
   /** Student (or admin) may read portal content. */
   hasPortalAccess: boolean;
   studentName: string | null;
+  /** An admin blocked the IP this student is using. */
+  isBlocked: boolean;
+  /** An admin blocked the name this student signed in with. */
+  isNameBlocked: boolean;
   signIn: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
   enterPortal: (password: string, studentName: string) => Promise<void>;
@@ -149,6 +153,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       isAdmin: !loading && status.is_admin,
       hasPortalAccess: !loading && status.has_access,
       studentName: status.student_name ?? null,
+      isBlocked: !loading && !!status.blocked,
+      isNameBlocked: !loading && !!status.name_blocked,
       signIn,
       signOut,
       enterPortal,

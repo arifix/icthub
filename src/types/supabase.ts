@@ -174,6 +174,23 @@ type PortalMemberRow = {
   created_at: string;
   last_seen_at: string;
   expires_at: string;
+  ip_address: string | null;
+};
+
+type BlockedIpRow = {
+  ip_address: string;
+  created_at: string;
+  blocked_by: string | null;
+  student_name: string | null;
+  reason: string | null;
+};
+
+type BlockedNameRow = {
+  name_key: string;
+  display_name: string;
+  created_at: string;
+  blocked_by: string | null;
+  reason: string | null;
 };
 
 type AdminUserRow = {
@@ -192,7 +209,14 @@ export type PortalStatus = {
   has_access: boolean;
   is_admin: boolean;
   student_name?: string | null;
+  /** The student's IP was blocked by an admin. */
+  blocked?: boolean;
+  /** The name this student signed in with was blocked by an admin. */
+  name_blocked?: boolean;
 };
+
+export type BlockIpResult = { ip_address: string; signed_out: number };
+export type BlockNameResult = { name: string; signed_out: number };
 
 export type RedeemResult =
   | { ok: true; student_name: string; expires_at: string }
@@ -305,7 +329,9 @@ export interface Database {
         PageVisitRow,
         Exclude<keyof PageVisitRow, "page">
       >;
-      portal_members: Table<PortalMemberRow, "created_at" | "last_seen_at">;
+      portal_members: Table<PortalMemberRow, "created_at" | "last_seen_at" | "ip_address">;
+      blocked_ips: Table<BlockedIpRow, "created_at" | "blocked_by" | "student_name" | "reason">;
+      blocked_names: Table<BlockedNameRow, "created_at" | "blocked_by" | "reason">;
       admin_users: Table<AdminUserRow, "created_at">;
       portal_settings: Table<PortalSettingRow, "id" | "created_at">;
     };
@@ -329,6 +355,14 @@ export interface Database {
       };
       portal_overview: { Args: Record<string, never>; Returns: Json };
       cleanup_portal_data: { Args: Record<string, never>; Returns: undefined };
+      block_portal_name: {
+        Args: { p_name: string; p_reason?: string | null };
+        Returns: Json;
+      };
+      block_portal_ip: {
+        Args: { p_ip: string; p_reason?: string | null };
+        Returns: Json;
+      };
     };
     Enums: { [_ in never]: never };
     CompositeTypes: { [_ in never]: never };
